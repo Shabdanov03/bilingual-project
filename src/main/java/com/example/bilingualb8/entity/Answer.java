@@ -27,6 +27,5 @@ public class Answer {
     @Column(name = "evaluated_score")
     private Integer evaluatedScore;
 
-    @Column(name = "is_correct")
-    private Boolean isCorrect;
+
 }
