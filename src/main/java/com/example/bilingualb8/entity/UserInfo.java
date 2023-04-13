@@ -14,14 +14,12 @@ import static jakarta.persistence.CascadeType.*;
 @NoArgsConstructor
 public class UserInfo {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "userInfo_id_gen")
-    @SequenceGenerator(name = "userInfo_id-gen", sequenceName = "userInfo_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_info_id_gen")
+    @SequenceGenerator(name = "user_info_id_gen", sequenceName = "user_info_id_gen", allocationSize = 1)
     private Long id;
-
     @Column(unique = true)
     private String email;
     private String password;
-
     @Enumerated(value = EnumType.STRING)
     private Role role;
     @OneToOne(cascade = ALL)

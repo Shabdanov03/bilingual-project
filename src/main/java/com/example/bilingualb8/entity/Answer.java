@@ -5,6 +5,8 @@ import lombok.*;
 
 import java.util.List;
 
+import static jakarta.persistence.CascadeType.*;
+
 @Entity
 @Table(name = "answers")
 @AllArgsConstructor
@@ -14,18 +16,17 @@ import java.util.List;
 public class Answer {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "answer_id_gen")
-    @SequenceGenerator(name = "answer_id-gen", sequenceName = "answer_id_seq", allocationSize = 1)
+    @SequenceGenerator(name = "answer_id_gen", sequenceName = "answer_id_gen", allocationSize = 1)
     private Long id;
     @OneToOne
     private Question question;
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = {REFRESH,MERGE,PERSIST,DETACH})
     private User user;
-    @OneToMany
+    @OneToMany(cascade = {REFRESH,MERGE,PERSIST,DETACH})
     private List<Option> options;
     private String payload;
-
-    @Column(name = "evaluated_score")
-    private Integer evaluatedScore;
-
-
+    private int evaluatedScore;
+    private int numberOfWords;
+    private int numberOfPlays;
+    private boolean isChecked;
 }

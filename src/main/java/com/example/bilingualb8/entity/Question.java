@@ -1,5 +1,6 @@
 package com.example.bilingualb8.entity;
 
+import com.example.bilingualb8.enums.OptionType;
 import com.example.bilingualb8.enums.QuestionType;
 import jakarta.persistence.*;
 import lombok.*;
@@ -18,26 +19,23 @@ import static jakarta.persistence.CascadeType.*;
 public class Question {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "question_id_gen")
-    @SequenceGenerator(name = "question_id-gen", sequenceName = "question_id_seq", allocationSize = 1)
+    @SequenceGenerator(name = "question_id_gen", sequenceName = "question_id_gen", allocationSize = 1)
     private Long id;
+    @Column(length=100)
     private String title;
+    @Column(length = 10000)
     private String statement;
-
-    @Column(name = "question_type")
     @Enumerated(value = EnumType.STRING)
     private QuestionType questionType;
     private LocalDate duration;
-    @Column(name = "min_words")
-    private Integer minWords;
-    @Column(name = "number_of_replays")
-    private Integer numberOfReplays;
-    @Column(name = "correct_answer")
+    private int minWords;
+    private int numberOfReplays;
+    @Column(length=10000)
     private String correctAnswer;
-    @Column(name = "passage_question")
+    @Column(length=10000)
     private String passageQuestion;
+    @Column(length=10000)
     private String passage;
-
-    @Column(name = "audio_text")
     private String audioText;
     @ManyToOne(cascade = {MERGE, REFRESH, DETACH, PERSIST})
     private Test test;
@@ -45,4 +43,7 @@ public class Question {
     private List<File> files;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "question")
     private List<Option> options;
+    private int questionOrder;
+    @Enumerated(value=EnumType.STRING)
+    private OptionType optionType;
 }

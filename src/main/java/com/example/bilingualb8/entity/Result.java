@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import static jakarta.persistence.CascadeType.*;
 import static jakarta.persistence.CascadeType.PERSIST;
@@ -26,9 +27,8 @@ public class Result {
     private User user;
     @Enumerated(value = EnumType.STRING)
     private ResultStatus status;
-    private Integer score;
-    @Column(name="date_of_submission")
+    private float score;
     private LocalDate dateOfSubmission;
-
-
+    @OneToMany(cascade = ALL)
+    private List<Answer> answers;
 }

@@ -14,12 +14,11 @@ import static jakarta.persistence.CascadeType.*;
 public class Option {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "option_id_gen")
-    @SequenceGenerator(name = "option_id-gen", sequenceName = "option_id_seq", allocationSize = 1)
+    @SequenceGenerator(name = "option_id_gen", sequenceName = "option_id_gen", allocationSize = 1)
     private Long id;
     private String title;
-
-    @Column(name = "is_correct")
     private Boolean isCorrect;
-    @ManyToOne(cascade = {PERSIST,MERGE,REFRESH,DETACH})
+    @ManyToOne(cascade = {PERSIST, MERGE, REFRESH, DETACH})
     private Question question;
+    private String fileUrl;
 }

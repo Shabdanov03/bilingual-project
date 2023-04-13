@@ -15,14 +15,11 @@ import static jakarta.persistence.CascadeType.*;
 public class File {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "file_id_gen")
-    @SequenceGenerator(name = "file_id-gen", sequenceName = "file_id_seq", allocationSize = 1)
+    @SequenceGenerator(name = "file_id_gen", sequenceName = "file_id_gen", allocationSize = 1)
     private Long id;
-    @Column(name = "file_url")
     private String fileUrl;
     @ManyToOne(cascade = {REFRESH, PERSIST, MERGE, DETACH})
     private Question question;
-
-    @Column(name = "file_type")
     @Enumerated(value = EnumType.STRING)
     private FileType fileType;
 }
