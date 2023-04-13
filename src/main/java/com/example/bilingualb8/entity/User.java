@@ -1,20 +1,17 @@
 package com.example.bilingualb8.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-import java.security.Timestamp;
 import java.time.LocalDate;
-import java.util.List;
 
 
 
 
 @Entity
 @Table(name = "users")
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class User {
@@ -22,15 +19,19 @@ public class User {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_id_gen")
     @SequenceGenerator(name = "user_id-gen", sequenceName = "user_id_seq", allocationSize = 1)
     private Long id;
+    @Column(name = "first_name")
     private String firstName;
+    @Column(name = "last_name")
     private String lastName;
     @OneToOne(cascade = CascadeType.ALL)
     private UserInfo userInfo;
+
+    @Column(name = "is_active")
     private Boolean isActive;
-    private LocalDate createAt;
+
+    @Column(name = "created_at")
+    private LocalDate createdAt;
+
+    @Column(name = "modified_at")
     private LocalDate modifiedAt;
-    @OneToOne(cascade = CascadeType.ALL)
-    private Answer answer;
-
-
 }

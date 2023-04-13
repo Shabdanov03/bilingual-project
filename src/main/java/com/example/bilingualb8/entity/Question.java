@@ -2,18 +2,17 @@ package com.example.bilingualb8.entity;
 
 import com.example.bilingualb8.enums.QuestionType;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.springframework.data.jpa.repository.support.JpaRepositoryImplementation;
+import lombok.*;
 
-import java.security.Timestamp;
 import java.time.LocalDate;
 import java.util.List;
 
+import static jakarta.persistence.CascadeType.*;
+
 @Entity
 @Table(name = "questions")
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class Question {
@@ -22,23 +21,28 @@ public class Question {
     @SequenceGenerator(name = "question_id-gen", sequenceName = "question_id_seq", allocationSize = 1)
     private Long id;
     private String title;
-
     private String statement;
-    private String questionStatement;
+
+    @Column(name = "question_type")
+    @Enumerated(value = EnumType.STRING)
     private QuestionType questionType;
-   private LocalDate duration;
-   private Integer min_words;
-   private Integer numberOfReplays;
-   private String correct_answer;
-   private String questionToThePassage;
-   private String  passage;
-   private String audioText;
-    @ManyToOne
+    private LocalDate duration;
+    @Column(name = "min_words")
+    private Integer minWords;
+    @Column(name = "number_of_replays")
+    private Integer numberOfReplays;
+    @Column(name = "correct_answer")
+    private String correctAnswer;
+    @Column(name = "passage_question")
+    private String passageQuestion;
+    private String passage;
+
+    @Column(name = "audio_text")
+    private String audioText;
+    @ManyToOne(cascade = {MERGE, REFRESH, DETACH, PERSIST})
     private Test test;
-   @OneToMany(mappedBy = "questions")
-   private List<File> files;
-   @OneToOne(cascade = CascadeType.ALL)
-   private Option correct_option;
-
-
+    @OneToMany(mappedBy = "question", cascade = ALL)
+    private List<File> files;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "question")
+    private List<Option> options;
 }

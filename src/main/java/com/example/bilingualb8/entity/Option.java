@@ -1,13 +1,14 @@
 package com.example.bilingualb8.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
+import static jakarta.persistence.CascadeType.*;
 
 @Entity
 @Table(name = "options")
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class Option {
@@ -16,6 +17,9 @@ public class Option {
     @SequenceGenerator(name = "option_id-gen", sequenceName = "option_id_seq", allocationSize = 1)
     private Long id;
     private String title;
-    @ManyToOne(cascade = CascadeType.ALL)
+
+    @Column(name = "is_correct")
+    private Boolean isCorrect;
+    @ManyToOne(cascade = {PERSIST,MERGE,REFRESH,DETACH})
     private Question question;
 }

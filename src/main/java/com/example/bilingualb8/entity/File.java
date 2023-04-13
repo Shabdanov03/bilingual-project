@@ -2,13 +2,14 @@ package com.example.bilingualb8.entity;
 
 import com.example.bilingualb8.enums.FileType;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
+import static jakarta.persistence.CascadeType.*;
 
 @Entity
 @Table(name = "files")
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class File {
@@ -16,8 +17,12 @@ public class File {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "file_id_gen")
     @SequenceGenerator(name = "file_id-gen", sequenceName = "file_id_seq", allocationSize = 1)
     private Long id;
+    @Column(name = "file_url")
     private String fileUrl;
-    @ManyToOne(cascade = CascadeType.ALL)
-    private Question questions;
+    @ManyToOne(cascade = {REFRESH, PERSIST, MERGE, DETACH})
+    private Question question;
+
+    @Column(name = "file_type")
+    @Enumerated(value = EnumType.STRING)
     private FileType fileType;
 }

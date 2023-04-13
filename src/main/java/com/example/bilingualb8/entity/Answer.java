@@ -1,15 +1,16 @@
 package com.example.bilingualb8.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
+import java.util.List;
 
 @Entity
 @Table(name = "answers")
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 public class Answer {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "answer_id_gen")
@@ -19,9 +20,13 @@ public class Answer {
     private Question question;
     @ManyToOne(cascade = CascadeType.ALL)
     private User user;
-    @OneToOne
-    private Option option;
-    private String payLoad;
+    @OneToMany
+    private List<Option> options;
+    private String payload;
+
+    @Column(name = "evaluated_score")
     private Integer evaluatedScore;
+
+    @Column(name = "is_correct")
     private Boolean isCorrect;
 }

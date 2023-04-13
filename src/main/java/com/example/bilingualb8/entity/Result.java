@@ -2,29 +2,32 @@ package com.example.bilingualb8.entity;
 
 import com.example.bilingualb8.enums.ResultStatus;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-import java.security.Timestamp;
 import java.time.LocalDate;
+
+import static jakarta.persistence.CascadeType.*;
+import static jakarta.persistence.CascadeType.PERSIST;
 
 @Entity
 @Table(name = "results")
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class Result {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "result_id_gen")
-    @SequenceGenerator(name = "result_id-gen", sequenceName = "result_id_seq", allocationSize = 1)
+    @SequenceGenerator(name = "result_id_gen", sequenceName = "result_id_seq", allocationSize = 1)
     private Long id;
-    @OneToOne
+    @ManyToOne(cascade = {MERGE, REFRESH, DETACH, PERSIST})
     private Test test;
-    @ManyToOne
+    @ManyToOne(cascade = {MERGE, REFRESH, DETACH, PERSIST})
     private User user;
+    @Enumerated(value = EnumType.STRING)
     private ResultStatus status;
     private Integer score;
+    @Column(name="date_of_submission")
     private LocalDate dateOfSubmission;
 
 
