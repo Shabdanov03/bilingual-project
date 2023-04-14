@@ -3,14 +3,15 @@ package com.example.bilingualb8.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDate;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "users")
-@Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
+@Data
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_id_gen")
@@ -21,6 +22,15 @@ public class User {
     @OneToOne(cascade = CascadeType.ALL)
     private UserInfo userInfo;
     private Boolean isActive;
-    private LocalDate createdAt;
-    private LocalDate modifiedAt;
+    private LocalDateTime createdAt;
+    private LocalDateTime modifiedAt;
+    @PrePersist
+    protected void onCreate() {
+        modifiedAt = LocalDateTime.now();
+        createdAt = LocalDateTime.now();
+    }
+    @PreUpdate
+    protected void onUpdate() {
+        modifiedAt = LocalDateTime.now();
+    }
 }
