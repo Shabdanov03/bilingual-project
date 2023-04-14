@@ -14,7 +14,7 @@ import java.util.List;
 public class Test {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "test_id_gen")
-    @SequenceGenerator(name = "test_id_gen", sequenceName = "test_id_gen", allocationSize = 1)
+    @SequenceGenerator(name = "test_id_gen", sequenceName = "test_id_gen", allocationSize = 1,initialValue = 5)
     private Long id;
     private String title;
     private String shortDescription;
