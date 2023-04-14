@@ -9,6 +9,7 @@ import com.example.bilingualb8.entity.UserInfo;
 import com.example.bilingualb8.enums.Role;
 import com.example.bilingualb8.repositories.UserRepository;
 import com.example.bilingualb8.services.AuthenticationService;
+import jakarta.annotation.PostConstruct;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -23,6 +24,23 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+
+    @PostConstruct
+    public void init() {
+        UserInfo userInfo = new UserInfo();
+        userInfo.setEmail("admin@gmail.com");
+        userInfo.setPassword(passwordEncoder.encode("admin"));
+        userInfo.setRole(Role.ADMIN);
+        User user = new User();
+        user.setFirstName("admin");
+        user.setLastName("adminov");
+        user.setUserInfo(userInfo);
+        user.setIsActive(false);
+        userInfo.setUser(user);
+        if (userRepository.findUserInfoByEmail(userInfo.getEmail()).isEmpty()) {
+            userRepository.save(user);
+        }
+    }
 
     @Override
     public AuthenticationResponse signUp(SignUpRequest signUpRequest) {

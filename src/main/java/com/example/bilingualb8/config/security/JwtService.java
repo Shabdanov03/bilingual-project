@@ -8,7 +8,6 @@ import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
@@ -24,31 +23,34 @@ public class JwtService {
     @Value("${application.security.jwt.refresh-token.expiration}")
     private long refreshExpiration;
 
-    public String extractUserEmail(String token){
+    public String extractUserEmail(String token) {
         return extractClaim(token, Claims::getSubject);
     }
-    public <T> T extractClaim(String token, Function<Claims, T> claimsResolve){
+
+    public <T> T extractClaim(String token, Function<Claims, T> claimsResolve) {
         final Claims claims = extractAllClaims(token);
         return claimsResolve.apply(claims);
     }
-    public String generateToken(UserDetails userDetails){
-        return generateToken(new HashMap<>(), userDetails,jwtExpiration);
+
+    public String generateToken(UserDetails userDetails) {
+        return generateToken(new HashMap<>(), userDetails, jwtExpiration);
     }
+
     public String generateToken(
             Map<String, Object> extractClaim,
             UserDetails userDetails,
             long expiration
-    ){
+    ) {
         return Jwts.builder()
                 .setClaims(extractClaim)
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + expiration ))
+                .setExpiration(new Date(System.currentTimeMillis() + expiration))
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
-    
-    public Boolean isTokenValid(String token, UserDetails userDetails){
+
+    public Boolean isTokenValid(String token, UserDetails userDetails) {
         final String username = extractUserEmail(token);
         return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
     }
@@ -61,7 +63,7 @@ public class JwtService {
         return extractClaim(token, Claims::getExpiration);
     }
 
-    private Claims extractAllClaims(String token){
+    private Claims extractAllClaims(String token) {
         return Jwts
                 .parserBuilder()
                 .setSigningKey(getSignInKey())
@@ -69,6 +71,7 @@ public class JwtService {
                 .parseClaimsJws(token)
                 .getBody();
     }
+
     private Key getSignInKey() {
         byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
         return Keys.hmacShaKeyFor(keyBytes);
