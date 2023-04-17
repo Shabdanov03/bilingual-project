@@ -32,7 +32,8 @@ build/
 ### VS Code ###
 .vscode/
 
+
 src/main/resources/application-saltanat.properties
-src/main/resources/application-ilim.properties
 src/main/resources/application-my.properties
 src/main/resources/application-local.yml
+src/main/resources/application-ilim.properties
