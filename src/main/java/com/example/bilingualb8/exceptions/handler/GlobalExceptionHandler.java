@@ -2,9 +2,14 @@ package com.example.bilingualb8.exceptions.handler;
 
 import com.example.bilingualb8.exceptions.*;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import java.util.stream.Collectors;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler  {
@@ -24,9 +29,9 @@ public class GlobalExceptionHandler  {
                 a.getClass().getSimpleName(),
                 a.getMessage());
     }
-    @ExceptionHandler(BadCredentialExcaption.class)
+    @ExceptionHandler(BadCredentialException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
-    public ExceptionResponse badCredential(BadCredentialExcaption b ){
+    public ExceptionResponse badCredential(BadCredentialException b ){
         return new ExceptionResponse(HttpStatus.FORBIDDEN,
                 b.getClass().getSimpleName(),
                 b.getMessage());
@@ -38,4 +43,17 @@ public class GlobalExceptionHandler  {
                 b.getClass().getSimpleName(),
                 b.getMessage());
     }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ExceptionResponse handlerMethodArgumentNotValidException(MethodArgumentNotValidException e){
+        BindingResult bindingResult = e.getBindingResult();
+        String error = bindingResult.getAllErrors().stream().map(ObjectError::getDefaultMessage).collect(Collectors.joining("; "));
+        return new ExceptionResponse(
+                HttpStatus.BAD_REQUEST,
+                e.getClass().getSimpleName(),
+                error
+        );
+    }
+
 }
