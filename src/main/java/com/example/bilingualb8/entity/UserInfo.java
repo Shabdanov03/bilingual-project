@@ -19,7 +19,7 @@ import static jakarta.persistence.CascadeType.ALL;
 public class UserInfo implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_info_id_gen")
-    @SequenceGenerator(name = "user_info_id_gen", sequenceName = "user_info_id_gen", allocationSize = 1)
+    @SequenceGenerator(name = "user_info_id_gen", sequenceName = "user_info_id_gen", allocationSize = 1,initialValue = 5)
     private Long id;
     @Column(unique = true)
     private String email;
