@@ -1,6 +1,6 @@
 package com.example.bilingualb8.exceptions;
 
-public class NotFoundException extends RuntimeException{
+public class  NotFoundException extends RuntimeException{
     public NotFoundException(){
 
     }
