@@ -15,11 +15,11 @@ import java.time.LocalDateTime;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_id_gen")
-    @SequenceGenerator(name = "user_id_gen", sequenceName = "user_id_gen", allocationSize = 1)
+    @SequenceGenerator(name = "user_id_gen", sequenceName = "user_id_gen", allocationSize = 1,initialValue = 5)
     private Long id;
     private String firstName;
     private String lastName;
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL,mappedBy = "user")
     private UserInfo userInfo;
     private Boolean isActive;
     private LocalDateTime createdAt;
