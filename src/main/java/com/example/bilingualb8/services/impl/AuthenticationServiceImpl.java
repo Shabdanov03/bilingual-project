@@ -7,6 +7,7 @@ import com.example.bilingualb8.dto.responses.auth.AuthenticationResponse;
 import com.example.bilingualb8.entity.User;
 import com.example.bilingualb8.entity.UserInfo;
 import com.example.bilingualb8.enums.Role;
+import com.example.bilingualb8.exceptions.NotFoundException;
 import com.example.bilingualb8.repositories.UserRepository;
 import com.example.bilingualb8.services.AuthenticationService;
 import jakarta.persistence.EntityNotFoundException;
@@ -38,7 +39,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         newUser.setIsActive(false);
         newUser.setUserInfo(newUserInfo);
         newUserInfo.setUser(newUser);
-        userRepository.save(newUser);
+        if (userRepository.findUserInfoByEmail(newUserInfo.getEmail()).isEmpty()) {
+            userRepository.save(newUser);
+        }
 
         var jwtToken = jwtService.generateToken(newUserInfo);
         return AuthenticationResponse
@@ -51,6 +54,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public AuthenticationResponse signIn(AuthenticationRequest authenticationRequest) {
+        var user = userRepository.findUserInfoByEmail(authenticationRequest.getEmail())
+                .orElseThrow(() -> new NotFoundException("User was not found."));
+
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         authenticationRequest.getEmail(),
@@ -58,8 +64,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 )
         );
 
-        var user = userRepository.findUserInfoByEmail(authenticationRequest.getEmail())
-                .orElseThrow(() -> new EntityNotFoundException("User was not found."));
         var jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse
                 .builder()

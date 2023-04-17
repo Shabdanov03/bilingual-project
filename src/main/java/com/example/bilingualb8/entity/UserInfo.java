@@ -12,14 +12,15 @@ import static jakarta.persistence.CascadeType.ALL;
 
 @Entity
 @Table(name = "user_infos")
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class UserInfo implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_info_id_gen")
-    @SequenceGenerator(name = "user_info_id_gen", sequenceName = "user_info_id_gen", allocationSize = 1,initialValue = 5)
+    @SequenceGenerator(name = "user_info_id_gen", sequenceName = "user_info_id_gen", allocationSize = 1,initialValue = 6)
     private Long id;
     @Column(unique = true)
     private String email;
