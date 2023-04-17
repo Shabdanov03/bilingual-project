@@ -7,4 +7,5 @@ import com.example.bilingualb8.dto.responses.auth.AuthenticationResponse;
 public interface AuthenticationService {
     AuthenticationResponse signUp(SignUpRequest signUpRequest);
     AuthenticationResponse signIn(AuthenticationRequest authenticationRequest);
+
 }

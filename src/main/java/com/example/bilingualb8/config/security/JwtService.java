@@ -13,15 +13,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
-
 @Service
 public class JwtService {
-    @Value("${application.security.jwt.secret-key}")
-    private String SECRET_KEY;
-    @Value("${application.security.jwt.expiration}")
-    private long jwtExpiration;
-    @Value("${application.security.jwt.refresh-token.expiration}")
-    private long refreshExpiration;
+    private final String SECRET_KEY = "5970337336763979244226452948404D6351665468576D5A7134743777217A25";
+    private final long jwtExpiration = 60000L;
 
     public String extractUserEmail(String token) {
         return extractClaim(token, Claims::getSubject);
