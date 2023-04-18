@@ -11,15 +11,22 @@ import com.example.bilingualb8.exceptions.AlreadyExistException;
 import com.example.bilingualb8.exceptions.NotFoundException;
 import com.example.bilingualb8.repositories.UserRepository;
 import com.example.bilingualb8.services.AuthenticationService;
+import com.google.auth.oauth2.GoogleCredentials;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.FirebaseOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseToken;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.io.IOException;
 
 @Service
 @Slf4j
@@ -103,6 +110,21 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return AuthenticationResponse.builder()
                 .email(firebaseToken.getEmail())
                 .token(token)
+                .role(userInfo.getRole())
                 .build();
+    }
+
+    @PostConstruct
+    public void init() {
+        try {
+            GoogleCredentials googleCredentials = GoogleCredentials.fromStream(new ClassPathResource("gadgetarium.json").getInputStream());
+            FirebaseOptions firebaseOptions = FirebaseOptions.builder()
+                    .setCredentials(googleCredentials)
+                    .build();
+            log.info("successfully works the init method");
+            FirebaseApp firebaseApp = FirebaseApp.initializeApp(firebaseOptions);
+        } catch (IOException e) {
+            log.error("IOException");
+        }
     }
 }
