@@ -25,4 +25,6 @@ public class AuthController {
     public ResponseEntity<AuthenticationResponse> signIn(@RequestBody @Valid AuthenticationRequest authenticationRequest) {
         return ResponseEntity.ok(authenticationService.signIn(authenticationRequest));
     }
+
+
 }

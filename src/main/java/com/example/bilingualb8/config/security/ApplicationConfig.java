@@ -1,4 +1,4 @@
-package com.example.bilingualb8.config;
+package com.example.bilingualb8.config.security;
 
 import com.example.bilingualb8.repositories.UserRepository;
 import jakarta.persistence.EntityNotFoundException;

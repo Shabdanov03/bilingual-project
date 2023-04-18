@@ -1,16 +1,16 @@
 package com.example.bilingualb8.services.impl;
 
-import com.example.bilingualb8.config.security.JwtService;
+import com.example.bilingualb8.config.jwt.JwtService;
 import com.example.bilingualb8.dto.requests.auth.AuthenticationRequest;
 import com.example.bilingualb8.dto.requests.auth.SignUpRequest;
 import com.example.bilingualb8.dto.responses.auth.AuthenticationResponse;
 import com.example.bilingualb8.entity.User;
 import com.example.bilingualb8.entity.UserInfo;
 import com.example.bilingualb8.enums.Role;
+import com.example.bilingualb8.exceptions.AlreadyExistException;
 import com.example.bilingualb8.exceptions.NotFoundException;
 import com.example.bilingualb8.repositories.UserRepository;
 import com.example.bilingualb8.services.AuthenticationService;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -27,6 +27,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public AuthenticationResponse signUp(SignUpRequest signUpRequest) {
+        if (userRepository.existsByUserInfoEmail(signUpRequest.getEmail())) {
+            throw new AlreadyExistException("Sorry, this email is already registered. Please try a different email or login to your existing account");
+        }
         var newUserInfo = UserInfo.builder()
                 .email(signUpRequest.getEmail())
                 .password(passwordEncoder.encode(signUpRequest.getPassword()))
@@ -39,9 +42,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         newUser.setIsActive(false);
         newUser.setUserInfo(newUserInfo);
         newUserInfo.setUser(newUser);
-        if (userRepository.findUserInfoByEmail(newUserInfo.getEmail()).isEmpty()) {
-            userRepository.save(newUser);
-        }
+        userRepository.save(newUser);
 
         var jwtToken = jwtService.generateToken(newUserInfo);
         return AuthenticationResponse

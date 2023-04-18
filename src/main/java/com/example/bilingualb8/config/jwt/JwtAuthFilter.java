@@ -1,4 +1,4 @@
-package com.example.bilingualb8.config.security;
+package com.example.bilingualb8.config.jwt;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
