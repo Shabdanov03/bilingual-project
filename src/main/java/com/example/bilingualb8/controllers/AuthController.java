@@ -4,6 +4,7 @@ import com.example.bilingualb8.dto.requests.auth.AuthenticationRequest;
 import com.example.bilingualb8.dto.requests.auth.SignUpRequest;
 import com.example.bilingualb8.dto.responses.auth.AuthenticationResponse;
 import com.example.bilingualb8.services.AuthenticationService;
+import com.google.firebase.auth.FirebaseAuthException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -26,5 +27,8 @@ public class AuthController {
         return ResponseEntity.ok(authenticationService.signIn(authenticationRequest));
     }
 
-
+    @PostMapping("/auth-google")
+    public AuthenticationResponse authWithGoogle(String tokenId) throws FirebaseAuthException {
+        return authenticationService.authWithGoogle(tokenId);
+    }
 }

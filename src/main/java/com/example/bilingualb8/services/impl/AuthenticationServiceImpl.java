@@ -11,13 +11,18 @@ import com.example.bilingualb8.exceptions.AlreadyExistException;
 import com.example.bilingualb8.exceptions.NotFoundException;
 import com.example.bilingualb8.repositories.UserRepository;
 import com.example.bilingualb8.services.AuthenticationService;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthException;
+import com.google.firebase.auth.FirebaseToken;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class AuthenticationServiceImpl implements AuthenticationService {
     private final UserRepository userRepository;
@@ -71,6 +76,33 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .token(jwtToken)
                 .email(user.getUsername())
                 .role(user.getRole())
+                .build();
+    }
+
+    @Override
+    public AuthenticationResponse authWithGoogle(String tokenId) throws FirebaseAuthException {
+        FirebaseToken firebaseToken = FirebaseAuth.getInstance().verifyIdToken(tokenId);
+        if (userRepository.findUserInfoByEmail(firebaseToken.getEmail()).isEmpty()) {
+            User newUser = new User();
+            String[] name = firebaseToken.getName().split(" ");
+            newUser.setFirstName(name[0]);
+            newUser.setLastName(name[1]);
+            UserInfo userInfo = new UserInfo();
+            userInfo.setEmail(firebaseToken.getEmail());
+            userInfo.setPassword(firebaseToken.getEmail());
+            userInfo.setRole(Role.USER);
+            userRepository.save(newUser);
+        }
+        UserInfo userInfo = userRepository.findUserInfoByEmail(firebaseToken.getEmail()).orElseThrow(() -> {
+            log.error(String.format("Пользователь с таким электронным адресом %s не найден!", firebaseToken.getEmail()));
+            throw new org.webjars.NotFoundException(String.format("Пользователь с таким электронным адресом %s не найден!", firebaseToken.getEmail()));
+        });
+
+        String token = jwtService.generateToken(userInfo);
+        log.info("successfully works the authorization with google method");
+        return AuthenticationResponse.builder()
+                .email(firebaseToken.getEmail())
+                .token(token)
                 .build();
     }
 }
