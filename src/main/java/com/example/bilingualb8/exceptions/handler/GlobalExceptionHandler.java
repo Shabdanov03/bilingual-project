@@ -12,33 +12,36 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.util.stream.Collectors;
 
 @RestControllerAdvice
-public class GlobalExceptionHandler  {
+public class GlobalExceptionHandler {
     @ExceptionHandler(NotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ExceptionResponse handleNotFoundException(NotFoundException e ){
+    public ExceptionResponse handleNotFoundException(NotFoundException e) {
         return new ExceptionResponse(
                 HttpStatus.NOT_FOUND,
-                e.getClass().getSimpleName(),e.getMessage());
+                e.getClass().getSimpleName(), e.getMessage());
 
     }
+
     @ExceptionHandler(AlreadyExistException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
-    public ExceptionResponse alreadyExistException(AlreadyExistException a){
+    public ExceptionResponse alreadyExistException(AlreadyExistException a) {
         return new ExceptionResponse(
                 HttpStatus.CONFLICT,
                 a.getClass().getSimpleName(),
                 a.getMessage());
     }
+
     @ExceptionHandler(BadCredentialException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
-    public ExceptionResponse badCredential(BadCredentialException b ){
+    public ExceptionResponse badCredential(BadCredentialException b) {
         return new ExceptionResponse(HttpStatus.FORBIDDEN,
                 b.getClass().getSimpleName(),
                 b.getMessage());
     }
+
     @ExceptionHandler(BadRequestException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
-    public ExceptionResponse badCredential(BadRequestException b ){
+    public ExceptionResponse badCredential(BadRequestException b) {
         return new ExceptionResponse(HttpStatus.FORBIDDEN,
                 b.getClass().getSimpleName(),
                 b.getMessage());
@@ -46,7 +49,7 @@ public class GlobalExceptionHandler  {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
-    public ExceptionResponse handlerMethodArgumentNotValidException(MethodArgumentNotValidException e){
+    public ExceptionResponse handlerMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         BindingResult bindingResult = e.getBindingResult();
         String error = bindingResult.getAllErrors().stream().map(ObjectError::getDefaultMessage).collect(Collectors.joining("; "));
         return new ExceptionResponse(
