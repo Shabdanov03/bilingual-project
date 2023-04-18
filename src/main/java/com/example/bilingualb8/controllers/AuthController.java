@@ -1,7 +1,10 @@
 package com.example.bilingualb8.controllers;
 
 import com.example.bilingualb8.dto.requests.auth.AuthenticationRequest;
+import com.example.bilingualb8.dto.requests.auth.ForgotPassword;
+import com.example.bilingualb8.dto.requests.auth.ResetPasswordRequest;
 import com.example.bilingualb8.dto.requests.auth.SignUpRequest;
+import com.example.bilingualb8.dto.responses.SimpleResponse;
 import com.example.bilingualb8.dto.responses.auth.AuthenticationResponse;
 import com.example.bilingualb8.services.AuthenticationService;
 import jakarta.validation.Valid;
@@ -26,5 +29,14 @@ public class AuthController {
         return ResponseEntity.ok(authenticationService.signIn(authenticationRequest));
     }
 
+    @PostMapping("/forgot-password")
+    public ResponseEntity<SimpleResponse> processForgotPasswordForm(@RequestBody @Valid ForgotPassword forgotPassword) {
+        return ResponseEntity.ok(authenticationService.forgotPassword(forgotPassword));
+    }
+
+    @GetMapping("/reset-password")
+    public ResponseEntity<SimpleResponse> resetPassword(@RequestParam String token, @RequestBody @Valid ResetPasswordRequest request){
+        return ResponseEntity.ok(authenticationService.resetPassword(token,request.newPassword()));
+    }
 
 }
