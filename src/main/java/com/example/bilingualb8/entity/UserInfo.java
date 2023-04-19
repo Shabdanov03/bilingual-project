@@ -25,11 +25,11 @@ public class UserInfo implements UserDetails {
     @Column(unique = true)
     private String email;
     private String password;
+    private String resetPasswordToken;
     @Enumerated(value = EnumType.STRING)
     private Role role;
     @OneToOne(cascade = ALL)
     private User user;
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.name()));
