@@ -5,9 +5,6 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 
-/**
- * Shabdanov Ilim
- **/
 @Builder
 public record ForgotPassword(
         @NotBlank(message = "The email must not be empty.")

@@ -39,18 +39,18 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public AuthenticationResponse signUp(SignUpRequest signUpRequest) {
-        if (userRepository.existsByUserInfoEmail(signUpRequest.getEmail())) {
+        if (userRepository.existsByUserInfoEmail(signUpRequest.email())) {
             throw new AlreadyExistException("Sorry, this email is already registered. Please try a different email or login to your existing account");
         }
         var newUserInfo = UserInfo.builder()
-                .email(signUpRequest.getEmail())
-                .password(passwordEncoder.encode(signUpRequest.getPassword()))
+                .email(signUpRequest.email())
+                .password(passwordEncoder.encode(signUpRequest.password()))
                 .role(Role.USER)
                 .build();
 
         User newUser = new User();
-        newUser.setFirstName(signUpRequest.getFirstName());
-        newUser.setLastName(signUpRequest.getLastName());
+        newUser.setFirstName(signUpRequest.firstName());
+        newUser.setLastName(signUpRequest.lastName());
         newUser.setIsActive(false);
         newUser.setUserInfo(newUserInfo);
         newUserInfo.setUser(newUser);
@@ -67,13 +67,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public AuthenticationResponse signIn(AuthenticationRequest authenticationRequest) {
-        var user = userRepository.findUserInfoByEmail(authenticationRequest.getEmail())
+        var user = userRepository.findUserInfoByEmail(authenticationRequest.email())
                 .orElseThrow(() -> new NotFoundException("User was not found."));
 
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        authenticationRequest.getEmail(),
-                        authenticationRequest.getPassword()
+                        authenticationRequest.email(),
+                        authenticationRequest.password()
                 )
         );
 

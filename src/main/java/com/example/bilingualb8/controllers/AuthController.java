@@ -12,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
@@ -35,8 +34,7 @@ public class AuthController {
     }
 
     @GetMapping("/reset-password")
-    public ResponseEntity<SimpleResponse> resetPassword(@RequestParam String token, @RequestBody @Valid ResetPasswordRequest request){
-        return ResponseEntity.ok(authenticationService.resetPassword(token,request.newPassword()));
+    public ResponseEntity<SimpleResponse> resetPassword(@RequestParam String token, @RequestBody @Valid ResetPasswordRequest request) {
+        return ResponseEntity.ok(authenticationService.resetPassword(token, request.newPassword()));
     }
-
 }

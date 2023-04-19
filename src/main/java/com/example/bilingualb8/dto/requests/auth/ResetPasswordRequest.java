@@ -5,9 +5,6 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.Builder;
 
-/**
- * Shabdanov Ilim
- **/
 @Builder
 public record ResetPasswordRequest(
         @NotBlank(message = "The password must not be empty.")
