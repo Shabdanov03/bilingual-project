@@ -154,7 +154,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         }
         UserInfo userInfo = userRepository.findUserInfoByEmail(firebaseToken.getEmail()).orElseThrow(() -> {
             log.error(String.format("Пользователь с таким электронным адресом %s не найден!", firebaseToken.getEmail()));
-            throw new org.webjars.NotFoundException(String.format("Пользователь с таким электронным адресом %s не найден!", firebaseToken.getEmail()));
+            throw new NotFoundException(String.format("Пользователь с таким электронным адресом %s не найден!", firebaseToken.getEmail()));
         });
 
         String token = jwtService.generateToken(userInfo);
