@@ -16,7 +16,16 @@ import com.example.bilingualb8.repositories.UserRepository;
 import com.example.bilingualb8.services.AuthenticationService;
 import com.example.bilingualb8.services.EmailService;
 import jakarta.mail.MessagingException;
+import com.google.auth.oauth2.GoogleCredentials;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.FirebaseOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthException;
+import com.google.firebase.auth.FirebaseToken;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,8 +34,10 @@ import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
 import java.util.UUID;
+import java.io.IOException;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class AuthenticationServiceImpl implements AuthenticationService {
     private final UserRepository userRepository;
@@ -126,4 +137,46 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return SimpleResponse.builder().message("User password changed successfully!").build();
     }
 
+
+    @Override
+    public AuthenticationResponse authWithGoogle(String tokenId) throws FirebaseAuthException {
+        FirebaseToken firebaseToken = FirebaseAuth.getInstance().verifyIdToken(tokenId);
+        if (userRepository.findUserInfoByEmail(firebaseToken.getEmail()).isEmpty()) {
+            User newUser = new User();
+            String[] name = firebaseToken.getName().split(" ");
+            newUser.setFirstName(name[0]);
+            newUser.setLastName(name[1]);
+            UserInfo userInfo = new UserInfo();
+            userInfo.setEmail(firebaseToken.getEmail());
+            userInfo.setPassword(firebaseToken.getEmail());
+            userInfo.setRole(Role.USER);
+            userRepository.save(newUser);
+        }
+        UserInfo userInfo = userRepository.findUserInfoByEmail(firebaseToken.getEmail()).orElseThrow(() -> {
+            log.error(String.format("Пользователь с таким электронным адресом %s не найден!", firebaseToken.getEmail()));
+            throw new NotFoundException(String.format("Пользователь с таким электронным адресом %s не найден!", firebaseToken.getEmail()));
+        });
+
+        String token = jwtService.generateToken(userInfo);
+        log.info("successfully works the authorization with google method");
+        return AuthenticationResponse.builder()
+                .email(firebaseToken.getEmail())
+                .token(token)
+                .role(userInfo.getRole())
+                .build();
+    }
+
+    @PostConstruct
+    public void init() {
+        try {
+            GoogleCredentials googleCredentials = GoogleCredentials.fromStream(new ClassPathResource("billingual.json").getInputStream());
+            FirebaseOptions firebaseOptions = FirebaseOptions.builder()
+                    .setCredentials(googleCredentials)
+                    .build();
+            log.info("successfully works the init method");
+            FirebaseApp firebaseApp = FirebaseApp.initializeApp(firebaseOptions);
+        } catch (IOException e) {
+            log.error("IOException");
+        }
+    }
 }
