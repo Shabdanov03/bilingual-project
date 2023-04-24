@@ -30,6 +30,7 @@ public class TestController {
     public TestListResponse getById(@PathVariable Long id){
         return testService.getById(id);
     }
+
     @PreAuthorize("hasAuthority('ADMIN')")
     @Operation(summary = "This is delete by id test method")
     @DeleteMapping("/{id}")

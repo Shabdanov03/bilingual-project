@@ -24,8 +24,6 @@ public class SecurityConfig {
                 .csrf()
                 .disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/swagger-ui/index.html","/api/auth/**")
-                .permitAll()
                 .anyRequest()
                 .permitAll() // TODO for swagger - permitAll() else authenticated()
                 .and()
@@ -36,5 +34,4 @@ public class SecurityConfig {
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
     }
-
 }
