@@ -2,6 +2,7 @@ package com.example.bilingualb8.entity;
 
 import com.example.bilingualb8.enums.OptionType;
 import com.example.bilingualb8.enums.QuestionType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -37,6 +38,7 @@ public class Question {
     private String passage;
     private String audioText;
     @ManyToOne(cascade = {MERGE, REFRESH, DETACH, PERSIST})
+    @JsonIgnore
     private Test test;
     @OneToMany(mappedBy = "question", cascade = ALL)
     private List<File> files;

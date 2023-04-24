@@ -24,10 +24,8 @@ public class SecurityConfig {
                 .csrf()
                 .disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/swagger-ui/index.html","/api/auth/**")
-                .permitAll()
                 .anyRequest()
-                .permitAll()
+                .permitAll() // TODO for swagger - permitAll() else authenticated()
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -36,5 +34,4 @@ public class SecurityConfig {
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
     }
-
 }
