@@ -16,6 +16,7 @@ import static jakarta.persistence.CascadeType.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Question {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "question_id_gen")
