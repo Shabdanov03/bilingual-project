@@ -8,9 +8,9 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: main
       SERVER_PORT: 2023
-      DATABASE_URL: jdbc:postgresql://database:5432/postgres
-      DATABASE_USER: bilingualdbuser
-      DATABASE_PASS: biligualdb2023
+      POSTGRES_DB: jdbc:postgresql://database:5432/postgres
+      POSTGRES_USER: bilingualdbuser
+      POSTGRES_PASSWORD: biligualdb2023
   database:
     image: postgres:latest
     restart: always
