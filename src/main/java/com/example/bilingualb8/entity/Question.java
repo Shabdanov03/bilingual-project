@@ -16,10 +16,11 @@ import static jakarta.persistence.CascadeType.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Question {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "question_id_gen")
-    @SequenceGenerator(name = "question_id_gen", sequenceName = "question_id_gen", allocationSize = 1, initialValue = 10)
+    @SequenceGenerator(name = "question_id_gen", sequenceName = "question_id_gen", allocationSize = 1, initialValue = 11)
     private Long id;
     @Column(length = 100)
     private String title;
