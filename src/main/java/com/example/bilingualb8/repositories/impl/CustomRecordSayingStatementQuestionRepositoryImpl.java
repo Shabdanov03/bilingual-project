@@ -1,0 +1,6 @@
+package com.example.bilingualb8.repositories.impl;
+
+import com.example.bilingualb8.repositories.custom.CustomRecordSayingStatementQuestionRepository;
+
+public class CustomRecordSayingStatementQuestionRepositoryImpl implements CustomRecordSayingStatementQuestionRepository {
+}

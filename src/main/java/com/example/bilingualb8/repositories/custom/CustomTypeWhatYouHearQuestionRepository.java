@@ -1,4 +1,4 @@
 package com.example.bilingualb8.repositories.custom;
 
-public class CustomTypeWhatYouHearQuestionRepository {
+public interface CustomTypeWhatYouHearQuestionRepository {
 }
