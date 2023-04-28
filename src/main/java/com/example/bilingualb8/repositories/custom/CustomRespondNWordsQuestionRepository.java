@@ -29,4 +29,5 @@ public class CustomRespondNWordsQuestionRepository {
                         resultSet.getLong("testId")
                 ));
     }
+public interface CustomRespondNWordsQuestionRepository {
 }
