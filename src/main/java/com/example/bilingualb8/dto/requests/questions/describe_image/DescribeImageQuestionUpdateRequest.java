@@ -1,18 +1,18 @@
-package com.example.bilingualb8.dto.requests.questions.respond_n_words;
+package com.example.bilingualb8.dto.requests.questions.describe_image;
 
+import com.example.bilingualb8.dto.requests.file.FileRequest;
 import jakarta.validation.constraints.Positive;
 import lombok.Builder;
 import lombok.Data;
 
-@Builder
 @Data
-public class RespondNWordsQuestionUpdateRequest {
+@Builder
+public class DescribeImageQuestionUpdateRequest {
     private String title;
-    private String statement;
+    private String correctAnswer;
     @Positive(message = "Duration can not be negative")
     private Integer duration;
     @Positive(message = "Order can not be negative")
     private Integer questionOrder;
-    @Positive(message = "Min words can not be negative")
-    private Integer minWords;
+    private FileRequest file;
 }

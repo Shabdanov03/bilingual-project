@@ -45,7 +45,7 @@ public class Question {
     private List<File> files;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "question")
     private List<Option> options;
-    private int questionOrder;
+    private Integer questionOrder;
     @Enumerated(value = EnumType.STRING)
     private OptionType optionType;
 }

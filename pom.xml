@@ -62,7 +62,7 @@
             <artifactId>spring-security-test</artifactId>
             <scope>test</scope>
         </dependency>
-<!--        swagger config-->
+        <!--        swagger config-->
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
@@ -101,7 +101,9 @@
             <artifactId>firebase-admin</artifactId>
             <version>9.0.0</version>
         </dependency>
+
     </dependencies>
+
 
     <build>
         <plugins>
