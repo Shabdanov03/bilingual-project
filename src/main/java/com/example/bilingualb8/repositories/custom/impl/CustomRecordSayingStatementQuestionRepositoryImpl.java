@@ -1,4 +1,4 @@
-package com.example.bilingualb8.repositories.impl;
+package com.example.bilingualb8.repositories.custom.impl;
 
 import com.example.bilingualb8.repositories.custom.CustomRecordSayingStatementQuestionRepository;
 

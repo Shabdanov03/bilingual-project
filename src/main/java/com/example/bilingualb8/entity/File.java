@@ -22,4 +22,10 @@ public class File {
     private Question question;
     @Enumerated(value = EnumType.STRING)
     private FileType fileType;
+
+    public File(FileType fileType, String fileUrl,Question question) {
+        this.fileType = fileType;
+        this.fileUrl = fileUrl;
+        this.question = question;
+    }
 }
