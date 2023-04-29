@@ -7,7 +7,6 @@ import com.example.bilingualb8.repositories.custom.CustomDescribeImageQuestionRe
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -34,6 +33,7 @@ public class CustomDescribeImageQuestionRepositoryImpl implements CustomDescribe
                     join files f on q.id = f.question_id
                     join tests t on t.id = q.test_id
                 where q.question_type = 'DESCRIBE_IMAGE'""";
+
         return jdbcTemplate.query(sql, (resultSet, i) ->
                 new DescribeImageQuestionResponse(
                         resultSet.getLong("id"),

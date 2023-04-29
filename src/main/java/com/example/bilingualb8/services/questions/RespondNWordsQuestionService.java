@@ -5,7 +5,6 @@ import com.example.bilingualb8.dto.requests.questions.respond_n_words.RespondNWo
 import com.example.bilingualb8.dto.requests.questions.respond_n_words.RespondNWordsQuestionUpdateRequest;
 import com.example.bilingualb8.dto.responses.SimpleResponse;
 import com.example.bilingualb8.dto.responses.questions.respond_n_words.RespondNWordsQuestionResponse;
-
 import java.util.List;
 
 public interface RespondNWordsQuestionService {
