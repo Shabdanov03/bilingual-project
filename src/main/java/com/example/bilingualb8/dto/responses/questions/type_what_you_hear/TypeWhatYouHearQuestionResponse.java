@@ -16,24 +16,26 @@ public class TypeWhatYouHearQuestionResponse{
    private Long id;
    private String title;
    private Integer duration;
+   private Integer numberOfReplays;
+   private Integer questionOrder;
    @Builder.Default
    @Enumerated(EnumType.STRING)
    private QuestionType questionType = QuestionType.TYPE_WHAT_YOU_HEAR;
    private FileResponse file;
-   private String correctAnswer;
    private Long testId;
 
    public TypeWhatYouHearQuestionResponse(Long id, String title, Integer duration, QuestionType questionType,
                                           // todo file response stuff
                                           Long questionId, Long fileId, FileType fileType,String fileUrl,
                                           // todo ....
-                                          String correctAnswer, Long testId) {
+                                          Long testId,Integer numberOfReplays,Integer questionOrder) {
       this.id = id;
       this.title = title;
       this.duration = duration;
       this.questionType = questionType;
       this.file = new FileResponse(fileId, fileType, fileUrl, questionId);
-      this.correctAnswer = correctAnswer;
       this.testId = testId;
+      this.numberOfReplays = numberOfReplays;
+      this.questionOrder = questionOrder;
    }
 }

@@ -1,39 +1,40 @@
-package com.example.bilingualb8.services.impl.questionImpl;
+package com.example.bilingualb8.services.questions.impl;
 
-import com.example.bilingualb8.dto.requests.questions.respond_n_words.RespondNWordsQuestionRequest;
-import com.example.bilingualb8.dto.requests.questions.respond_n_words.RespondNWordsQuestionUpdateRequest;
+import com.example.bilingualb8.dto.requests.questions.record_saying_statement.RecordSayingStatementQuestionRequest;
+import com.example.bilingualb8.dto.requests.questions.record_saying_statement.RecordSayingStatementQuestionUpdateRequest;
 import com.example.bilingualb8.dto.responses.SimpleResponse;
-import com.example.bilingualb8.dto.responses.questions.respond_n_words.RespondNWordsQuestionResponse;
+import com.example.bilingualb8.dto.responses.questions.record_saying_statement.RecordSayingStatementQuestionResponse;
 import com.example.bilingualb8.entity.Question;
 import com.example.bilingualb8.entity.Test;
 import com.example.bilingualb8.enums.QuestionType;
 import com.example.bilingualb8.exceptions.NotFoundException;
 import com.example.bilingualb8.repositories.QuestionRepository;
 import com.example.bilingualb8.repositories.TestRepository;
-import com.example.bilingualb8.repositories.custom.CustomRespondNWordsQuestionRepository;
-import com.example.bilingualb8.services.questions.RespondNWordsQuestionService;
+import com.example.bilingualb8.repositories.custom.CustomRecordSayingStatementQuestionRepository;
+import com.example.bilingualb8.services.questions.RecordSayingStatementQuestionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class RespondNWordsQuestionServiceImpl implements RespondNWordsQuestionService {
-    private final CustomRespondNWordsQuestionRepository customRepository;
+public class RecordSayingStatementQuestionServiceImpl implements RecordSayingStatementQuestionService {
+    private final CustomRecordSayingStatementQuestionRepository customRepository;
     private final QuestionRepository questionRepository;
     private final TestRepository testRepository;
 
     @Override
-    public SimpleResponse saveRespondNWordsQuestion(RespondNWordsQuestionRequest request) {
+    public SimpleResponse saveRecordSayingStatement(RecordSayingStatementQuestionRequest request) {
         Test test = testRepository.findById(request.getTestId()).orElseThrow(() ->
                 new NotFoundException(String.format("Test with id : %s doesn't exist !", request.getTestId())));
+
         Question question = Question.builder()
+                .questionType(QuestionType.RECORD_SAYING_STATEMENT)
                 .title(request.getTitle())
                 .statement(request.getStatement())
-                .questionType(QuestionType.RESPOND_N_WORDS)
-                .duration(request.getDuration())
+                .correctAnswer(request.getCorrectAnswer())
                 .questionOrder(request.getQuestionOrder())
+                .duration(request.getDuration())
                 .minWords(request.getMinWords())
                 .test(test)
                 .build();
@@ -44,18 +45,18 @@ public class RespondNWordsQuestionServiceImpl implements RespondNWordsQuestionSe
     }
 
     @Override
-    public List<RespondNWordsQuestionResponse> getAllRespondNWordsQuestion() {
-        return customRepository.getAllRespondNWordsQuestion();
+    public List<RecordSayingStatementQuestionResponse> getAllRecordSayingStatementQuestion() {
+        return customRepository.getAllRecordSayingStatementQuestion();
     }
 
     @Override
-    public RespondNWordsQuestionResponse getRespondNWordsQuestionById(Long id) {
-        return customRepository.getRespondNWordsQuestionById(id).orElseThrow(() ->
+    public RecordSayingStatementQuestionResponse getRecordSayingStatementQuestion(Long id) {
+        return customRepository.getRecordSayingStatementQuestionById(id).orElseThrow(() ->
                 new NotFoundException(String.format("Question with id : %s doesn't exist !", id)));
     }
 
     @Override
-    public SimpleResponse deleteRespondNWordsQuestionById(Long id) {
+    public SimpleResponse deleteRecordSayingStatementQuestionById(Long id) {
         if (!questionRepository.existsById(id)) {
             return SimpleResponse.builder()
                     .message(String.format("Question with id : %s doesn't exist !", id))
@@ -68,16 +69,20 @@ public class RespondNWordsQuestionServiceImpl implements RespondNWordsQuestionSe
     }
 
     @Override
-    public SimpleResponse updateRespondNWordsQuestionById(Long id, RespondNWordsQuestionUpdateRequest updateRequest) {
-        Question question = questionRepository.findById(id).orElseThrow(() -> new NotFoundException(
-                String.format("Question with id : %s doesn't exist ! ", id)));
+    public SimpleResponse updateRecordSayingStatementQuestion(Long id, RecordSayingStatementQuestionUpdateRequest updateRequest) {
+        Question question = questionRepository.findById(id).orElseThrow(() ->
+                new NotFoundException(String.format("Question with id : %s doesn't exist! ", id)));
 
+        // TODO UPDATE LOGIC
         question.setTitle(updateRequest.getTitle() != null ? updateRequest.getTitle() : question.getTitle());
         question.setStatement(updateRequest.getStatement() != null ? updateRequest.getStatement() : question.getStatement());
         question.setDuration(updateRequest.getDuration() != null ? updateRequest.getDuration() : question.getDuration());
+        question.setCorrectAnswer(updateRequest.getCorrectAnswer() != null ? updateRequest.getCorrectAnswer() : question.getCorrectAnswer());
         question.setQuestionOrder(updateRequest.getQuestionOrder() != null ? updateRequest.getQuestionOrder() : question.getQuestionOrder());
         question.setMinWords(updateRequest.getMinWords() != null ? updateRequest.getMinWords() : question.getMinWords());
+
         questionRepository.save(question);
+
         return SimpleResponse.builder()
                 .message(String.format("Question with id : %s successfully updated !", id))
                 .build();

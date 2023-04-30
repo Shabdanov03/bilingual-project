@@ -17,10 +17,12 @@ public class TypeWhatYouHearQuestionRequest {
     @NotNull(message = "The duration must not be empty.")
     @Positive(message = "Duration can not be negative")
     private Integer duration;
+    private Integer questionOrder;
     @Builder.Default
     @Enumerated(EnumType.STRING)
     private QuestionType questionType = QuestionType.TYPE_WHAT_YOU_HEAR;
     @NotNull(message = "Number of replays  must not be empty.")
+    @Positive(message = "Number of Replays can not be negative")
     private Integer numberOfReplays;
     @NotNull(message = "File must not be empty")
     private FileRequest fileRequest;

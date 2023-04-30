@@ -1,4 +1,5 @@
 package com.example.bilingualb8.repositories.custom.impl;
+
 import com.example.bilingualb8.dto.responses.questions.type_what_you_hear.TypeWhatYouHearQuestionResponse;
 import com.example.bilingualb8.enums.FileType;
 import com.example.bilingualb8.enums.QuestionType;
@@ -6,6 +7,7 @@ import com.example.bilingualb8.repositories.custom.CustomTypeWhatYouHearQuestion
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -22,26 +24,31 @@ public class CustomTypeWhatYouHearQuestionRepositoryImpl implements CustomTypeWh
                        q.duration      as duration,
                        q.statement     as statement,
                        q.question_type as questionType,
+                       q.number_of_replays as numberOfReplays,
+                       q.question_order as questionOrder,
                        f.id as fileId,
                        f.file_url      as fileUrl,
                        f.file_type     as fileType,
-                       q.correct_answer as correctAnswer,
                        t.id as testId
                 from questions q
                          join tests t on t.id = q.test_id
                          join files f on q.id = f.question_id
+                WHERE q.question_type = 'TYPE_WHAT_YOU_HEAR'
                 """;
+
         return jdbcTemplate.query(sql, (resultSet, i) -> new TypeWhatYouHearQuestionResponse(
-                        resultSet.getLong("id"),
-                        resultSet.getString("title"),
-                        resultSet.getInt("duration"),
-                        QuestionType.valueOf(resultSet.getString("question_type")),
-                        resultSet.getLong("id"),
-                        resultSet.getLong("fileId"),
-                        FileType.valueOf(resultSet.getString("fileType")),
-                        resultSet.getString("fileUrl"),
-                        resultSet.getString("correctAnswer"),
-                        resultSet.getLong("testId")));
+                resultSet.getLong("id"),
+                resultSet.getString("title"),
+                resultSet.getInt("duration"),
+                QuestionType.valueOf(resultSet.getString("questionType")),
+                resultSet.getLong("id"),
+                resultSet.getLong("fileId"),
+                FileType.valueOf(resultSet.getString("fileType")),
+                resultSet.getString("fileUrl"),
+                resultSet.getLong("testId"),
+                resultSet.getInt("numberOfReplays"),
+                resultSet.getInt("questionOrder")
+        ));
     }
 
     @Override
@@ -52,9 +59,11 @@ public class CustomTypeWhatYouHearQuestionRepositoryImpl implements CustomTypeWh
                        q.duration      as duration,
                        q.statement     as statement,
                        q.question_type as questionType,
+                       q.number_of_replays as numberOfReplays,
+                       q.question_order as questionOrder,
+                       f.id            as fileId,
                        f.file_url      as fileUrl,
                        f.file_type     as fileType,
-                       q.correct_answer as correctAnswer,
                        t.id as testId
                 from questions q
                          join tests t on t.id = q.test_id
@@ -70,7 +79,9 @@ public class CustomTypeWhatYouHearQuestionRepositoryImpl implements CustomTypeWh
                 resultSet.getLong("fileId"),
                 FileType.valueOf(resultSet.getString("fileType")),
                 resultSet.getString("fileUrl"),
-                resultSet.getString("correctAnswer"),
-                resultSet.getLong("testId")), id).stream().findAny();
+                resultSet.getLong("testId"),
+                resultSet.getInt("numberOfReplays"),
+                resultSet.getInt("questionOrder")
+                ), id).stream().findAny();
     }
 }
