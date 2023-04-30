@@ -34,8 +34,6 @@ public class Question {
     @Column(length = 10000)
     private String correctAnswer;
     @Column(length = 10000)
-    private String passageQuestion;
-    @Column(length = 10000)
     private String passage;
     private String audioText;
     @ManyToOne(cascade = {MERGE, REFRESH, DETACH, PERSIST})

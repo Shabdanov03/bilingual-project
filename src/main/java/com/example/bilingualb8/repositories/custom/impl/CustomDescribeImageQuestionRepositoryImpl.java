@@ -52,7 +52,7 @@ public class CustomDescribeImageQuestionRepositoryImpl implements CustomDescribe
     @Override
     public Optional<DescribeImageQuestionResponse> getDescribeImageQuestionById(Long id) {
         String sql = """
-                select
+                    select
                     q.id as id,
                     q.title as title,
                     q.question_type as question_type,
@@ -63,10 +63,10 @@ public class CustomDescribeImageQuestionRepositoryImpl implements CustomDescribe
                     f.file_url as file_url,
                     f.question_id as question_id,
                     t.id as test_id
-                from questions q
+                    from questions q
                     join files f on q.id = f.question_id
                     join tests t on t.id = q.test_id
-                where q.question_type = 'DESCRIBE_IMAGE' AND q.id = ?""";
+                    where q.question_type = 'DESCRIBE_IMAGE' AND q.id = ?""";
         return jdbcTemplate.query(sql, (resultSet, i) ->
                 new DescribeImageQuestionResponse(
                         resultSet.getLong("id"),

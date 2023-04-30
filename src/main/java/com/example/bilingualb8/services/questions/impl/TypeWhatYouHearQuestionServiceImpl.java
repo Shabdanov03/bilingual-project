@@ -7,6 +7,7 @@ import com.example.bilingualb8.dto.responses.questions.type_what_you_hear.TypeWh
 import com.example.bilingualb8.entity.File;
 import com.example.bilingualb8.entity.Question;
 import com.example.bilingualb8.entity.Test;
+import com.example.bilingualb8.enums.QuestionType;
 import com.example.bilingualb8.exceptions.NotFoundException;
 import com.example.bilingualb8.repositories.QuestionRepository;
 import com.example.bilingualb8.repositories.TestRepository;
@@ -32,7 +33,7 @@ public class TypeWhatYouHearQuestionServiceImpl implements TypeWhatYouHearQuesti
         Question question = Question.builder()
                 .title(request.getTitle())
                 .duration(request.getDuration())
-                .questionType(request.getQuestionType())
+                .questionType(QuestionType.TYPE_WHAT_YOU_HEAR)
                 .numberOfReplays(request.getNumberOfReplays())
                 .correctAnswer(request.getCorrectAnswer())
                 .questionOrder(request.getQuestionOrder())
