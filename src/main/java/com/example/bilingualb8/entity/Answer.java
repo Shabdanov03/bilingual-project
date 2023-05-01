@@ -18,7 +18,7 @@ public class Answer {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "answer_id_gen")
     @SequenceGenerator(name = "answer_id_gen", sequenceName = "answer_id_gen", allocationSize = 1,initialValue = 10)
     private Long id;
-    @OneToOne
+    @OneToOne(cascade = {REFRESH,MERGE,PERSIST,DETACH})
     private Question question;
     @ManyToOne(cascade = {REFRESH,MERGE,PERSIST,DETACH})
     private User user;

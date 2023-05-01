@@ -12,6 +12,7 @@ import com.example.bilingualb8.repositories.QuestionRepository;
 import com.example.bilingualb8.repositories.TestRepository;
 import com.example.bilingualb8.repositories.custom.CustomRespondNWordsQuestionRepository;
 import com.example.bilingualb8.services.questions.RespondNWordsQuestionService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -55,13 +56,11 @@ public class RespondNWordsQuestionServiceImpl implements RespondNWordsQuestionSe
     }
 
     @Override
+    @Transactional
     public SimpleResponse deleteRespondNWordsQuestionById(Long id) {
-        if (!questionRepository.existsById(id)) {
-            return SimpleResponse.builder()
-                    .message(String.format("Question with id : %s doesn't exist !", id))
-                    .build();
-        }
-        questionRepository.deleteById(id);
+        Question question = questionRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException(String.format("Question with id %s was not found", id)));
+        questionRepository.delete(question);
         return SimpleResponse.builder()
                 .message(String.format("Question with id : %s successfully deleted !", id))
                 .build();

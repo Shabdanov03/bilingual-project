@@ -9,12 +9,12 @@ import lombok.Builder;
 
 @Builder
 public record SignUpRequest(
-        @NameValid
+        @NameValid(message = "First name must be valid")
         @NotBlank(message = "The first name must not be empty.")
         @NotNull(message = "The first name must not be empty.")
         String firstName,
 
-        @NameValid
+        @NameValid(message = "Last name must be valid")
         @NotBlank(message = "The surname must not be empty.")
         @NotNull(message = "The surname must not be empty.")
         String lastName,
