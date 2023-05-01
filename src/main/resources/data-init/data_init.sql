@@ -6,11 +6,11 @@ values (1, now(), 'Alibek', false, 'Altynbekov', now()),
        (5, now(), 'Zhazgul', false, 'Zhoroeva', now());
 
 insert into user_infos(id, email, password, role, user_id)
-values (1, 'alibek@gmail.com', 'alibek123', 'ADMIN', 1),
-       (2, 'ilim@gmail.com', 'ilim123', 'USER', 2),
-       (3, 'adil@gmail.com', 'adil123', 'USER', 3),
-       (4, 'saltanat@gmail.com', 'saltanat123', 'USER', 4),
-       (5, 'zhazgul@gmail.com', 'zhazgul123', 'USER', 5);
+values (1, 'alibek@gmail.com', '$2a$04$m6SmfKTWVoq3UqY.TSfFhOhff9PJR9mIP9W4qxbDap3/36ucDdmVq', 'ADMIN', 1),
+       (2, 'ilim@gmail.com', '$2a$04$HxEwmj1058t4CHWAAlawEediNwxxoyexbBkBZrw6RYU/WIbetD07u', 'USER', 2),
+       (3, 'adil@gmail.com', '$2a$04$9AbdDhS0Se77peV1Vol79uTD1ndTja8WFDCcS7Bu0tZA8RdRogXNy', 'USER', 3),
+       (4, 'saltanat@gmail.com', '$2a$04$fMcU5JEqZ5da60kbT77tOeDkXVLGA3xcJ43fDpUM6Rq2c/a2OXRzS', 'USER', 4),
+       (5, 'zhazgul@gmail.com', '$2a$04$zsU2raL6oyLYLJQQgPpN9.2JFonBtos3Y9PlqvE5hZFUWp8qwZ3re', 'USER', 5);
 
 
 

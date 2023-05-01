@@ -82,6 +82,6 @@ public class CustomTypeWhatYouHearQuestionRepositoryImpl implements CustomTypeWh
                 resultSet.getLong("testId"),
                 resultSet.getInt("numberOfReplays"),
                 resultSet.getInt("questionOrder")
-                ), id).stream().findAny();
+        ), id).stream().findAny();
     }
 }
