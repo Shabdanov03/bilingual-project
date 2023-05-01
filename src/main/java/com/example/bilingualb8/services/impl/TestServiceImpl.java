@@ -3,7 +3,6 @@ package com.example.bilingualb8.services.impl;
 import com.example.bilingualb8.dto.requests.test.TestRequest;
 import com.example.bilingualb8.dto.responses.SimpleResponse;
 import com.example.bilingualb8.dto.responses.test.TestResponse;
-import com.example.bilingualb8.entity.Question;
 import com.example.bilingualb8.entity.Test;
 import com.example.bilingualb8.exceptions.AlreadyExistException;
 import com.example.bilingualb8.exceptions.NotFoundException;
@@ -13,7 +12,6 @@ import com.example.bilingualb8.services.TestService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service

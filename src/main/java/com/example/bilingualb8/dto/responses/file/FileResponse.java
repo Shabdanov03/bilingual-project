@@ -12,9 +12,8 @@ import lombok.Data;
 @AllArgsConstructor
 public class FileResponse {
     private Long id;
-    @Builder.Default
     @Enumerated(EnumType.STRING)
-    private FileType fileType = FileType.IMAGE;
+    private FileType fileType;
     private String fileUrl;
     private Long questionId;
 

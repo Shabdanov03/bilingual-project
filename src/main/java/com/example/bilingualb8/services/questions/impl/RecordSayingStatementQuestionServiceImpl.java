@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 public class RecordSayingStatementQuestionServiceImpl implements RecordSayingStatementQuestionService {
     private final QuestionRepository questionRepository;
     private final TestRepository testRepository;
+
     @Override
     public SimpleResponse saveRecordSayingStatement(RecordSayingStatementQuestionRequest request) {
         Test test = testRepository.findById(request.getTestId()).orElseThrow(() ->

@@ -57,34 +57,34 @@ public class CustomQuestionRepositoryImpl implements CustomQuestionRepository {
 
         List<QuestionResponse> questions = jdbcTemplate.query(sql, (resultSet, i) ->
                 new QuestionResponse(
-                resultSet.getLong("id"),
-                resultSet.getString("title"),
-                resultSet.getString("statement"),
-                QuestionType.valueOf(resultSet.getString("question_type")),
-                resultSet.getInt("duration"),
-                resultSet.getInt("min_words"),
-                resultSet.getInt("number_of_replays"),
-                resultSet.getString("correct_answer"),
-                resultSet.getString("passage"),
-                resultSet.getString("audio_text"),
-                resultSet.getLong("test_id"),
-                null,
-                null
-        ));
+                        resultSet.getLong("id"),
+                        resultSet.getString("title"),
+                        resultSet.getString("statement"),
+                        QuestionType.valueOf(resultSet.getString("question_type")),
+                        resultSet.getInt("duration"),
+                        resultSet.getInt("min_words"),
+                        resultSet.getInt("number_of_replays"),
+                        resultSet.getString("correct_answer"),
+                        resultSet.getString("passage"),
+                        resultSet.getString("audio_text"),
+                        resultSet.getLong("test_id"),
+                        null,
+                        null
+                ));
 
 
         String optionQuery = """
-               SELECT
-                o.id as id,
-                o.question_id as questionId,
-                o.file_url as fileUrl,
-                o.title as title,
-                o.is_correct as isCorrect
-                FROM options o
-                """;
+                SELECT
+                 o.id as id,
+                 o.question_id as questionId,
+                 o.file_url as fileUrl,
+                 o.title as title,
+                 o.is_correct as isCorrect
+                 FROM options o
+                 """;
 
 
-        List<OptionResponse> options = jdbcTemplate.query(optionQuery,(resultSet,i) ->
+        List<OptionResponse> options = jdbcTemplate.query(optionQuery, (resultSet, i) ->
 
                 new OptionResponse(
                         resultSet.getLong("id"),
@@ -128,7 +128,7 @@ public class CustomQuestionRepositoryImpl implements CustomQuestionRepository {
                         FileType.valueOf(resultSet.getString("file_type")),
                         resultSet.getString("file_url"),
                         resultSet.getLong("question_id")
-                ),id);
+                ), id);
 
         String optionsQuery = """
                 SELECT

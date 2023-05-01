@@ -1,6 +1,5 @@
 package com.example.bilingualb8.dto.requests.questions.record_saying_statement;
 
-import com.example.bilingualb8.dto.requests.file.FileRequest;
 import jakarta.validation.constraints.Positive;
 import lombok.Builder;
 import lombok.Data;

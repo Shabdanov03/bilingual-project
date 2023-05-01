@@ -21,6 +21,7 @@ import java.util.NoSuchElementException;
 public class TypeWhatYouHearQuestionServiceImpl implements TypeWhatYouHearQuestionService {
     private final TestRepository testRepository;
     private final QuestionRepository questionRepository;
+
     @Override
     public SimpleResponse saveTypeWhatYouHearQuestion(TypeWhatYouHearQuestionRequest request) {
         Test test = testRepository.findById(request.getTestId()).orElseThrow(() ->
