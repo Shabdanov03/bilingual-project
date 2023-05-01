@@ -14,7 +14,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class MainQuestionResponse {
+public class QuestionResponse {
     private Long id;
     private String title;
     private String statement;

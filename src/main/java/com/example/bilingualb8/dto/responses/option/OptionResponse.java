@@ -11,6 +11,6 @@ public class OptionResponse {
     private Long id;
     private String title;
     private Boolean isCorrect;
-    private Long question;
+    private Long questionId;
     private String fileUrl;
 }

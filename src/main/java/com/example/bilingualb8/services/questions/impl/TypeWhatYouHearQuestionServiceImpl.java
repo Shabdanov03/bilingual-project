@@ -3,18 +3,15 @@ package com.example.bilingualb8.services.questions.impl;
 import com.example.bilingualb8.dto.requests.questions.type_what_you_hear.TypeWhatYouHearQuestionRequest;
 import com.example.bilingualb8.dto.requests.questions.type_what_you_hear.TypeWhatYouHearQuestionUpdateRequest;
 import com.example.bilingualb8.dto.responses.SimpleResponse;
-import com.example.bilingualb8.dto.responses.questions.type_what_you_hear.TypeWhatYouHearQuestionResponse;
 import com.example.bilingualb8.entity.*;
 import com.example.bilingualb8.enums.QuestionType;
 import com.example.bilingualb8.exceptions.NotFoundException;
-import com.example.bilingualb8.repositories.AnswerRepository;
 import com.example.bilingualb8.repositories.QuestionRepository;
-import com.example.bilingualb8.repositories.ResultRepository;
 import com.example.bilingualb8.repositories.TestRepository;
-import com.example.bilingualb8.repositories.custom.CustomTypeWhatYouHearQuestionRepository;
 import com.example.bilingualb8.services.questions.TypeWhatYouHearQuestionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -24,9 +21,6 @@ import java.util.NoSuchElementException;
 public class TypeWhatYouHearQuestionServiceImpl implements TypeWhatYouHearQuestionService {
     private final TestRepository testRepository;
     private final QuestionRepository questionRepository;
-    private final CustomTypeWhatYouHearQuestionRepository customTypeWhatYouHearQuestionRepository;
-    private final AnswerRepository answerRepository;
-    private final ResultRepository resultRepository;
     @Override
     public SimpleResponse saveTypeWhatYouHearQuestion(TypeWhatYouHearQuestionRequest request) {
         Test test = testRepository.findById(request.getTestId()).orElseThrow(() ->
@@ -44,33 +38,6 @@ public class TypeWhatYouHearQuestionServiceImpl implements TypeWhatYouHearQuesti
         question.setFiles(new ArrayList<>((List.of(file))));
         questionRepository.save(question);
         return SimpleResponse.builder().message(String.format("Question with title: %s successfully saved!", request.getTitle())).build();
-    }
-
-    @Override
-    public List<TypeWhatYouHearQuestionResponse> getAllTypeWhatYouHearQuestion() {
-        return customTypeWhatYouHearQuestionRepository.getAllTypeWhatYouHearQuestion();
-    }
-
-    @Override
-    public TypeWhatYouHearQuestionResponse getTypeWhatYouHearQuestionById(Long id) {
-        return customTypeWhatYouHearQuestionRepository.getTypeWhatYouHearQuestionById(id).orElseThrow(() -> new
-                NoSuchElementException(String.format("Question  with id: %s not found!", id)));
-    }
-
-    @Override
-    public SimpleResponse deleteTypeWhatYouHearById(Long id) {
-        Question question = questionRepository.findById(id).orElseThrow(() ->
-                new NotFoundException(String.format("Question with id : %s doesn't exist !", id)));
-        Answer answer = answerRepository.findAnswerByQuestionId(question.getId());
-        List<Result> results = resultRepository.findByTestId(question.getTest().getId());
-        for (Result result : results) {
-            result.getAnswers().remove(answer);
-        }
-        answerRepository.delete(answer);
-        questionRepository.delete(question);
-        return SimpleResponse.builder()
-                .message(String.format("Question with id : %s successfully deleted !",id))
-                .build();
     }
 
     @Override

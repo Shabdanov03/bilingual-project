@@ -2,7 +2,7 @@ package com.example.bilingualb8.controllers;
 
 import com.example.bilingualb8.dto.requests.test.TestRequest;
 import com.example.bilingualb8.dto.responses.SimpleResponse;
-import com.example.bilingualb8.dto.responses.test.TestListResponse;
+import com.example.bilingualb8.dto.responses.test.TestResponse;
 import com.example.bilingualb8.services.TestService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
@@ -22,14 +22,14 @@ public class TestController {
     @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     @Operation(summary = "This is get all test method")
     @GetMapping
-    public List<TestListResponse> getAll() {
+    public List<TestResponse> getAll() {
         return testService.getAll();
     }
 
     @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     @Operation(summary = "This is get by id test method")
     @GetMapping("/{id}")
-    public TestListResponse getById(@PathVariable Long id) {
+    public TestResponse getById(@PathVariable Long id) {
         return testService.getById(id);
     }
 
