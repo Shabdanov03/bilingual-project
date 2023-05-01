@@ -9,46 +9,48 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/tests")
 @RequiredArgsConstructor
+@CrossOrigin
 public class TestController {
     private final TestService testService;
 
     @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     @Operation(summary = "This is get all test method")
     @GetMapping
-    public List<TestListResponse> getAll(){
+    public List<TestListResponse> getAll() {
         return testService.getAll();
     }
 
     @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     @Operation(summary = "This is get by id test method")
     @GetMapping("/{id}")
-    public TestListResponse getById(@PathVariable Long id){
+    public TestListResponse getById(@PathVariable Long id) {
         return testService.getById(id);
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @Operation(summary = "This is delete by id test method")
     @DeleteMapping("/{id}")
-    public SimpleResponse deleteById(@PathVariable Long id){
+    public SimpleResponse deleteById(@PathVariable Long id) {
         return testService.deleteById(id);
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @Operation(summary = "This is update test method")
     @PutMapping("/{id}")
-    public SimpleResponse update(@PathVariable @Valid Long id, @RequestBody TestRequest request){
+    public SimpleResponse update(@PathVariable @Valid Long id, @RequestBody TestRequest request) {
         return testService.update(id, request);
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @Operation(summary = "This is save test method")
     @PostMapping
-    public SimpleResponse save(@RequestBody @Valid TestRequest request){
+    public SimpleResponse save(@RequestBody @Valid TestRequest request) {
         return testService.save(request);
     }
 }

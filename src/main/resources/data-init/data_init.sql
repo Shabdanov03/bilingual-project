@@ -46,7 +46,7 @@ values (1, NULL, 'correct answer1', 30, NULL, NULL, 'MULTIPLE', NULL, 1,
        (9, NULL, NULL, 30, NULL, NULL, 'SINGLE', 'passage9', 9,
         'SELECT_BEST_TITLE',
         NULL, 'title9', 1),
-       (10, NULL, 'correct answer10', 30, NULL, NULL, 'SINGLE', 'passage10', 10,
+       (10, NULL, 'correct answer10', 30, NULL, NULL, 'SINGLE', 'passage10' , 10,
         'SELECT_THE_MAIN_IDEA',
         NULL, 'title10', 1);
 

@@ -5,9 +5,7 @@ import com.example.bilingualb8.enums.QuestionType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
-
 import java.util.List;
-
 import static jakarta.persistence.CascadeType.*;
 
 @Entity
@@ -47,3 +45,5 @@ public class Question {
     @Enumerated(value = EnumType.STRING)
     private OptionType optionType;
 }
+
+

@@ -4,12 +4,12 @@ import com.example.bilingualb8.dto.requests.questions.describe_image.DescribeIma
 import com.example.bilingualb8.dto.requests.questions.describe_image.DescribeImageQuestionUpdateRequest;
 import com.example.bilingualb8.dto.responses.SimpleResponse;
 import com.example.bilingualb8.dto.responses.questions.describe_image.DescribeImageQuestionResponse;
-import com.example.bilingualb8.entity.File;
-import com.example.bilingualb8.entity.Question;
-import com.example.bilingualb8.entity.Test;
+import com.example.bilingualb8.entity.*;
 import com.example.bilingualb8.enums.QuestionType;
 import com.example.bilingualb8.exceptions.NotFoundException;
+import com.example.bilingualb8.repositories.AnswerRepository;
 import com.example.bilingualb8.repositories.QuestionRepository;
+import com.example.bilingualb8.repositories.ResultRepository;
 import com.example.bilingualb8.repositories.TestRepository;
 import com.example.bilingualb8.repositories.custom.CustomDescribeImageQuestionRepository;
 import com.example.bilingualb8.services.questions.DescribeImageQuestionService;
@@ -25,6 +25,8 @@ public class DescribeImageQuestionServiceImpl implements DescribeImageQuestionSe
     private final QuestionRepository questionRepository;
     private final CustomDescribeImageQuestionRepository customRepository;
     private final TestRepository testRepository;
+    private final AnswerRepository answerRepository;
+    private final ResultRepository resultRepository;
 
     public SimpleResponse saveDescribeQuestion(DescribeImageQuestionRequest request) {
         Test test = testRepository.findById(request.getTestId()).orElseThrow(() ->
@@ -58,14 +60,17 @@ public class DescribeImageQuestionServiceImpl implements DescribeImageQuestionSe
 
     @Override
     public SimpleResponse deleteDescribeImageQuestionById(Long id) {
-        if (!questionRepository.existsById(id)) {
-            return SimpleResponse.builder()
-                    .message(String.format("Question with id : %s doesn't exist !", id))
-                    .build();
+         Question question = questionRepository.findById(id).orElseThrow(() ->
+                new NotFoundException(String.format("Question with id : %s doesn't exist !", id)));
+        Answer answer = answerRepository.findAnswerByQuestionId(question.getId());
+        List<Result> results = resultRepository.findByTestId(question.getTest().getId());
+        for (Result result : results) {
+            result.getAnswers().remove(answer);
         }
-        questionRepository.deleteById(id);
+        answerRepository.delete(answer);
+        questionRepository.delete(question);
         return SimpleResponse.builder()
-                .message(String.format("Question with id : %s successfully deleted !", id))
+                .message(String.format("Question with id : %s successfully deleted !",id))
                 .build();
     }
 
