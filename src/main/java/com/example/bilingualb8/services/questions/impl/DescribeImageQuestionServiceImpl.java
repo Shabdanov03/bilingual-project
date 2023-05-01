@@ -3,15 +3,11 @@ package com.example.bilingualb8.services.questions.impl;
 import com.example.bilingualb8.dto.requests.questions.describe_image.DescribeImageQuestionRequest;
 import com.example.bilingualb8.dto.requests.questions.describe_image.DescribeImageQuestionUpdateRequest;
 import com.example.bilingualb8.dto.responses.SimpleResponse;
-import com.example.bilingualb8.dto.responses.questions.describe_image.DescribeImageQuestionResponse;
 import com.example.bilingualb8.entity.*;
 import com.example.bilingualb8.enums.QuestionType;
 import com.example.bilingualb8.exceptions.NotFoundException;
-import com.example.bilingualb8.repositories.AnswerRepository;
 import com.example.bilingualb8.repositories.QuestionRepository;
-import com.example.bilingualb8.repositories.ResultRepository;
 import com.example.bilingualb8.repositories.TestRepository;
-import com.example.bilingualb8.repositories.custom.CustomDescribeImageQuestionRepository;
 import com.example.bilingualb8.services.questions.DescribeImageQuestionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,10 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class DescribeImageQuestionServiceImpl implements DescribeImageQuestionService {
     private final QuestionRepository questionRepository;
-    private final CustomDescribeImageQuestionRepository customRepository;
     private final TestRepository testRepository;
-    private final AnswerRepository answerRepository;
-    private final ResultRepository resultRepository;
 
     public SimpleResponse saveDescribeQuestion(DescribeImageQuestionRequest request) {
         Test test = testRepository.findById(request.getTestId()).orElseThrow(() ->
@@ -44,33 +37,6 @@ public class DescribeImageQuestionServiceImpl implements DescribeImageQuestionSe
         questionRepository.save(question);
         return SimpleResponse.builder()
                 .message(String.format("Question with title : %s successfully saved !", request.getTitle()))
-                .build();
-    }
-
-    @Override
-    public List<DescribeImageQuestionResponse> getAllDescribeImageQuestion() {
-        return customRepository.getAllDescribeImageQuestion();
-    }
-
-    @Override
-    public DescribeImageQuestionResponse getDescribeImageQuestionById(Long id) {
-        return customRepository.getDescribeImageQuestionById(id).orElseThrow(() ->
-                new NotFoundException(String.format("Question with id : %s doesn't exist !", id)));
-    }
-
-    @Override
-    public SimpleResponse deleteDescribeImageQuestionById(Long id) {
-         Question question = questionRepository.findById(id).orElseThrow(() ->
-                new NotFoundException(String.format("Question with id : %s doesn't exist !", id)));
-        Answer answer = answerRepository.findAnswerByQuestionId(question.getId());
-        List<Result> results = resultRepository.findByTestId(question.getTest().getId());
-        for (Result result : results) {
-            result.getAnswers().remove(answer);
-        }
-        answerRepository.delete(answer);
-        questionRepository.delete(question);
-        return SimpleResponse.builder()
-                .message(String.format("Question with id : %s successfully deleted !",id))
                 .build();
     }
 

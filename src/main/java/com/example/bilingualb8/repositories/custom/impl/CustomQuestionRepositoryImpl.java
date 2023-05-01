@@ -2,26 +2,26 @@ package com.example.bilingualb8.repositories.custom.impl;
 
 import com.example.bilingualb8.dto.responses.file.FileResponse;
 import com.example.bilingualb8.dto.responses.option.OptionResponse;
-import com.example.bilingualb8.dto.responses.questions.MainQuestionMiniResponse;
-import com.example.bilingualb8.dto.responses.questions.MainQuestionResponse;
+import com.example.bilingualb8.dto.responses.questions.QuestionResponse;
 import com.example.bilingualb8.enums.FileType;
 import com.example.bilingualb8.enums.QuestionType;
 import com.example.bilingualb8.exceptions.NotFoundException;
-import com.example.bilingualb8.repositories.custom.CustomMainQuestionRepository;
+import com.example.bilingualb8.repositories.custom.CustomQuestionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Repository
 @RequiredArgsConstructor
-public class CustomMainQuestionRepositoryImpl implements CustomMainQuestionRepository {
+public class CustomQuestionRepositoryImpl implements CustomQuestionRepository {
     private final JdbcTemplate jdbcTemplate;
 
     @Override
-    public List<MainQuestionMiniResponse> getAllQuestions() {
+    public List<QuestionResponse> getAllQuestions() {
         String sql = """
                 SELECT
                 q.id as id,
@@ -37,24 +37,80 @@ public class CustomMainQuestionRepositoryImpl implements CustomMainQuestionRepos
                 t.id as test_id
                 FROM questions q join tests t on t.id = q.test_id
                 """;
-        return jdbcTemplate.query(sql, (resultSet, i) ->
-                new MainQuestionMiniResponse(
+
+        String fileQuery = """
+                SELECT
+                f.id as fileId,
+                f.file_type as fileType,
+                f.file_url as fileUrl,
+                f.question_id as questionId
+                FROM files f
+                """;
+
+        List<FileResponse> files = jdbcTemplate.query(fileQuery, (resultSet, i) ->
+                new FileResponse(
+                        resultSet.getLong("fileId"),
+                        FileType.valueOf(resultSet.getString("fileType")),
+                        resultSet.getString("fileUrl"),
+                        resultSet.getLong("questionId")
+                ));
+
+        List<QuestionResponse> questions = jdbcTemplate.query(sql, (resultSet, i) ->
+                new QuestionResponse(
+                resultSet.getLong("id"),
+                resultSet.getString("title"),
+                resultSet.getString("statement"),
+                QuestionType.valueOf(resultSet.getString("question_type")),
+                resultSet.getInt("duration"),
+                resultSet.getInt("min_words"),
+                resultSet.getInt("number_of_replays"),
+                resultSet.getString("correct_answer"),
+                resultSet.getString("passage"),
+                resultSet.getString("audio_text"),
+                resultSet.getLong("test_id"),
+                null,
+                null
+        ));
+
+
+        String optionQuery = """
+               SELECT
+                o.id as id,
+                o.question_id as questionId,
+                o.file_url as fileUrl,
+                o.title as title,
+                o.is_correct as isCorrect
+                FROM options o
+                """;
+
+
+        List<OptionResponse> options = jdbcTemplate.query(optionQuery,(resultSet,i) ->
+
+                new OptionResponse(
                         resultSet.getLong("id"),
                         resultSet.getString("title"),
-                        resultSet.getString("statement"),
-                        QuestionType.valueOf(resultSet.getString("question_type")),
-                        resultSet.getInt("duration"),
-                        resultSet.getInt("min_words"),
-                        resultSet.getInt("number_of_replays"),
-                        resultSet.getString("correct_answer"),
-                        resultSet.getString("passage"),
-                        resultSet.getString("audio_text"),
-                        resultSet.getLong("test_id")
+                        resultSet.getBoolean("isCorrect"),
+                        resultSet.getLong("questionId"),
+                        resultSet.getString("fileUrl")
                 ));
+
+        // TODO Inserting files & options to related questions
+        questions.forEach(question -> {
+            List<FileResponse> fileResponseList = files.stream()
+                    .filter(file -> file.getQuestionId().equals(question.getId()))
+                    .collect(Collectors.toList());
+            List<OptionResponse> optionResponseList = options.stream()
+                    .filter(option -> option.getQuestionId().equals(question.getId()))
+                    .collect(Collectors.toList());
+            question.setOptions(optionResponseList);
+            question.setFiles(fileResponseList);
+        });
+
+        return questions;
     }
 
     @Override
-    public Optional<MainQuestionResponse> getQuestionById(Long id) {
+    public Optional<QuestionResponse> getQuestionById(Long id) {
 
 
         String fileSql = """
@@ -75,7 +131,7 @@ public class CustomMainQuestionRepositoryImpl implements CustomMainQuestionRepos
                 ),id);
 
         String optionsQuery = """
-                SELECT 
+                SELECT
                 o.id as id,
                 o.question_id as questionId,
                 o.file_url as fileUrl,
@@ -110,8 +166,8 @@ public class CustomMainQuestionRepositoryImpl implements CustomMainQuestionRepos
                 where q.id = ?
                 """;
 
-        MainQuestionResponse response = jdbcTemplate.query(sql, (resultset, i) ->
-                new MainQuestionResponse(
+        QuestionResponse response = jdbcTemplate.query(sql, (resultset, i) ->
+                new QuestionResponse(
                         resultset.getLong("id"),
                         resultset.getString("title"),
                         resultset.getString("statement"),
