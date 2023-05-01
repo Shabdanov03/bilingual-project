@@ -17,9 +17,16 @@ public class CustomRespondNWordsQuestionRepositoryImpl implements CustomRespondN
 
     public List<RespondNWordsQuestionResponse> getAllRespondNWordsQuestion() {
         String sql = """
-                SELECT q.id as id, q.title as title,q.statement as statement,
-                q.question_type as questionType,q.duration as duration,q.question_order as questionOrder,q.min_words as minWords,
-                t.id as testId FROM questions q join tests t on t.id = q.test_id
+                SELECT
+                q.id as id,
+                q.title as title,
+                q.statement as statement,
+                q.question_type as questionType,
+                q.duration as duration,
+                q.question_order as questionOrder,
+                q.min_words as minWords,
+                t.id as testId 
+                FROM questions q join tests t on t.id = q.test_id
                  WHERE q.question_type = 'RESPOND_N_WORDS'
                 """;
         return jdbcTemplate.query(sql, (resultSet, i) ->

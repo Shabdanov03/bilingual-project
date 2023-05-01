@@ -1,9 +1,11 @@
 package com.example.bilingualb8.repositories.custom.impl;
 
 import com.example.bilingualb8.dto.responses.questions.highlight_the_answer.HighlightTheAnswerQuestionResponse;
-import com.example.bilingualb8.dto.responses.questions.respond_n_words.RespondNWordsQuestionResponse;
 import com.example.bilingualb8.enums.QuestionType;
+import com.example.bilingualb8.repositories.AnswerRepository;
+import com.example.bilingualb8.repositories.ResultRepository;
 import com.example.bilingualb8.repositories.custom.CustomHighlightTheAnswerQuestionRepository;
+import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -13,8 +15,11 @@ import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
-public class CustomHighlightTheAnswerQuestionRepositoryImpl  implements CustomHighlightTheAnswerQuestionRepository {
-   private final JdbcTemplate jdbcTemplate;
+public class CustomHighlightTheAnswerQuestionRepositoryImpl implements CustomHighlightTheAnswerQuestionRepository {
+    private final JdbcTemplate jdbcTemplate;
+    private final EntityManager entityManager;
+    private final ResultRepository resultRepository;
+    private final AnswerRepository answerRepository;
     @Override
     public List<HighlightTheAnswerQuestionResponse> getAllHighlightTheAnswerQuestion() {
         String sql = """
@@ -42,12 +47,13 @@ public class CustomHighlightTheAnswerQuestionRepositoryImpl  implements CustomHi
                         resultSet.getInt("duration"),
                         resultSet.getInt("questionOrder"),
                         resultSet.getLong("testId")
-                ));    }
+                ));
+    }
 
     @Override
     public Optional<HighlightTheAnswerQuestionResponse> getHighlightTheAnswerQuestionById(Long id) {
         String sql = """
-                SELECT   
+                SELECT
                 q.id as id,
                 q.title as title,
                 q.question_type as questionType,
@@ -71,5 +77,6 @@ public class CustomHighlightTheAnswerQuestionRepositoryImpl  implements CustomHi
                         resultSet.getInt("duration"),
                         resultSet.getInt("questionOrder"),
                         resultSet.getLong("testId")
-                ),id).stream().findAny();    }
+                ), id).stream().findAny();
+    }
 }
