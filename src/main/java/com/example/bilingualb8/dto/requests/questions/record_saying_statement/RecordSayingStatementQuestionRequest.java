@@ -1,6 +1,5 @@
 package com.example.bilingualb8.dto.requests.questions.record_saying_statement;
 
-import com.example.bilingualb8.enums.QuestionType;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.Builder;
@@ -9,8 +8,6 @@ import lombok.Data;
 @Data
 @Builder
 public class RecordSayingStatementQuestionRequest {
-    @NotNull(message = "The Question Type must not be empty.")
-    private QuestionType questionType;
     @NotNull(message = "The title must not be empty.")
     private String title;
     @NotNull(message = "The statement must not be empty.")

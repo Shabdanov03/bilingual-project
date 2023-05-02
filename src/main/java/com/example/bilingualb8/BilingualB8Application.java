@@ -14,7 +14,7 @@ public class BilingualB8Application {
     }
 
     @GetMapping
-    String introduction(){
+    String introduction() {
         return "introduction";
     }
 }

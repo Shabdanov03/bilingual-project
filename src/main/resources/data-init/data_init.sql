@@ -17,8 +17,8 @@ values (1, 'alibek@gmail.com', '$2a$04$m6SmfKTWVoq3UqY.TSfFhOhff9PJR9mIP9W4qxbDa
 insert into tests(id, short_description, title)
 values (1, 'test for students ', 'Test 1');
 
-insert into questions(id, audio_text, correct_answer, duration, min_words, number_of_replays, option_type, passage
-                      ,question_order, question_type, statement, title, test_id)
+insert into questions( id, audio_text, correct_answer, duration, min_words, number_of_replays, option_type, passage
+                     , question_order, question_type, statement, title, test_id)
 values (1, NULL, 'correct answer1', 30, NULL, NULL, 'MULTIPLE', NULL, 1,
         'SELECT_ENGLISH_WORD',
         NULL, 'title1', 1),
@@ -46,7 +46,7 @@ values (1, NULL, 'correct answer1', 30, NULL, NULL, 'MULTIPLE', NULL, 1,
        (9, NULL, NULL, 30, NULL, NULL, 'SINGLE', 'passage9', 9,
         'SELECT_BEST_TITLE',
         NULL, 'title9', 1),
-       (10, NULL, 'correct answer10', 30, NULL, NULL, 'SINGLE', 'passage10' , 10,
+       (10, NULL, 'correct answer10', 30, NULL, NULL, 'SINGLE', 'passage10', 10,
         'SELECT_THE_MAIN_IDEA',
         NULL, 'title10', 1);
 
@@ -107,14 +107,14 @@ values (1, 1),
 
 insert into results_answers(result_id, answers_id)
 values (1, 1),
-       (1,2),
-       (1,3),
-       (1,4),
-       (1,5),
-       (1,6),
-       (1,7),
-       (1,8),
-       (1,9),
-       (1,10);
+       (1, 2),
+       (1, 3),
+       (1, 4),
+       (1, 5),
+       (1, 6),
+       (1, 7),
+       (1, 8),
+       (1, 9),
+       (1, 10);
 
 

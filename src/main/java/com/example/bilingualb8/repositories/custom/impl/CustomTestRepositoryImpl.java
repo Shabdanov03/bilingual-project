@@ -30,7 +30,7 @@ public class CustomTestRepositoryImpl implements CustomTestRepository {
                 t.title as title,
                 t.short_description as description
                 from tests t
-                join questions q on t.id = q.test_id
+                left join questions q on t.id = q.test_id
                 group by t.id
                 """;
 
@@ -144,7 +144,7 @@ public class CustomTestRepositoryImpl implements CustomTestRepository {
                 t.title as title,
                 t.short_description as description
                 from tests t
-                join questions q on t.id = q.test_id
+                left join questions q on t.id = q.test_id
                 WHERE t.id = ?
                 group by t.id
                 """;
@@ -173,6 +173,7 @@ public class CustomTestRepositoryImpl implements CustomTestRepository {
                 q.audio_text as audio_text,
                 t.id as test_id
                 FROM questions q join tests t on t.id = q.test_id
+                WHERE t.id = ?
                 """;
 
         List<QuestionResponse> questions = jdbcTemplate.query(questionQuery, (resultSet, i) ->
@@ -190,7 +191,7 @@ public class CustomTestRepositoryImpl implements CustomTestRepository {
                         resultSet.getLong("test_id"),
                         null,
                         null
-                ));
+                ),id);
 
         String fileQuery = """
                 SELECT

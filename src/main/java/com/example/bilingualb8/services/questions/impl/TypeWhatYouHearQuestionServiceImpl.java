@@ -4,6 +4,7 @@ import com.example.bilingualb8.dto.requests.questions.type_what_you_hear.TypeWha
 import com.example.bilingualb8.dto.requests.questions.type_what_you_hear.TypeWhatYouHearQuestionUpdateRequest;
 import com.example.bilingualb8.dto.responses.SimpleResponse;
 import com.example.bilingualb8.entity.*;
+import com.example.bilingualb8.enums.FileType;
 import com.example.bilingualb8.enums.QuestionType;
 import com.example.bilingualb8.exceptions.NotFoundException;
 import com.example.bilingualb8.repositories.QuestionRepository;
@@ -25,7 +26,7 @@ public class TypeWhatYouHearQuestionServiceImpl implements TypeWhatYouHearQuesti
     @Override
     public SimpleResponse saveTypeWhatYouHearQuestion(TypeWhatYouHearQuestionRequest request) {
         Test test = testRepository.findById(request.getTestId()).orElseThrow(() ->
-                new NoSuchElementException(String.format("Test with id  %d was not found", request.getTestId())));
+                new NoSuchElementException(String.format("Test with id  %d  not found", request.getTestId())));
         Question question = Question.builder()
                 .title(request.getTitle())
                 .duration(request.getDuration())
@@ -35,7 +36,7 @@ public class TypeWhatYouHearQuestionServiceImpl implements TypeWhatYouHearQuesti
                 .questionOrder(request.getQuestionOrder())
                 .test(test)
                 .build();
-        File file = new File(request.getFileRequest().getFileType(), request.getFileRequest().getFileUrl(), question);
+        File file = new File(FileType.AUDIO, request.getFileRequest().getFileUrl(), question);
         question.setFiles(new ArrayList<>((List.of(file))));
         questionRepository.save(question);
         return SimpleResponse.builder().message(String.format("Question with title: %s successfully saved!", request.getTitle())).build();
@@ -53,7 +54,6 @@ public class TypeWhatYouHearQuestionServiceImpl implements TypeWhatYouHearQuesti
         if (updateQuestionRequest.getFile() != null) {
             File file = question.getFiles().get(0);
             file.setFileUrl(updateQuestionRequest.getFile().getFileUrl());
-            file.setFileType(updateQuestionRequest.getFile().getFileType());
             question.setFiles(new ArrayList<>(List.of(file)));
         }
         questionRepository.save(question);

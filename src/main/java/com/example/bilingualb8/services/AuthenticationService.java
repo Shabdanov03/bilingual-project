@@ -9,9 +9,13 @@ import com.google.firebase.auth.FirebaseAuthException;
 
 public interface AuthenticationService {
     AuthenticationResponse signUp(SignUpRequest signUpRequest);
+
     AuthenticationResponse signIn(AuthenticationRequest authenticationRequest);
+
     SimpleResponse forgotPassword(ForgotPassword forgotPassword);
-    SimpleResponse resetPassword(String token,String newPassword);
+
+    SimpleResponse resetPassword(String token, String newPassword);
+
     AuthenticationResponse authWithGoogle(String tokenId) throws FirebaseAuthException;
 
 }

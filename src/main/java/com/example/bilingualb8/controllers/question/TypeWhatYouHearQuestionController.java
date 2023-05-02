@@ -19,14 +19,14 @@ public class TypeWhatYouHearQuestionController {
 
     @Operation(summary = "This is save Type what you hear question method")
     @PreAuthorize("hasAuthority('ADMIN')")
-    @PostMapping("/save")
+    @PostMapping
     public SimpleResponse saveTypeWhatYouHearQuestion(@RequestBody @Valid TypeWhatYouHearQuestionRequest request) {
         return questionService.saveTypeWhatYouHearQuestion(request);
     }
 
     @Operation(summary = "This is update by id Type what you hear question method")
     @PreAuthorize("hasAuthority('ADMIN')")
-    @PutMapping("/{id}/update")
+    @PutMapping("/{id}")
     public SimpleResponse updateTypeWhatYouHearQuestion(@PathVariable Long id, @RequestBody @Valid
     TypeWhatYouHearQuestionUpdateRequest updateRequest) {
         return questionService.updateTypeWhatYouHear(id, updateRequest);

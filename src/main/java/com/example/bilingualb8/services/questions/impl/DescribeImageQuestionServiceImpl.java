@@ -4,6 +4,7 @@ import com.example.bilingualb8.dto.requests.questions.describe_image.DescribeIma
 import com.example.bilingualb8.dto.requests.questions.describe_image.DescribeImageQuestionUpdateRequest;
 import com.example.bilingualb8.dto.responses.SimpleResponse;
 import com.example.bilingualb8.entity.*;
+import com.example.bilingualb8.enums.FileType;
 import com.example.bilingualb8.enums.QuestionType;
 import com.example.bilingualb8.exceptions.NotFoundException;
 import com.example.bilingualb8.repositories.QuestionRepository;
@@ -32,7 +33,7 @@ public class DescribeImageQuestionServiceImpl implements DescribeImageQuestionSe
                 .test(test)
                 .build();
 
-        File file = new File(request.getFile().getFileType(), request.getFile().getFileUrl(), question);
+        File file = new File(FileType.IMAGE, request.getFile().getFileUrl(), question);
         question.setFiles(new ArrayList<>((List.of(file))));
         questionRepository.save(question);
         return SimpleResponse.builder()
