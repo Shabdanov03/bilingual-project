@@ -3,13 +3,19 @@ package com.example.bilingualb8.services.impl;
 import com.example.bilingualb8.dto.requests.test.TestRequest;
 import com.example.bilingualb8.dto.responses.SimpleResponse;
 import com.example.bilingualb8.dto.responses.test.TestResponse;
+import com.example.bilingualb8.entity.Question;
+import com.example.bilingualb8.entity.Result;
 import com.example.bilingualb8.entity.Test;
 import com.example.bilingualb8.exceptions.AlreadyExistException;
 import com.example.bilingualb8.exceptions.NotFoundException;
+import com.example.bilingualb8.repositories.QuestionRepository;
+import com.example.bilingualb8.repositories.ResultRepository;
 import com.example.bilingualb8.repositories.TestRepository;
 import com.example.bilingualb8.repositories.custom.CustomTestRepository;
 import com.example.bilingualb8.services.TestService;
+import com.example.bilingualb8.services.questions.MainQuestionService;
 import lombok.AllArgsConstructor;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,6 +25,10 @@ import java.util.List;
 public class TestServiceImpl implements TestService {
     private final TestRepository testRepository;
     private final CustomTestRepository customTestRepository;
+    private final QuestionRepository questionRepository;
+    private final MainQuestionService mainQuestionService;
+    private final JdbcTemplate jdbcTemplate;
+    private final ResultRepository resultRepository;
 
     @Override
     public SimpleResponse save(TestRequest request) {
@@ -37,6 +47,13 @@ public class TestServiceImpl implements TestService {
     @Override
     public SimpleResponse deleteById(Long testId) {
         testRepository.findById(testId).orElseThrow(() -> new NotFoundException(String.format("Test with : %d id not found", testId)));
+        List<Question> questions = questionRepository.findQuestionsByTestId(testId);
+        for (Question question : questions) {
+            mainQuestionService.deleteQuestionById(question.getId());
+        }
+        for (Result result : resultRepository.findByTestId(testId)) {
+            resultRepository.deleteById(result.getId());
+        }
         testRepository.deleteById(testId);
         return SimpleResponse.builder()
                 .message(String.format("Test with : %d id successfully deleted", testId))

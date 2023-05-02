@@ -15,7 +15,7 @@ import static jakarta.persistence.CascadeType.*;
 public class File {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "file_id_gen")
-    @SequenceGenerator(name = "file_id_gen", sequenceName = "file_id_gen", allocationSize = 1,initialValue = 5)
+    @SequenceGenerator(name = "file_id_gen", sequenceName = "file_id_gen", allocationSize = 1, initialValue = 5)
     private Long id;
     private String fileUrl;
     @ManyToOne(cascade = {REFRESH, PERSIST, MERGE, DETACH})
@@ -23,7 +23,7 @@ public class File {
     @Enumerated(value = EnumType.STRING)
     private FileType fileType;
 
-    public File(FileType fileType, String fileUrl,Question question) {
+    public File(FileType fileType, String fileUrl, Question question) {
         this.fileType = fileType;
         this.fileUrl = fileUrl;
         this.question = question;

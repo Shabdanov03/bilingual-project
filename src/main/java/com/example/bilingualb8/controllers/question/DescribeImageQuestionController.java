@@ -26,7 +26,7 @@ public class DescribeImageQuestionController {
 
     @Operation(summary = "This is update by id Describe image question method")
     @PreAuthorize("hasAuthority('ADMIN')")
-    @PutMapping("/{id}/update")
+    @PutMapping("/{id}")
     public SimpleResponse updateDescribeImageQuestionById(@PathVariable Long id, @RequestBody
     @Valid DescribeImageQuestionUpdateRequest updateRequest) {
         return questionService.updateDescribeImageQuestionById(id, updateRequest);

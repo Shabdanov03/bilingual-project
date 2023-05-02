@@ -7,5 +7,6 @@ import java.util.Optional;
 
 public interface CustomTestRepository {
     List<TestResponse> getAll();
+
     Optional<TestResponse> getById(Long id);
 }

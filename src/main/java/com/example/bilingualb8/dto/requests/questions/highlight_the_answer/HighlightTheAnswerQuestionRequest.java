@@ -1,8 +1,5 @@
 package com.example.bilingualb8.dto.requests.questions.highlight_the_answer;
 
-import com.example.bilingualb8.enums.QuestionType;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.Builder;
@@ -13,10 +10,6 @@ import lombok.Data;
 public class HighlightTheAnswerQuestionRequest {
     @NotNull(message = "The title must not be empty !")
     private String title;
-    @Builder.Default
-    @NotNull(message = "The question type must not be empty.")
-    @Enumerated(EnumType.STRING)
-    private QuestionType questionType = QuestionType.HIGHLIGHT_THE_ANSWER;
     @NotNull(message = "The statement must not be empty.")
     private String statement;
     @NotNull(message = "The passage must not be empty.")

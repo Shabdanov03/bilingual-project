@@ -1,9 +1,6 @@
 package com.example.bilingualb8.dto.requests.questions.type_what_you_hear;
 
 import com.example.bilingualb8.dto.requests.file.FileRequest;
-import com.example.bilingualb8.enums.QuestionType;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.Builder;
@@ -18,9 +15,6 @@ public class TypeWhatYouHearQuestionRequest {
     @Positive(message = "Duration can not be negative")
     private Integer duration;
     private Integer questionOrder;
-    @Builder.Default
-    @Enumerated(EnumType.STRING)
-    private QuestionType questionType = QuestionType.TYPE_WHAT_YOU_HEAR;
     @NotNull(message = "Number of replays  must not be empty.")
     @Positive(message = "Number of Replays can not be negative")
     private Integer numberOfReplays;

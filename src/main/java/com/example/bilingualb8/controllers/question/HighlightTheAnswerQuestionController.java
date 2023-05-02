@@ -27,7 +27,7 @@ public class HighlightTheAnswerQuestionController {
 
     @Operation(summary = "This is update by id Highlight the answer question method")
     @PreAuthorize("hasAuthority('ADMIN')")
-    @PutMapping("/{id}/update")
+    @PutMapping("/{id}")
     public SimpleResponse updateHighlightTheAnswerQuestionById(@PathVariable Long id, @RequestBody
     @Valid HighlightTheAnswerQuestionUpdateRequest updateRequest) {
         return questionService.updateHighlightTheAnswerQuestionById(id, updateRequest);

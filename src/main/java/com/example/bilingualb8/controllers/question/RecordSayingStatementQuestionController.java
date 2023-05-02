@@ -20,14 +20,14 @@ public class RecordSayingStatementQuestionController {
 
     @Operation(summary = "This is save Record saying statement question method")
     @PreAuthorize("hasAuthority('ADMIN')")
-    @PostMapping("/save")
+    @PostMapping
     public SimpleResponse saveRecordSayingStatementQuestion(@RequestBody @Valid RecordSayingStatementQuestionRequest request) {
         return questionService.saveRecordSayingStatement(request);
     }
 
     @Operation(summary = "This is update by id Record saying statement question method")
     @PreAuthorize("hasAuthority('ADMIN')")
-    @PutMapping("/{id}/update")
+    @PutMapping("/{id}")
     public SimpleResponse updateRespondNWordsQuestionById(@PathVariable Long id, @RequestBody @Valid
     RecordSayingStatementQuestionUpdateRequest updateRequest) {
         return questionService.updateRecordSayingStatementQuestion(id, updateRequest);

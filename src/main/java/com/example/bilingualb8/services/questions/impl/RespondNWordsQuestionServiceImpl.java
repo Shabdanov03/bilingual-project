@@ -26,7 +26,7 @@ public class RespondNWordsQuestionServiceImpl implements RespondNWordsQuestionSe
         Question question = Question.builder()
                 .title(request.getTitle())
                 .statement(request.getStatement())
-                .questionType(QuestionType.RESPOND_N_WORDS)
+                .questionType(QuestionType.RESPOND_N_WORDS)// delete
                 .duration(request.getDuration())
                 .questionOrder(request.getQuestionOrder())
                 .minWords(request.getMinWords())

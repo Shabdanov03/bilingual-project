@@ -1,9 +1,6 @@
 package com.example.bilingualb8.dto.requests.questions.describe_image;
 
 import com.example.bilingualb8.dto.requests.file.FileRequest;
-import com.example.bilingualb8.enums.QuestionType;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.Builder;
@@ -16,10 +13,6 @@ public class DescribeImageQuestionRequest {
     private String title;
     @NotNull(message = "The correct answer must not be empty.")
     private String correctAnswer;
-    @Builder.Default
-    @NotNull(message = "The question type must not be empty.")
-    @Enumerated(EnumType.STRING)
-    private QuestionType questionType = QuestionType.DESCRIBE_IMAGE;
     @NotNull(message = "The duration must not be empty.")
     @Positive(message = "Duration can not be negative")
     private Integer duration;

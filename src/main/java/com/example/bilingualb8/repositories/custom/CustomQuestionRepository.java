@@ -7,5 +7,6 @@ import java.util.Optional;
 
 public interface CustomQuestionRepository {
     List<QuestionResponse> getAllQuestions();
+
     Optional<QuestionResponse> getQuestionById(Long id);
 }

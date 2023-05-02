@@ -44,6 +44,8 @@ public class AuthController {
     public ResponseEntity<SimpleResponse> resetPassword(@RequestParam String token, @RequestBody @Valid ResetPasswordRequest request) {
         return ResponseEntity.ok(authenticationService.resetPassword(token, request.newPassword()));
     }
+
+    @Operation(summary = "This is auth with google method")
     @PostMapping("/auth-google")
     public AuthenticationResponse authWithGoogle(String tokenId) throws FirebaseAuthException {
         return authenticationService.authWithGoogle(tokenId);

@@ -19,14 +19,14 @@ public class RespondNWordsQuestionController {
 
     @Operation(summary = "This is save Respond N words question method")
     @PreAuthorize("hasAuthority('ADMIN')")
-    @PostMapping("/save")
+    @PostMapping
     public SimpleResponse saveRespondNWordsQuestion(@RequestBody @Valid RespondNWordsQuestionRequest request) {
         return questionService.saveRespondNWordsQuestion(request);
     }
 
     @Operation(summary = "This is update by id Respond N words question method")
     @PreAuthorize("hasAuthority('ADMIN')")
-    @PutMapping("/{id}/update")
+    @PutMapping("/{id}")
     public SimpleResponse updateRespondNWordsQuestionById(@PathVariable Long id, @RequestBody @Valid
     RespondNWordsQuestionUpdateRequest updateRequest) {
         return questionService.updateRespondNWordsQuestionById(id, updateRequest);
