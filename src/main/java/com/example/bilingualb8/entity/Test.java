@@ -7,6 +7,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "tests")
+@Builder
 @Getter
 @Setter
 @AllArgsConstructor
