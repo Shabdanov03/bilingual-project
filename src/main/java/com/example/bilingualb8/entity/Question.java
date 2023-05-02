@@ -16,10 +16,11 @@ import static jakarta.persistence.CascadeType.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Question {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "question_id_gen")
-    @SequenceGenerator(name = "question_id_gen", sequenceName = "question_id_gen", allocationSize = 1, initialValue = 10)
+    @SequenceGenerator(name = "question_id_gen", sequenceName = "question_id_gen", allocationSize = 1, initialValue = 11)
     private Long id;
     @Column(length = 100)
     private String title;
@@ -33,8 +34,6 @@ public class Question {
     @Column(length = 10000)
     private String correctAnswer;
     @Column(length = 10000)
-    private String passageQuestion;
-    @Column(length = 10000)
     private String passage;
     private String audioText;
     @ManyToOne(cascade = {MERGE, REFRESH, DETACH, PERSIST})
@@ -44,7 +43,9 @@ public class Question {
     private List<File> files;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "question")
     private List<Option> options;
-    private int questionOrder;
+    private Integer questionOrder;
     @Enumerated(value = EnumType.STRING)
     private OptionType optionType;
 }
+
+

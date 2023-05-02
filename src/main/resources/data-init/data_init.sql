@@ -6,47 +6,47 @@ values (1, now(), 'Alibek', false, 'Altynbekov', now()),
        (5, now(), 'Zhazgul', false, 'Zhoroeva', now());
 
 insert into user_infos(id, email, password, role, user_id)
-values (1, 'alibek@gmail.com', 'alibek123', 'ADMIN', 1),
-       (2, 'ilim@gmail.com', 'ilim123', 'USER', 2),
-       (3, 'adil@gmail.com', 'adil123', 'USER', 3),
-       (4, 'saltanat@gmail.com', 'saltanat123', 'USER', 4),
-       (5, 'zhazgul@gmail.com', 'zhazgul123', 'USER', 5);
+values (1, 'alibek@gmail.com', '$2a$04$m6SmfKTWVoq3UqY.TSfFhOhff9PJR9mIP9W4qxbDap3/36ucDdmVq', 'ADMIN', 1),
+       (2, 'ilim@gmail.com', '$2a$04$HxEwmj1058t4CHWAAlawEediNwxxoyexbBkBZrw6RYU/WIbetD07u', 'USER', 2),
+       (3, 'adil@gmail.com', '$2a$04$9AbdDhS0Se77peV1Vol79uTD1ndTja8WFDCcS7Bu0tZA8RdRogXNy', 'USER', 3),
+       (4, 'saltanat@gmail.com', '$2a$04$fMcU5JEqZ5da60kbT77tOeDkXVLGA3xcJ43fDpUM6Rq2c/a2OXRzS', 'USER', 4),
+       (5, 'zhazgul@gmail.com', '$2a$04$zsU2raL6oyLYLJQQgPpN9.2JFonBtos3Y9PlqvE5hZFUWp8qwZ3re', 'USER', 5);
 
 
 
 insert into tests(id, short_description, title)
 values (1, 'test for students ', 'Test 1');
 
-insert into questions(id, audio_text, correct_answer, duration, min_words, number_of_replays, option_type, passage,
-                      passage_question, question_order, question_type, statement, title, test_id)
-values (1, NULL, 'correct answer1', 30, NULL, NULL, 'MULTIPLE', NULL, NULL, 1,
+insert into questions( id, audio_text, correct_answer, duration, min_words, number_of_replays, option_type, passage
+                     , question_order, question_type, statement, title, test_id)
+values (1, NULL, 'correct answer1', 30, NULL, NULL, 'MULTIPLE', NULL, 1,
         'SELECT_ENGLISH_WORD',
         NULL, 'title1', 1),
-       (2, 'audio2', 'correct answer2', 30, 3, 2, NULL, NULL, NULL, 2,
+       (2, 'audio2', 'correct answer2', 30, 3, 2, NULL, NULL, 2,
         'TYPE_WHAT_YOU_HEAR',
         'statement2', 'title2', 1),
-       (3, NULL, 'correct answer3', 30, NULL, NULL, NULL, NULL, NULL,
+       (3, NULL, 'correct answer3', 30, NULL, NULL, NULL, NULL,
         3, 'DESCRIBE_IMAGE',
         NULL, 'title3', 1),
-       (4, 'audio4', 'correct answer4', 30, NULL, NULL, 'MULTIPLE', NULL, NULL, 4,
+       (4, 'audio4', 'correct answer4', 30, NULL, NULL, 'MULTIPLE', NULL, 4,
         'LISTEN_AND_SELECT_ENGLISH_WORD',
         NULL, 'title4', 1),
-       (5, 'audio5', 'correct answer5', 30, 3, NULL, NULL, NULL, NULL, 5,
+       (5, 'audio5', 'correct answer5', 30, 3, NULL, NULL, NULL, 5,
         'RECORD_SAYING_STATEMENT',
         'statement5', 'title5', 1),
-       (6, NULL, NULL, 30, 30, NULL, NULL, NULL, NULL, 6,
+       (6, NULL, NULL, 30, 30, NULL, NULL, NULL, 6,
         'RESPOND_N_WORDS',
         'statement6', 'title6', 1),
-       (7, NULL, 'correct answer7', 30, NULL, NULL, NULL, 'passage7', 'passage_question7', 7,
+       (7, NULL, 'correct answer7', 30, NULL, NULL, NULL, 'passage7', 7,
         'HIGHLIGHT_THE_ANSWER',
         'statement7', 'title7', 1),
-       (8, NULL, NULL, 30, NULL, NULL, 'SINGLE', 'passage8', NULL, 8,
+       (8, NULL, NULL, 30, NULL, NULL, 'SINGLE', 'passage8', 8,
         'SELECT_THE_MAIN_IDEA',
         NULL, 'title8', 1),
-       (9, NULL, NULL, 30, NULL, NULL, 'SINGLE', 'passage9', NULL, 9,
+       (9, NULL, NULL, 30, NULL, NULL, 'SINGLE', 'passage9', 9,
         'SELECT_BEST_TITLE',
         NULL, 'title9', 1),
-       (10, NULL, 'correct answer10', 30, NULL, NULL, 'SINGLE', 'passage10', NULL, 10,
+       (10, NULL, 'correct answer10', 30, NULL, NULL, 'SINGLE', 'passage10', 10,
         'SELECT_THE_MAIN_IDEA',
         NULL, 'title10', 1);
 
@@ -107,14 +107,14 @@ values (1, 1),
 
 insert into results_answers(result_id, answers_id)
 values (1, 1),
-       (1,2),
-       (1,3),
-       (1,4),
-       (1,5),
-       (1,6),
-       (1,7),
-       (1,8),
-       (1,9),
-       (1,10);
+       (1, 2),
+       (1, 3),
+       (1, 4),
+       (1, 5),
+       (1, 6),
+       (1, 7),
+       (1, 8),
+       (1, 9),
+       (1, 10);
 
 

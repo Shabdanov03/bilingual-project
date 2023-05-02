@@ -38,4 +38,6 @@ src/main/resources/application-my.properties
 src/main/resources/application-local.yml
 src/main/resources/application-ilim.properties
 src/main/resources/application-zhazgul.properties
-src/main/resources/application-adil's.yml
+src/main/resources/application-adil's.properties
+src/main/resources/application-test.properties
+src/main/resources/application-demo.properties

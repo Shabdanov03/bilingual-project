@@ -1,9 +1,5 @@
 package com.example.bilingualb8.validations;
 
-/**
- * Shabdanov Ilim
- **/
-
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 
