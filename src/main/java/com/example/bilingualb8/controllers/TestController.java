@@ -14,6 +14,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/tests")
 @RequiredArgsConstructor
+@CrossOrigin
 public class TestController {
     private final TestService testService;
 
