@@ -15,7 +15,6 @@ import com.example.bilingualb8.repositories.custom.CustomTestRepository;
 import com.example.bilingualb8.services.TestService;
 import com.example.bilingualb8.services.questions.MainQuestionService;
 import lombok.AllArgsConstructor;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,20 +26,21 @@ public class TestServiceImpl implements TestService {
     private final CustomTestRepository customTestRepository;
     private final QuestionRepository questionRepository;
     private final MainQuestionService mainQuestionService;
-    private final JdbcTemplate jdbcTemplate;
     private final ResultRepository resultRepository;
 
     @Override
     public SimpleResponse save(TestRequest request) {
         if (testRepository.existsByTitle(request.title())) {
-            throw new AlreadyExistException(String.format("Test with : %s title already exists", request.title()));
+            throw new AlreadyExistException(String.format("Test with title : %s already exists", request.title()));
         }
-        Test test = new Test();
-        test.setTitle(request.title());
-        test.setShortDescription(request.shortDescription());
+
+        Test test = Test.builder()
+                .title(request.title())
+                .shortDescription(request.shortDescription())
+                .build();
         testRepository.save(test);
         return SimpleResponse.builder()
-                .message(String.format("Test with : %s title successfully saved", request.title()))
+                .message(String.format("Test with title : %s  successfully saved", request.title()))
                 .build();
     }
 
