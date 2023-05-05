@@ -21,5 +21,5 @@ public class SelectRealEnglishWordUpdateRequest {
     Integer questionOrder;
     @NotNull(message = "The Option must not be empty.")
     @Valid
-    private List<OptionUpdateRequest> option;
+    private List<OptionUpdateRequest> options;
 }

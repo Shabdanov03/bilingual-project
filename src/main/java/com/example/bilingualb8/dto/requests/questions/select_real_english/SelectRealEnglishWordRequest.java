@@ -25,5 +25,5 @@ public class SelectRealEnglishWordRequest {
     private Long testId;
     @NotNull(message = "The option must not be empty.")
     @Valid
-    private List<OptionRequest> option;
+    private List<OptionRequest> options;
 }

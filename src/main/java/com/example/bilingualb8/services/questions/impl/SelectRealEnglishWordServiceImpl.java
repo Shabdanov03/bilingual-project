@@ -45,7 +45,7 @@ public class SelectRealEnglishWordServiceImpl implements SelectRealEnglishWordSe
                 .build();
 
         List<Option> options = new ArrayList<>();
-        for (OptionRequest optionRequest : request.getOption()) {
+        for (OptionRequest optionRequest : request.getOptions()) {
             Option option = new Option();
             option.setTitle(optionRequest.getTitle());
             option.setIsCorrect(optionRequest.getIsCorrect() != null ? optionRequest.getIsCorrect() : false);
@@ -75,7 +75,7 @@ public class SelectRealEnglishWordServiceImpl implements SelectRealEnglishWordSe
             question.setQuestionOrder(request.getQuestionOrder());
         }
         List<Option> options = question.getOptions(); // Existing options
-        List<OptionUpdateRequest> requestOptions = request.getOption(); // Request options
+        List<OptionUpdateRequest> requestOptions = request.getOptions(); // Request options
 
         Map<Long, Option> optionMap = new HashMap<>();
         for (Option option : options) {
