@@ -23,7 +23,6 @@ public class SelectRealEnglishWordQuestionController {
     public SimpleResponse saveSelectRealEnglishWordQuestion(@RequestBody @Valid SelectRealEnglishWordRequest request) {
         return questionService.saveSelectRealEnglishWordQuestion(request);
     }
-
     @Operation(summary = "This is update by id Select-Real-English-Word question method")
     @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/{id}")

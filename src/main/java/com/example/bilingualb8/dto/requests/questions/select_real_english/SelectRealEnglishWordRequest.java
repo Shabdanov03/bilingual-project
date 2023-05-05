@@ -1,6 +1,7 @@
 package com.example.bilingualb8.dto.requests.questions.select_real_english;
 
 import com.example.bilingualb8.dto.requests.option.OptionRequest;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.Builder;
@@ -23,5 +24,6 @@ public class SelectRealEnglishWordRequest {
     @Positive(message = "Test id can not be negative")
     private Long testId;
     @NotNull(message = "The option must not be empty.")
+    @Valid
     private List<OptionRequest> option;
 }

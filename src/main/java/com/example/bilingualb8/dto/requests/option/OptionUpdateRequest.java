@@ -7,7 +7,9 @@ import lombok.Data;
 
 @Data
 @Builder
-public class OptionRequest {
+public class OptionUpdateRequest {
+    @NotNull(message = "The Option id must not be empty.")
+    private Long id;
     @NotNull(message = "The title must not be empty.")
     private String title;
     @NotNull(message = "The is correct must not be empty.")

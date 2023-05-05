@@ -21,4 +21,5 @@ public class Option {
     @ManyToOne(cascade = {PERSIST, MERGE, REFRESH, DETACH})
     private Question question;
     private String fileUrl;
+    private Integer optionOrder;
 }
