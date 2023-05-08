@@ -10,9 +10,8 @@ import lombok.Data;
 public class OptionRequest {
     @NotNull(message = "The title must not be empty.")
     private String title;
-    @NotNull(message = "The Is correct must not be empty.")
+    @NotNull(message = "The is correct must not be empty.")
     private Boolean isCorrect;
-    @NotNull(message = "The file url must not be empty.")
     private String fileUrl;
     @NotNull(message = "The Option order must not be empty.")
     @Positive(message = "Option order can not be negative")
