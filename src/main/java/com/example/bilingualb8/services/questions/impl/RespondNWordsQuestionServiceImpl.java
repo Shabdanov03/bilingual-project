@@ -31,6 +31,7 @@ public class RespondNWordsQuestionServiceImpl implements RespondNWordsQuestionSe
                 .questionOrder(request.getQuestionOrder())
                 .minWords(request.getMinWords())
                 .test(test)
+                .isActive(request.getIsActive())
                 .build();
         questionRepository.save(question);
         return SimpleResponse.builder()
@@ -48,6 +49,8 @@ public class RespondNWordsQuestionServiceImpl implements RespondNWordsQuestionSe
         question.setDuration(updateRequest.getDuration() != null ? updateRequest.getDuration() : question.getDuration());
         question.setQuestionOrder(updateRequest.getQuestionOrder() != null ? updateRequest.getQuestionOrder() : question.getQuestionOrder());
         question.setMinWords(updateRequest.getMinWords() != null ? updateRequest.getMinWords() : question.getMinWords());
+        question.setIsActive(updateRequest.getIsActive() != null ? updateRequest.getIsActive() : question.getIsActive());
+
         questionRepository.save(question);
         return SimpleResponse.builder()
                 .message(String.format("Question with id : %s successfully updated !", id))

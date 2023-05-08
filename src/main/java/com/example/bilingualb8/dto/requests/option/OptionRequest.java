@@ -8,12 +8,12 @@ import lombok.Data;
 @Data
 @Builder
 public class OptionRequest {
-    @NotNull(message = "The title must not be empty.")
+    @NotNull(message = "Option Title can not be null")
     private String title;
-    @NotNull(message = "The is correct must not be empty.")
+    @NotNull(message = "Is Correct can not be null")
     private Boolean isCorrect;
     private String fileUrl;
-    @NotNull(message = "The Option order must not be empty.")
+    @NotNull(message = "The option order must not be empty.")
     @Positive(message = "Option order can not be negative")
     private Integer optionOrder;
 }

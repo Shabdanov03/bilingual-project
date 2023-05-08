@@ -11,6 +11,9 @@ public record TestRequest (
         String title,
         @NotBlank(message = "The description must not be empty.")
         @NotNull(message = "The description must not be empty.")
-        String shortDescription
+        String shortDescription,
+        @NotBlank(message = "The isActive must not be empty.")
+        @NotNull(message = "The isActive must not be empty.")
+        Boolean isActive
 ){
 }

@@ -32,6 +32,7 @@ public class HighlightTheAnswerQuestionServiceImpl implements HighlightTheAnswer
                 .duration(request.getDuration())
                 .questionOrder(request.getQuestionOrder())
                 .test(test)
+                .isActive(request.getIsActive())
                 .build();
         questionRepository.save(question);
         return SimpleResponse.builder()
@@ -50,6 +51,8 @@ public class HighlightTheAnswerQuestionServiceImpl implements HighlightTheAnswer
         question.setCorrectAnswer(updateRequest.getCorrectAnswer() != null ? updateRequest.getCorrectAnswer() : question.getCorrectAnswer());
         question.setDuration(updateRequest.getDuration() != null ? updateRequest.getDuration() : question.getDuration());
         question.setQuestionOrder(updateRequest.getQuestionOrder() != null ? updateRequest.getQuestionOrder() : question.getQuestionOrder());
+        question.setIsActive(updateRequest.getIsActive() != null ? updateRequest.getIsActive() : question.getIsActive());
+
         questionRepository.save(question);
         return SimpleResponse.builder()
                 .message(String.format("Question with id : %s successfully updated !", id))

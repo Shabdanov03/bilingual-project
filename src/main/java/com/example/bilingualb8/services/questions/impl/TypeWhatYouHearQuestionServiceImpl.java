@@ -35,6 +35,7 @@ public class TypeWhatYouHearQuestionServiceImpl implements TypeWhatYouHearQuesti
                 .correctAnswer(request.getCorrectAnswer())
                 .questionOrder(request.getQuestionOrder())
                 .test(test)
+                .isActive(request.getIsActive())
                 .build();
         File file = new File(FileType.AUDIO, request.getFileRequest().getFileUrl(), question);
         question.setFiles(new ArrayList<>((List.of(file))));
@@ -50,6 +51,7 @@ public class TypeWhatYouHearQuestionServiceImpl implements TypeWhatYouHearQuesti
         question.setDuration(updateQuestionRequest.getDuration() != null ? updateQuestionRequest.getDuration() : question.getDuration());
         question.setNumberOfReplays(updateQuestionRequest.getNumberOfReplays() != null ? updateQuestionRequest.getNumberOfReplays() : question.getNumberOfReplays());
         question.setCorrectAnswer(updateQuestionRequest.getCorrectAnswer() != null ? updateQuestionRequest.getCorrectAnswer() : question.getCorrectAnswer());
+        question.setIsActive(updateQuestionRequest.getIsActive() != null ? updateQuestionRequest.getIsActive() : question.getIsActive());
 
         if (updateQuestionRequest.getFile() != null) {
             File file = question.getFiles().get(0);

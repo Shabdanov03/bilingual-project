@@ -31,4 +31,5 @@ public class QuestionResponse {
     private Long testId;
     private List<FileResponse> files;
     private List<OptionResponse> options;
+    private Boolean isActive;
 }

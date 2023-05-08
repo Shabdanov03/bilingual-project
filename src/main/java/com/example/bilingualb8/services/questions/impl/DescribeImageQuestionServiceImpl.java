@@ -31,6 +31,7 @@ public class DescribeImageQuestionServiceImpl implements DescribeImageQuestionSe
                 .questionType(QuestionType.DESCRIBE_IMAGE)
                 .duration(request.getDuration())
                 .test(test)
+                .isActive(request.getIsActive())
                 .build();
 
         File file = new File(FileType.IMAGE, request.getFile().getFileUrl(), question);
@@ -50,6 +51,7 @@ public class DescribeImageQuestionServiceImpl implements DescribeImageQuestionSe
         question.setCorrectAnswer(updateRequest.getCorrectAnswer() != null ? updateRequest.getCorrectAnswer() : question.getCorrectAnswer());
         question.setDuration(updateRequest.getDuration() != null ? updateRequest.getDuration() : question.getDuration());
         question.setQuestionOrder(updateRequest.getQuestionOrder() != null ? updateRequest.getQuestionOrder() : question.getQuestionOrder());
+        question.setIsActive(updateRequest.getIsActive() != null ? updateRequest.getIsActive() : question.getIsActive());
 
         if (updateRequest.getFile() != null) {
             File file = question.getFiles().get(0);

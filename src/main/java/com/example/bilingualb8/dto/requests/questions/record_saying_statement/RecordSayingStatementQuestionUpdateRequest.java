@@ -1,5 +1,6 @@
 package com.example.bilingualb8.dto.requests.questions.record_saying_statement;
 
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.Builder;
 import lombok.Data;
@@ -16,4 +17,5 @@ public class RecordSayingStatementQuestionUpdateRequest {
     private Integer minWords;
     @Positive(message = "Question Order can not be negative")
     private Integer questionOrder;
+    private Boolean isActive;
 }

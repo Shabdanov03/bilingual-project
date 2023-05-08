@@ -24,4 +24,5 @@ public class ListenAndSelectEnglishWordsUpdateRequest {
     @Valid
     @NotNull(message = "The options must not be empty.")
     private List<OptionUpdateRequest> options;
+    private Boolean isActive;
 }

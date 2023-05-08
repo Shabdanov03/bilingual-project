@@ -25,4 +25,6 @@ public class TypeWhatYouHearQuestionRequest {
     @NotNull(message = "The test id must not be empty.")
     @Positive(message = "Test id can not be negative")
     private Long testId;
+    @NotNull(message = "The isActive id must not be empty.")
+    private Boolean isActive;
 }

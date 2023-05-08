@@ -19,6 +19,7 @@ public class Test {
     private Long id;
     private String title;
     private String shortDescription;
+    private Boolean isActive;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "test")
     private List<Question> questions;
 }
