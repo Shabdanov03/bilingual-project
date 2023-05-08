@@ -12,13 +12,12 @@ import java.util.List;
 @Data
 @Builder
 public class SelectRealEnglishWordUpdateRequest {
-    private Long id;
     @NotNull(message = "The title must not be empty.")
     private String title;
     @Positive(message = "Duration can not be negative")
     private Integer duration;
     @Positive(message = "Question order can not be negative")
-    Integer questionOrder;
+    private Integer questionOrder;
     @NotNull(message = "The Option must not be empty.")
     @Valid
     private List<OptionUpdateRequest> options;

@@ -15,6 +15,7 @@ import com.example.bilingualb8.repositories.OptionRepository;
 import com.example.bilingualb8.repositories.QuestionRepository;
 import com.example.bilingualb8.repositories.TestRepository;
 import com.example.bilingualb8.services.questions.SelectRealEnglishWordService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -60,6 +61,7 @@ public class SelectRealEnglishWordServiceImpl implements SelectRealEnglishWordSe
                 .build();
     }
 
+    @Transactional
     @Override
     public SimpleResponse updateSelectRealEnglishWordQuestion(Long id, SelectRealEnglishWordUpdateRequest request) {
         Question question = questionRepository.findById(id).orElseThrow(() ->

@@ -19,7 +19,7 @@ public class SelectRealEnglishWordRequest {
     private Integer duration;
     @NotNull(message = "The question order must not be empty.")
     @Positive(message = "Test question order can not be negative")
-    Integer questionOrder;
+    private Integer questionOrder;
     @NotNull(message = "The test id must not be empty.")
     @Positive(message = "Test id can not be negative")
     private Long testId;
