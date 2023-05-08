@@ -81,3 +81,4 @@ public class TestServiceImpl implements TestService {
                 .message(String.format("Test with : %d id successfully updated", testId))
                 .build();
     }
+}
