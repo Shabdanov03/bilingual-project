@@ -76,6 +76,7 @@ public class TestServiceImpl implements TestService {
         Test test = testRepository.findById(testId).orElseThrow(() -> new NotFoundException(String.format("Test with : %d id not found", testId)));
         test.setTitle(request.title());
         test.setShortDescription(request.shortDescription());
+        testRepository.save(test);
         return SimpleResponse.builder()
                 .message(String.format("Test with : %d id successfully updated", testId))
                 .build();
