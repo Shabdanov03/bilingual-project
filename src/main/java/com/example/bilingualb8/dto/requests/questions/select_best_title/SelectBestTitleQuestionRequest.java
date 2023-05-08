@@ -28,4 +28,6 @@ public class SelectBestTitleQuestionRequest {
     @NotNull(message = "The options  must not be empty.")
     @Valid
     private List<OptionRequest> options;
+    @NotNull(message = "The isActive id must not be empty.")
+    private Boolean isActive;
 }

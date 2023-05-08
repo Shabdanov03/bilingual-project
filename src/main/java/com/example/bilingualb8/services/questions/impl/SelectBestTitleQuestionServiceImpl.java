@@ -41,6 +41,7 @@ public class SelectBestTitleQuestionServiceImpl implements SelectBestTitleQuesti
         question.setTest(test);
         question.setPassage(request.getPassage());
         question.setQuestionType(QuestionType.SELECT_BEST_TITLE);
+        question.setIsActive(request.getIsActive());
 
         List<Option> options = new ArrayList<>();
         for (OptionRequest option : request.getOptions()) {
@@ -76,6 +77,10 @@ public class SelectBestTitleQuestionServiceImpl implements SelectBestTitleQuesti
         }
         if (request.getPassage() != null) {
             question.setPassage(request.getPassage());
+        }
+
+        if (request.getIsActive() != null) {
+            question.setIsActive(request.getIsActive());
         }
 
         // Update options

@@ -1,5 +1,6 @@
 package com.example.bilingualb8.dto.requests.questions.respond_n_words;
 
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.Builder;
 import lombok.Data;
@@ -15,4 +16,5 @@ public class RespondNWordsQuestionUpdateRequest {
     private Integer questionOrder;
     @Positive(message = "Min words can not be negative")
     private Integer minWords;
+    private Boolean isActive;
 }

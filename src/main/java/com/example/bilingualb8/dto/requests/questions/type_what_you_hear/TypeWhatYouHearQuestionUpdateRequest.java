@@ -1,6 +1,7 @@
 package com.example.bilingualb8.dto.requests.questions.type_what_you_hear;
 
 import com.example.bilingualb8.dto.requests.file.FileRequest;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
 
@@ -12,4 +13,5 @@ public class TypeWhatYouHearQuestionUpdateRequest {
     private Integer numberOfReplays;
     private String correctAnswer;
     private FileRequest file;
+    private Boolean isActive;
 }

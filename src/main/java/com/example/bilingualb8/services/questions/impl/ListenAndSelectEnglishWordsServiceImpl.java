@@ -41,6 +41,7 @@ public class ListenAndSelectEnglishWordsServiceImpl implements ListenAndSelectEn
                 .questionType(QuestionType.LISTEN_AND_SELECT_ENGLISH_WORD)
                 .optionType(OptionType.MULTIPLE)
                 .test(test)
+                .isActive(request.getIsActive())
                 .build();
 
         List<Option> options = new ArrayList<>();
@@ -79,6 +80,10 @@ public class ListenAndSelectEnglishWordsServiceImpl implements ListenAndSelectEn
         }
         if (request.getNumberOfReplays() != null) {
             question.setNumberOfReplays(request.getNumberOfReplays());
+        }
+
+        if (request.getIsActive() != null) {
+            question.setIsActive(request.getIsActive());
         }
 
         List<Option> options = question.getOptions();

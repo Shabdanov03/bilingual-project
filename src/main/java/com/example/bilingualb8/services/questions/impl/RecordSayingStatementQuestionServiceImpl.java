@@ -33,6 +33,7 @@ public class RecordSayingStatementQuestionServiceImpl implements RecordSayingSta
                 .duration(request.getDuration())
                 .minWords(request.getMinWords())
                 .test(test)
+                .isActive(request.getIsActive())
                 .build();
         questionRepository.save(question);
         return SimpleResponse.builder()
@@ -52,6 +53,7 @@ public class RecordSayingStatementQuestionServiceImpl implements RecordSayingSta
         question.setCorrectAnswer(updateRequest.getCorrectAnswer() != null ? updateRequest.getCorrectAnswer() : question.getCorrectAnswer());
         question.setQuestionOrder(updateRequest.getQuestionOrder() != null ? updateRequest.getQuestionOrder() : question.getQuestionOrder());
         question.setMinWords(updateRequest.getMinWords() != null ? updateRequest.getMinWords() : question.getMinWords());
+        question.setIsActive(updateRequest.getIsActive() != null ? updateRequest.getIsActive() : question.getIsActive());
 
         questionRepository.save(question);
 

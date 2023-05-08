@@ -1,6 +1,7 @@
 package com.example.bilingualb8.dto.requests.questions.describe_image;
 
 import com.example.bilingualb8.dto.requests.file.FileRequest;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.Builder;
 import lombok.Data;
@@ -15,4 +16,5 @@ public class DescribeImageQuestionUpdateRequest {
     @Positive(message = "Order can not be negative")
     private Integer questionOrder;
     private FileRequest file;
+    private Boolean isActive;
 }

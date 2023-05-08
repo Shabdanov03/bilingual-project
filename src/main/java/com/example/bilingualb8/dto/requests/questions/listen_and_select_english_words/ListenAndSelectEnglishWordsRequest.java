@@ -32,5 +32,7 @@ public class ListenAndSelectEnglishWordsRequest {
     @NotNull(message = "Option must not be empty")
     @Valid
     private List<OptionRequest> optionsRequest;
+    @NotNull(message = "The isActive id must not be empty.")
+    private Boolean isActive;
 
 }
