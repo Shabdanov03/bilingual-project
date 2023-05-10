@@ -46,6 +46,7 @@ public class Question {
     private Integer questionOrder;
     @Enumerated(value = EnumType.STRING)
     private OptionType optionType;
+    private Boolean isActive;
 }
 
 

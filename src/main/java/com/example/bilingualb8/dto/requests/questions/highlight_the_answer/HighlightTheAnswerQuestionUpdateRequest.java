@@ -1,5 +1,6 @@
 package com.example.bilingualb8.dto.requests.questions.highlight_the_answer;
 
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.Builder;
 import lombok.Data;
@@ -15,4 +16,5 @@ public class HighlightTheAnswerQuestionUpdateRequest {
     private Integer duration;
     @Positive(message = "Order can not be negative")
     private Integer questionOrder;
+    private Boolean isActive;
 }

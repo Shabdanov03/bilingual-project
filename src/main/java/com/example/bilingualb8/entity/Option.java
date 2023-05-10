@@ -25,6 +25,4 @@ public class Option {
     private Question question;
     private String fileUrl;
     private Integer optionOrder;
-
-
 }

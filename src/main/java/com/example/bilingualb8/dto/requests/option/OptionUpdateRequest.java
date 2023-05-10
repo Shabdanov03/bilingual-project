@@ -8,7 +8,7 @@ import lombok.Data;
 @Data
 @Builder
 public class OptionUpdateRequest {
-    @NotNull(message = "Option Id can not be null")
+    @NotNull(message = "The Option id must not be empty.")
     private Long id;
     @NotNull(message = "Title can not be null")
     private String title;
@@ -19,4 +19,3 @@ public class OptionUpdateRequest {
     @Positive(message = "Option order can not be negative")
     private Integer optionOrder;
 }
-

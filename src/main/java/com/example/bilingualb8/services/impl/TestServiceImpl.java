@@ -37,6 +37,7 @@ public class TestServiceImpl implements TestService {
         Test test = Test.builder()
                 .title(request.title())
                 .shortDescription(request.shortDescription())
+                .isActive(request.isActive())
                 .build();
         testRepository.save(test);
         return SimpleResponse.builder()
@@ -76,6 +77,8 @@ public class TestServiceImpl implements TestService {
         Test test = testRepository.findById(testId).orElseThrow(() -> new NotFoundException(String.format("Test with : %d id not found", testId)));
         test.setTitle(request.title());
         test.setShortDescription(request.shortDescription());
+        test.setIsActive(request.isActive());
+        testRepository.save(test);
         return SimpleResponse.builder()
                 .message(String.format("Test with : %d id successfully updated", testId))
                 .build();
