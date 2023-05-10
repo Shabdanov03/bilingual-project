@@ -146,7 +146,8 @@ public class CustomTestRepositoryImpl implements CustomTestRepository {
                 t.id as id,
                 sum(q.duration) as duration,
                 t.title as title,
-                t.short_description as description
+                t.short_description as description,
+                t.is_active as is_active
                 from tests t
                 left join questions q on t.id = q.test_id
                 WHERE t.id = ?
