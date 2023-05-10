@@ -28,7 +28,8 @@ public class CustomTestRepositoryImpl implements CustomTestRepository {
                 t.id as id,
                 sum(q.duration) as duration,
                 t.title as title,
-                t.short_description as description
+                t.short_description as description,
+                t.is_active as is_active
                 from tests t
                 left join questions q on t.id = q.test_id
                 group by t.id
@@ -40,6 +41,7 @@ public class CustomTestRepositoryImpl implements CustomTestRepository {
                         resultSet.getInt("duration"),
                         resultSet.getString("title"),
                         resultSet.getString("description"),
+                        resultSet.getBoolean("is_active"),
                         null
                 ));
 
@@ -55,6 +57,7 @@ public class CustomTestRepositoryImpl implements CustomTestRepository {
                 q.correct_answer as correct_answer,
                 q.passage as passage,
                 q.audio_text as audio_text,
+                q.is_active as is_active,
                 t.id as test_id
                 FROM questions q join tests t on t.id = q.test_id
                 """;
@@ -73,7 +76,8 @@ public class CustomTestRepositoryImpl implements CustomTestRepository {
                         resultSet.getString("audio_text"),
                         resultSet.getLong("test_id"),
                         null,
-                        null
+                        null,
+                        resultSet.getBoolean("is_active")
                 ));
 
         String fileQuery = """
@@ -155,6 +159,7 @@ public class CustomTestRepositoryImpl implements CustomTestRepository {
                         resultSet.getInt("duration"),
                         resultSet.getString("title"),
                         resultSet.getString("description"),
+                        resultSet.getBoolean("is_active"),
                         null
                 ), id).stream().findAny().orElseThrow(
                 () -> new NotFoundException(String.format("Test with id %s was not found", id)));
@@ -171,6 +176,7 @@ public class CustomTestRepositoryImpl implements CustomTestRepository {
                 q.correct_answer as correct_answer,
                 q.passage as passage,
                 q.audio_text as audio_text,
+                q.is_active as is_active,
                 t.id as test_id
                 FROM questions q join tests t on t.id = q.test_id
                 WHERE t.id = ?
@@ -190,8 +196,9 @@ public class CustomTestRepositoryImpl implements CustomTestRepository {
                         resultSet.getString("audio_text"),
                         resultSet.getLong("test_id"),
                         null,
-                        null
-                ),id);
+                        null,
+                        resultSet.getBoolean("is_active")
+                ), id);
 
         String fileQuery = """
                 SELECT

@@ -33,6 +33,7 @@ public class CustomQuestionRepositoryImpl implements CustomQuestionRepository {
                 q.number_of_replays as number_of_replays,
                 q.correct_answer as correct_answer,
                 q.passage as passage,
+                q.is_active as is_active,
                 q.audio_text as audio_text,
                 t.id as test_id
                 FROM questions q join tests t on t.id = q.test_id
@@ -69,7 +70,8 @@ public class CustomQuestionRepositoryImpl implements CustomQuestionRepository {
                         resultSet.getString("audio_text"),
                         resultSet.getLong("test_id"),
                         null,
-                        null
+                        null,
+                        resultSet.getBoolean("is_active")
                 ));
 
 
@@ -161,6 +163,7 @@ public class CustomQuestionRepositoryImpl implements CustomQuestionRepository {
                 q.correct_answer as correct_answer,
                 q.passage as passage,
                 q.audio_text as audio_text,
+                q.is_active as is_active,
                 t.id as test_id
                 FROM questions q join tests t on t.id = q.test_id
                 where q.id = ?
@@ -180,12 +183,12 @@ public class CustomQuestionRepositoryImpl implements CustomQuestionRepository {
                         resultset.getString("audio_text"),
                         resultset.getLong("test_id"),
                         null,
-                        null
+                        null,
+                        resultset.getBoolean("is_active")
                 ), id).stream().findAny().orElseThrow(() -> new NotFoundException(String.format("Question with id %s was not found", id)));
 
         response.setFiles(fileResponses);
         response.setOptions(options);
-
         return Optional.of(response);
     }
 }

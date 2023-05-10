@@ -14,20 +14,21 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CustomResultRepositoryImpl implements CustomResultRepository {
     private final JdbcTemplate jdbcTemplate;
+
     @Override
     public List<MyResultResponse> getAll(Long userId) {
 
         String sql = """
-        SELECT r.id,
-               r.date_of_submission,
-               t.title as test_title,
-               r.status,
-               r.score
-        FROM results r
-        JOIN users u ON r.user_id = u.id
-        JOIN tests t ON r.test_id = t.id
-        WHERE u.id = ?;
-        """;
+                SELECT r.id,
+                       r.date_of_submission,
+                       t.title as test_title,
+                       r.status,
+                       r.score
+                FROM results r
+                JOIN users u ON r.user_id = u.id
+                JOIN tests t ON r.test_id = t.id
+                WHERE u.id = ?;
+                """;
 
         return jdbcTemplate.query(sql, (resultSet, i) ->
                         new MyResultResponse(

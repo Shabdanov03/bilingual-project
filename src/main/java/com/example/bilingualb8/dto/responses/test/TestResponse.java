@@ -15,6 +15,7 @@ public class TestResponse {
     private Integer duration;
     private String title;
     private String shortDescription;
+    private Boolean isActive;
     private List<QuestionResponse> questions;
 }
 
