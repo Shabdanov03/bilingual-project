@@ -17,10 +17,12 @@ import com.example.bilingualb8.repositories.TestRepository;
 import com.example.bilingualb8.services.questions.SelectTheMainIdeaQuestionService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -49,7 +51,6 @@ public class SelectTheMainIdeaQuestionServiceImpl implements SelectTheMainIdeaQu
             Option option = new Option();
             option.setTitle(optionRequest.getTitle());
             option.setIsCorrect(optionRequest.getIsCorrect() != null ? optionRequest.getIsCorrect() : false);
-            option.setFileUrl(optionRequest.getFileUrl());
             option.setQuestion(question);
             optionList.add(option);
 
@@ -63,7 +64,7 @@ public class SelectTheMainIdeaQuestionServiceImpl implements SelectTheMainIdeaQu
 
     @Transactional
     @Override
-    public SimpleResponse updateSelectTheMainQuestionById(Long id,SelectTheMainIdeaQuestionUpdateRequest request) {
+    public SimpleResponse updateSelectTheMainQuestionById(Long id, SelectTheMainIdeaQuestionUpdateRequest request) {
         Question question = questionRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException(String.format("Question with id %s was not found", id)));
 
@@ -95,30 +96,30 @@ public class SelectTheMainIdeaQuestionServiceImpl implements SelectTheMainIdeaQu
                 option = new Option();
                 option.setTitle(optionRequest.getTitle());
                 option.setOptionOrder(optionRequest.getOptionOrder());
-                option.setFileUrl(optionRequest.getFileUrl());
                 option.setIsCorrect(optionRequest.getIsCorrect() != null ?
-        optionRequest.getIsCorrect() : false);
-        option.setQuestion(question);
-        options.add(option);
-    } else {
-        if (optionRequest.getTitle() != null) {
-            option.setTitle(optionRequest.getTitle());
+                        optionRequest.getIsCorrect() : false);
+                option.setQuestion(question);
+                options.add(option);
+            } else {
+                if (optionRequest.getTitle() != null) {
+                    option.setTitle(optionRequest.getTitle());
+                }
+                if (optionRequest.getOptionOrder() != null) {
+                    option.setOptionOrder(optionRequest.getOptionOrder());
+                }
+                if (optionRequest.getIsCorrect() != null) {
+                    option.setIsCorrect(optionRequest.getIsCorrect());
+                }
+
+                optionMap.remove(optionId);
+            }
         }
-        if (optionRequest.getOptionOrder() != null) {
-            option.setOptionOrder(optionRequest.getOptionOrder());
-        }
-        if (optionRequest.getIsCorrect() != null) {
-            option.setIsCorrect(optionRequest.getIsCorrect());
-        }
-        optionMap.remove(optionId);
-    }
-}
 
         for (Option option : optionMap.values()) {
-                optionRepository.delete(option);
-                options.remove(option);
-                }
-         questionRepository.save(question);
+            optionRepository.delete(option);
+            options.remove(option);
+        }
+        questionRepository.save(question);
 
         return SimpleResponse.builder()
                 .message(String.format("Question with id : %s successfully updated !", id))

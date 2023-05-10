@@ -1,7 +1,5 @@
 package com.example.bilingualb8.controllers.question;
 
-import com.example.bilingualb8.dto.requests.questions.record_saying_statement.RecordSayingStatementQuestionRequest;
-import com.example.bilingualb8.dto.requests.questions.record_saying_statement.RecordSayingStatementQuestionUpdateRequest;
 import com.example.bilingualb8.dto.requests.questions.select_the_main_idea.SelectTheMainIdeaQuestionRequest;
 import com.example.bilingualb8.dto.requests.questions.select_the_main_idea.SelectTheMainIdeaQuestionUpdateRequest;
 import com.example.bilingualb8.dto.responses.SimpleResponse;
@@ -17,13 +15,15 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @CrossOrigin
 public class SelectTheMainIdeaQuestionController {
-    private  final SelectTheMainIdeaQuestionService questionService;
+    private final SelectTheMainIdeaQuestionService questionService;
+
     @Operation(summary = "This is save  Select the main idea question method")
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping
     public SimpleResponse saveSelectTheMainIdea(@RequestBody @Valid SelectTheMainIdeaQuestionRequest request) {
         return questionService.saveSelectTheMainIdeaQuestion(request);
     }
+
     @Operation(summary = "This is update by id Select the main idea question method")
     @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/{id}")
