@@ -5,7 +5,6 @@ import com.example.bilingualb8.dto.responses.SimpleResponse;
 
 public interface SelectTheMainIdeaQuestionService {
     SimpleResponse saveSelectTheMainIdeaQuestion(SelectTheMainIdeaQuestionRequest request);
-
     SimpleResponse updateSelectTheMainQuestionById(Long id,SelectTheMainIdeaQuestionUpdateRequest request);
 
 }

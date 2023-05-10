@@ -31,7 +31,6 @@ public class SelectTheMainIdeaQuestionServiceImpl implements SelectTheMainIdeaQu
     private final QuestionRepository questionRepository;
     private final OptionRepository optionRepository;
 
-
     @Override
     public SimpleResponse saveSelectTheMainIdeaQuestion(SelectTheMainIdeaQuestionRequest request) {
         Test test = testRepository.findById(request.getTestId()).orElseThrow(() ->
@@ -114,13 +113,11 @@ public class SelectTheMainIdeaQuestionServiceImpl implements SelectTheMainIdeaQu
                 optionMap.remove(optionId);
             }
         }
-
         for (Option option : optionMap.values()) {
             optionRepository.delete(option);
             options.remove(option);
         }
         questionRepository.save(question);
-
         return SimpleResponse.builder()
                 .message(String.format("Question with id : %s successfully updated !", id))
                 .build();
