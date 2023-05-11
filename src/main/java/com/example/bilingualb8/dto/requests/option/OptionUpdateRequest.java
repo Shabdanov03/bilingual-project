@@ -12,7 +12,7 @@ public class OptionUpdateRequest {
     private Long id;
     @NotNull(message = "Title can not be null")
     private String title;
-    @NotNull(message ="Is Correct can not be null")
+    @NotNull(message = "Is Correct can not be null")
     private Boolean isCorrect;
     private String fileUrl;
     @NotNull(message = "The option order must not be empty.")

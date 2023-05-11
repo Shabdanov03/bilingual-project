@@ -1,6 +1,5 @@
 package com.example.bilingualb8.repositories;
 
-import com.example.bilingualb8.entity.Option;
 import com.example.bilingualb8.entity.Test;
 import org.springframework.data.jpa.repository.JpaRepository;
 
