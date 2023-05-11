@@ -12,7 +12,6 @@ public class OptionRequest {
     private String title;
     @NotNull(message = "Is Correct can not be null")
     private Boolean isCorrect;
-    private String fileUrl;
     @NotNull(message = "The option order must not be empty.")
     @Positive(message = "Option order can not be negative")
     private Integer optionOrder;
