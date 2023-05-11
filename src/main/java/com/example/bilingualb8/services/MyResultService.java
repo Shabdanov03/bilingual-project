@@ -7,5 +7,6 @@ import java.util.List;
 
 public interface MyResultService {
     List<MyResultResponse> getAll(Long userId);
+
     SimpleResponse deleteById(Long id);
 }
