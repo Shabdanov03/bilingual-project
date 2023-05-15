@@ -17,9 +17,6 @@ public class RecordSayingStatementQuestionRequest {
     @NotNull(message = "The duration must not be empty.")
     @Positive(message = "Duration can not be negative")
     private Integer duration;
-    @NotNull(message = "The minWords must not be empty.")
-    @Positive(message = "MinWords can not be negative")
-    private Integer minWords;
     @NotNull(message = "The Question Order must not be empty.")
     @Positive(message = "Question Order can not be negative")
     private Integer questionOrder;

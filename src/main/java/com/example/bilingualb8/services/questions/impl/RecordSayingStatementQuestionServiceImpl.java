@@ -31,7 +31,6 @@ public class RecordSayingStatementQuestionServiceImpl implements RecordSayingSta
                 .correctAnswer(request.getCorrectAnswer())
                 .questionOrder(request.getQuestionOrder())
                 .duration(request.getDuration())
-                .minWords(request.getMinWords())
                 .test(test)
                 .isActive(request.getIsActive())
                 .build();
@@ -52,11 +51,9 @@ public class RecordSayingStatementQuestionServiceImpl implements RecordSayingSta
         question.setDuration(updateRequest.getDuration() != null ? updateRequest.getDuration() : question.getDuration());
         question.setCorrectAnswer(updateRequest.getCorrectAnswer() != null ? updateRequest.getCorrectAnswer() : question.getCorrectAnswer());
         question.setQuestionOrder(updateRequest.getQuestionOrder() != null ? updateRequest.getQuestionOrder() : question.getQuestionOrder());
-        question.setMinWords(updateRequest.getMinWords() != null ? updateRequest.getMinWords() : question.getMinWords());
         question.setIsActive(updateRequest.getIsActive() != null ? updateRequest.getIsActive() : question.getIsActive());
 
         questionRepository.save(question);
-
         return SimpleResponse.builder()
                 .message(String.format("Question with id : %s successfully updated !", id))
                 .build();
