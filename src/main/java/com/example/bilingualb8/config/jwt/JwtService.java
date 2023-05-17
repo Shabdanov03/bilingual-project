@@ -10,6 +10,7 @@ import io.jsonwebtoken.security.SignatureException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
@@ -42,7 +43,7 @@ public class JwtService {
                 .setClaims(extractClaim)
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60))
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
@@ -50,7 +51,7 @@ public class JwtService {
     public Boolean isTokenValid(String token, UserDetails userDetails) {
         final String username = extractUserEmail(token);
 
-        if(isTokenExpired(token))
+        if (isTokenExpired(token))
             throw new MalformedJwtException("JWT Token is expired!");
 
         return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);

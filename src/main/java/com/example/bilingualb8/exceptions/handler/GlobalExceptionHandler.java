@@ -1,8 +1,6 @@
 package com.example.bilingualb8.exceptions.handler;
 
 import com.example.bilingualb8.exceptions.*;
-import io.jsonwebtoken.MalformedJwtException;
-import io.jsonwebtoken.SignatureException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
