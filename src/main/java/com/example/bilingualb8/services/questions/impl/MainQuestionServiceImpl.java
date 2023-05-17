@@ -46,7 +46,7 @@ public class MainQuestionServiceImpl implements MainQuestionService {
         for (Result result : results) {
             result.getAnswers().remove(answer);
         }
-        answerRepository.delete(answer);
+        if(answer != null) answerRepository.delete(answer);
         questionRepository.delete(question);
         return SimpleResponse.builder()
                 .message(String.format("Question with id : %s successfully deleted !", id))

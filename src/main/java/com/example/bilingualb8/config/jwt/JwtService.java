@@ -49,6 +49,10 @@ public class JwtService {
 
     public Boolean isTokenValid(String token, UserDetails userDetails) {
         final String username = extractUserEmail(token);
+
+        if(isTokenExpired(token))
+            throw new MalformedJwtException("JWT Token is expired!");
+
         return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
     }
 
@@ -60,17 +64,17 @@ public class JwtService {
         return extractClaim(token, Claims::getExpiration);
     }
 
-    private Claims extractAllClaims(String token)  {
-       try {
-           return Jwts
-                   .parserBuilder()
-                   .setSigningKey(getSignInKey())
-                   .build()
-                   .parseClaimsJws(token)
-                   .getBody();
-       }catch (SignatureException e){
-           throw new MalformedJwtException("invalid jwt  token.....!!!!");
-       }
+    private Claims extractAllClaims(String token) {
+        try {
+            return Jwts
+                    .parserBuilder()
+                    .setSigningKey(getSignInKey())
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+        } catch (SignatureException e) {
+            throw new MalformedJwtException("JWT Token is not valid!");
+        }
     }
 
     private Key getSignInKey() {

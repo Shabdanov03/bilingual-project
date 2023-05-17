@@ -54,10 +54,13 @@ public class TestServiceImpl implements TestService {
     public SimpleResponse deleteById(Long testId) {
         testRepository.findById(testId).orElseThrow(() -> new NotFoundException(String.format("Test with : %d id not found", testId)));
         List<Question> questions = questionRepository.findQuestionsByTestId(testId);
-        for (Question question : questions) {
+        List<Result> results = resultRepository.findByTestId(testId);
+
+        if (!questions.isEmpty()) for (Question question : questions) {
             mainQuestionService.deleteQuestionById(question.getId());
         }
-        for (Result result : resultRepository.findByTestId(testId)) {
+
+        if (!results.isEmpty()) for (Result result : resultRepository.findByTestId(testId)) {
             resultRepository.deleteById(result.getId());
         }
         testRepository.deleteById(testId);

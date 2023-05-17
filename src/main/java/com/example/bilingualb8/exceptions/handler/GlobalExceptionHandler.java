@@ -1,6 +1,9 @@
 package com.example.bilingualb8.exceptions.handler;
 
 import com.example.bilingualb8.exceptions.*;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.SignatureException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
@@ -12,6 +15,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.util.stream.Collectors;
 
 @RestControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler {
     @ExceptionHandler(NotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
@@ -58,5 +62,4 @@ public class GlobalExceptionHandler {
                 error
         );
     }
-
 }
