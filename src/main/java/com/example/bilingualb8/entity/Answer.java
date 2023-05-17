@@ -1,5 +1,6 @@
 package com.example.bilingualb8.entity;
 
+import com.example.bilingualb8.enums.AnswerStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -16,7 +17,7 @@ import static jakarta.persistence.CascadeType.*;
 public class Answer {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "answer_id_gen")
-    @SequenceGenerator(name = "answer_id_gen", sequenceName = "answer_id_gen", allocationSize = 1, initialValue = 10)
+    @SequenceGenerator(name = "answer_id_gen", sequenceName = "answer_id_gen", allocationSize = 1, initialValue = 11)
     private Long id;
     @OneToOne(cascade = {REFRESH, MERGE, PERSIST, DETACH})
     private Question question;
@@ -25,8 +26,11 @@ public class Answer {
     @OneToMany(cascade = {REFRESH, MERGE, PERSIST, DETACH})
     private List<Option> options;
     private String data;
-    private int evaluatedScore;
+    private float evaluatedScore;
     private int numberOfWords;
     private int numberOfPlays;
-    private boolean isChecked;
+    @Enumerated(EnumType.STRING)
+    private AnswerStatus answerStatus;
+    @OneToMany(cascade = ALL)
+    private List<File> files;
 }

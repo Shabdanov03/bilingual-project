@@ -1,5 +1,6 @@
 package com.example.bilingualb8.services;
 
+import com.example.bilingualb8.dto.requests.test.PassTestRequest;
 import com.example.bilingualb8.dto.requests.test.TestRequest;
 import com.example.bilingualb8.dto.responses.SimpleResponse;
 import com.example.bilingualb8.dto.responses.test.TestResponse;
@@ -16,4 +17,6 @@ public interface TestService {
     List<TestResponse> getAll();
 
     SimpleResponse update(Long id, TestRequest request);
+
+    SimpleResponse submitTest(PassTestRequest request);
 }

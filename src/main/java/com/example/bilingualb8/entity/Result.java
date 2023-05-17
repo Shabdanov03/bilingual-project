@@ -4,7 +4,7 @@ import com.example.bilingualb8.enums.ResultStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static jakarta.persistence.CascadeType.*;
@@ -28,7 +28,7 @@ public class Result {
     @Enumerated(value = EnumType.STRING)
     private ResultStatus status;
     private float score;
-    private LocalDate dateOfSubmission;
+    private LocalDateTime dateOfSubmission;
     @OneToMany(cascade = ALL)
     private List<Answer> answers;
 }

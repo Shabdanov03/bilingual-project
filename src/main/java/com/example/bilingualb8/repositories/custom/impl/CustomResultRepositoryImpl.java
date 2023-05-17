@@ -19,11 +19,11 @@ public class CustomResultRepositoryImpl implements CustomResultRepository {
     public List<MyResultResponse> getAll(Long userId) {
 
         String sql = """
-                SELECT r.id,
-                       r.date_of_submission,
+                SELECT r.id as id,
+                       r.date_of_submission as date_of_submission,
                        t.title as test_title,
-                       r.status,
-                       r.score
+                       r.status as status,
+                       r.score as score
                 FROM results r
                 JOIN users u ON r.user_id = u.id
                 JOIN tests t ON r.test_id = t.id

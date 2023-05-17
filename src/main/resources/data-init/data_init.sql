@@ -1,7 +1,7 @@
 insert into users(id, created_at, first_name, is_active, last_name, modified_at)
 values (1, now(), 'Alibek', false, 'Altynbekov', now()),
        (2, now(), 'Ilim', false, 'Shabdanov', now()),
-       (3, now(), 'Adil', false, 'Aitbaiev', now()),
+       (3, now(), 'Adil', false, 'Aitbaev', now()),
        (4, now(), 'Saltanat', false, 'Nematilla kyzy', now()),
        (5, now(), 'Zhazgul', false, 'Zhoroeva', now());
 
@@ -75,46 +75,50 @@ values (1, NULL, false, 'option1', 1),
 insert into files(id, file_type, file_url, question_id)
 values (1, 'AUDIO', 'file_url1', 2),
        (2, 'IMAGE', 'file_url2', 3),
-       (3, 'AUDIO', 'file_url3', 4);
+       (3, 'AUDIO', 'file_url3', 4),
+       (4,'AUDIO','file_url4',5);
 
 insert into results(id, date_of_submission, score, status, test_id, user_id)
 values (1, now(), 0, 'NOT_EVALUATED', 1, 2),
        (2, now(), 0, 'NOT_EVALUATED', 1, 3),
        (3, now(), 0, 'NOT_EVALUATED', 1, 5),
        (4, now(), 0, 'NOT_EVALUATED', 1, 4);
-
-insert into answers(id, evaluated_score, is_checked, number_of_plays, number_of_words, data, question_id, user_id)
-values (1, 0, false, 0, 0, NULL, 1, 2),
-       (2, 0, false, 0, 0, 'data', 2, 2),
-       (3, 0, false, 0, 0, 'data', 3, 2),
-       (4, 0, false, 0, 0, NULL, 4, 2),
-       (5, 0, false, 0, 0, 'data', 5, 2),
-       (6, 0, false, 0, 0, 'data', 6, 2),
-       (7, 0, false, 0, 0, 'data', 7, 2),
-       (8, 0, false, 0, 0, NULL, 8, 2),
-       (9, 0, false, 0, 0, NULL, 9, 2),
-       (10, 0, false, 0, 0, NULL, 10, 2);
-
-insert into answers_options(answer_id, options_id)
-values (1, 1),
-       (1, 2),
-       (4, 10),
-       (4, 11),
-       (8, 5),
-       (9, 13),
-       (10, 17);
-
-
-insert into results_answers(result_id, answers_id)
-values (1, 1),
-       (1, 2),
-       (1, 3),
-       (1, 4),
-       (1, 5),
-       (1, 6),
-       (1, 7),
-       (1, 8),
-       (1, 9),
-       (1, 10);
+--
+-- insert into answers(id,answer_status, evaluated_score, number_of_plays, number_of_words, data, question_id, user_id)
+-- values (1,'NOT_EVALUATED',0.0, 0, 0, NULL, 1, 2),
+--        (2, 'NOT_EVALUATED',0.0, 0, 0, 'data', 2, 2),
+--        (3, 'NOT_EVALUATED',0.0, 0, 0, 'data', 3, 2),
+--        (4, 'NOT_EVALUATED',0.0, 0, 0, NULL, 4, 2),
+--        (5, 'NOT_EVALUATED',0.0, 0, 0, 'data', 5, 2),
+--        (6, 'NOT_EVALUATED',0.0, 0, 0, 'data', 6, 2),
+--        (7, 'NOT_EVALUATED',0.0, 0, 0, 'data', 7, 2),
+--        (8, 'NOT_EVALUATED',0.0, 0, 0, NULL, 8, 2),
+--        (9, 'NOT_EVALUATED',0.0, 0, 0, NULL, 9, 2),
+--        (10, 'NOT_EVALUATED',0.0, 0, 0, NULL, 10, 2);
+--
+-- insert into answers_files(answer_id, files_id)
+-- values (5,4);
+--
+-- insert into answers_options(answer_id, options_id)
+-- values (1, 1),
+--        (1, 2),
+--        (4, 10),
+--        (4, 11),
+--        (8, 5),
+--        (9, 13),
+--        (10, 17);
+--
+--
+-- insert into results_answers(result_id, answers_id)
+-- values (1, 1),
+--        (1, 2),
+--        (1, 3),
+--        (1, 4),
+--        (1, 5),
+--        (1, 6),
+--        (1, 7),
+--        (1, 8),
+--        (1, 9),
+--        (1, 10);
 
 
