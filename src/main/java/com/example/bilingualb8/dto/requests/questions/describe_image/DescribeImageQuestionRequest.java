@@ -1,6 +1,5 @@
 package com.example.bilingualb8.dto.requests.questions.describe_image;
 
-import com.example.bilingualb8.dto.requests.file.FileRequest;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.Builder;
@@ -20,7 +19,7 @@ public class DescribeImageQuestionRequest {
     @Positive(message = "Order can not be negative")
     private Integer questionOrder;
     @NotNull(message = "The file must not be empty.")
-    private FileRequest file;
+    private String file;
     @NotNull(message = "The test id must not be empty.")
     @Positive(message = "Test id can not be negative")
     private Long testId;
