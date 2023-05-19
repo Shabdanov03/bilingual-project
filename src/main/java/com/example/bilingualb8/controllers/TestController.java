@@ -1,5 +1,6 @@
 package com.example.bilingualb8.controllers;
 
+import com.example.bilingualb8.dto.requests.test.PassTestRequest;
 import com.example.bilingualb8.dto.requests.test.TestRequest;
 import com.example.bilingualb8.dto.responses.SimpleResponse;
 import com.example.bilingualb8.dto.responses.test.TestResponse;
@@ -52,5 +53,14 @@ public class TestController {
     @PostMapping
     public SimpleResponse save(@RequestBody @Valid TestRequest request) {
         return testService.save(request);
+    }
+
+
+    // TODO PASS TEST
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @Operation(summary = "This submit test method")
+    @PostMapping("/submit")
+    public SimpleResponse submitTest(@RequestBody @Valid PassTestRequest request){
+        return testService.submitTest(request);
     }
 }

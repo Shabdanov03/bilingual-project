@@ -107,7 +107,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             userInfoRepository.save(userInfo);
 
             String subject = "Password Reset Request";
-            String resetPasswordLink = "http://localhost:8080/reset-password?token=" + token;
+            String resetPasswordLink = "http://localhost:8080/api/auth/reset-password?token=" + token;
 
             Context context = new Context();
             context.setVariable("title", "Password Reset");

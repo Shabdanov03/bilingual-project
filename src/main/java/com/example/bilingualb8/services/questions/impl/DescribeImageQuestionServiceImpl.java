@@ -33,8 +33,7 @@ public class DescribeImageQuestionServiceImpl implements DescribeImageQuestionSe
                 .test(test)
                 .isActive(request.getIsActive())
                 .build();
-
-        File file = new File(FileType.IMAGE, request.getFile().getFileUrl(), question);
+        File file = new File(FileType.IMAGE, request.getFile(), question);
         question.setFiles(new ArrayList<>((List.of(file))));
         questionRepository.save(question);
         return SimpleResponse.builder()
@@ -55,7 +54,7 @@ public class DescribeImageQuestionServiceImpl implements DescribeImageQuestionSe
 
         if (updateRequest.getFile() != null) {
             File file = question.getFiles().get(0);
-            file.setFileUrl(updateRequest.getFile().getFileUrl());
+            file.setFileUrl(updateRequest.getFile());
             question.setFiles(new ArrayList<>(List.of(file)));
         }
         questionRepository.save(question);

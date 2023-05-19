@@ -24,7 +24,8 @@ public class MyResultServiceImpl implements MyResultService {
 
     @Override
     public SimpleResponse deleteById(Long id) {
-        resultRepository.findById(id).orElseThrow(() -> new NotFoundException(String.format("result with : %d id not found", id)));
+        resultRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException(String.format("result with : %d id not found", id)));
         resultRepository.deleteById(id);
         return SimpleResponse.builder()
                 .message(String.format("result with : %d id successfully deleted", id))

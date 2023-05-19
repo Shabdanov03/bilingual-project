@@ -37,7 +37,7 @@ public class TypeWhatYouHearQuestionServiceImpl implements TypeWhatYouHearQuesti
                 .test(test)
                 .isActive(request.getIsActive())
                 .build();
-        File file = new File(FileType.AUDIO, request.getFileRequest().getFileUrl(), question);
+        File file = new File(FileType.AUDIO, request.getFileRequest(), question);
         question.setFiles(new ArrayList<>((List.of(file))));
         questionRepository.save(question);
         return SimpleResponse.builder().message(String.format("Question with title: %s successfully saved!", request.getTitle())).build();
@@ -55,7 +55,7 @@ public class TypeWhatYouHearQuestionServiceImpl implements TypeWhatYouHearQuesti
 
         if (updateQuestionRequest.getFile() != null) {
             File file = question.getFiles().get(0);
-            file.setFileUrl(updateQuestionRequest.getFile().getFileUrl());
+            file.setFileUrl(updateQuestionRequest.getFile());
             question.setFiles(new ArrayList<>(List.of(file)));
         }
         questionRepository.save(question);
