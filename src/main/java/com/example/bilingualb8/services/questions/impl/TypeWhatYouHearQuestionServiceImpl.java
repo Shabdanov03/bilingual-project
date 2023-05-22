@@ -11,6 +11,7 @@ import com.example.bilingualb8.repositories.QuestionRepository;
 import com.example.bilingualb8.repositories.TestRepository;
 import com.example.bilingualb8.services.questions.TypeWhatYouHearQuestionService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -19,12 +20,14 @@ import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class TypeWhatYouHearQuestionServiceImpl implements TypeWhatYouHearQuestionService {
     private final TestRepository testRepository;
     private final QuestionRepository questionRepository;
 
     @Override
     public SimpleResponse saveTypeWhatYouHearQuestion(TypeWhatYouHearQuestionRequest request) {
+        log.info("This is save " + request.getTitle() + "method");
         Test test = testRepository.findById(request.getTestId()).orElseThrow(() ->
                 new NoSuchElementException(String.format("Test with id  %d  not found", request.getTestId())));
         Question question = Question.builder()
@@ -45,6 +48,7 @@ public class TypeWhatYouHearQuestionServiceImpl implements TypeWhatYouHearQuesti
 
     @Override
     public SimpleResponse updateTypeWhatYouHear(Long id, TypeWhatYouHearQuestionUpdateRequest updateQuestionRequest) {
+        log.info("This is update " +updateQuestionRequest.getTitle() + "method");
         Question question = questionRepository.findById(id).orElseThrow(() ->
                 new NotFoundException(String.format("Question with id : %s doesn't exist! ", id)));
         question.setTitle(updateQuestionRequest.getTitle() != null ? updateQuestionRequest.getTitle() : question.getTitle());

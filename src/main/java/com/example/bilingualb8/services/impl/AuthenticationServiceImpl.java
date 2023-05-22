@@ -50,6 +50,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public AuthenticationResponse signUp(SignUpRequest signUpRequest) {
+        log.info("This is sing up method");
         if (userRepository.existsByUserInfoEmail(signUpRequest.email())) {
             throw new AlreadyExistException("Sorry, this email is already registered. Please try a different email or login to your existing account");
         }
@@ -78,6 +79,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public AuthenticationResponse signIn(AuthenticationRequest authenticationRequest) {
+        log.info("This is sigh in method");
         var user = userRepository.findUserInfoByEmail(authenticationRequest.email())
                 .orElseThrow(() -> new NotFoundException("User was not found."));
 
@@ -99,6 +101,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public SimpleResponse forgotPassword(ForgotPassword forgotPassword) {
+        log.info("This is forgot password method");
         UserInfo userInfo = userRepository.findUserInfoByEmail(forgotPassword.email())
                 .orElseThrow(() -> new NotFoundException("User was not found"));
         try {
@@ -129,6 +132,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public SimpleResponse resetPassword(String token, String newPassword) {
+        log.info("This is reset password method");
         UserInfo userInfo = userInfoRepository.findByResetPasswordToken(token)
                 .orElseThrow(() -> new NotFoundException("User was not found"));
         userInfo.setPassword(passwordEncoder.encode(newPassword));
@@ -140,6 +144,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public AuthenticationResponse authWithGoogle(String tokenId) throws FirebaseAuthException {
+        log.info("This is authentication with google method");
         FirebaseToken firebaseToken = FirebaseAuth.getInstance().verifyIdToken(tokenId);
         if (userRepository.findUserInfoByEmail(firebaseToken.getEmail()).isEmpty()) {
             User newUser = new User();
@@ -168,6 +173,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @PostConstruct
     public void init() {
+        log.info("This is init method ");
         try {
             GoogleCredentials googleCredentials = GoogleCredentials.fromStream(new ClassPathResource("billingual.json").getInputStream());
             FirebaseOptions firebaseOptions = FirebaseOptions.builder()

@@ -16,6 +16,7 @@ import com.example.bilingualb8.repositories.custom.CustomTestRepository;
 import com.example.bilingualb8.services.TestService;
 import com.example.bilingualb8.services.questions.MainQuestionService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -23,6 +24,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class TestServiceImpl implements TestService {
     private final TestRepository testRepository;
     private final CustomTestRepository customTestRepository;
@@ -35,6 +37,7 @@ public class TestServiceImpl implements TestService {
 
     @Override
     public SimpleResponse save(TestRequest request) {
+        log.info("This is save" + request.title() + "method");
         if (testRepository.existsByTitle(request.title())) {
             throw new AlreadyExistException(String.format("Test with title : %s already exists", request.title()));
         }
@@ -52,6 +55,7 @@ public class TestServiceImpl implements TestService {
 
     @Override
     public SimpleResponse deleteById(Long testId) {
+        log.info("This is delete test with id:"+testId +" method");
         testRepository.findById(testId).orElseThrow(() -> new NotFoundException(String.format("Test with : %d id not found", testId)));
         List<Question> questions = questionRepository.findQuestionsByTestId(testId);
         List<Result> results = resultRepository.findByTestId(testId);
@@ -71,17 +75,20 @@ public class TestServiceImpl implements TestService {
 
     @Override
     public TestResponse getById(Long testId) {
+        log.info("This is get by id method");
         return customTestRepository.getById(testId).orElseThrow(
                 () -> new NotFoundException(String.format("Test with id %s was not found", testId)));
     }
 
     @Override
     public List<TestResponse> getAll() {
+        log.info("This is get all tests method");
         return customTestRepository.getAll();
     }
 
     @Override
     public SimpleResponse update(Long testId, TestRequest request) {
+        log.info("This is update " + request.title() + " method");
         Test test = testRepository.findById(testId).orElseThrow(() -> new NotFoundException(String.format("Test with : %d id not found", testId)));
         test.setTitle(request.title());
         test.setShortDescription(request.shortDescription());
@@ -94,6 +101,7 @@ public class TestServiceImpl implements TestService {
 
     @Override
     public SimpleResponse submitTest(PassTestRequest request) {
+        log.info("This is submit test method");
         List<Answer> answers = new ArrayList<>();
         User user = userRepository.findById(request.getUserId())
                 .orElseThrow(() -> new NotFoundException(String.format("User with id %s was not found", request.getUserId())));

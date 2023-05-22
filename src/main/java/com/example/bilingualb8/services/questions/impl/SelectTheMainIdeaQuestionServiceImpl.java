@@ -17,6 +17,7 @@ import com.example.bilingualb8.repositories.TestRepository;
 import com.example.bilingualb8.services.questions.SelectTheMainIdeaQuestionService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -26,6 +27,7 @@ import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class SelectTheMainIdeaQuestionServiceImpl implements SelectTheMainIdeaQuestionService {
     private final TestRepository testRepository;
     private final QuestionRepository questionRepository;
@@ -33,6 +35,7 @@ public class SelectTheMainIdeaQuestionServiceImpl implements SelectTheMainIdeaQu
 
     @Override
     public SimpleResponse saveSelectTheMainIdeaQuestion(SelectTheMainIdeaQuestionRequest request) {
+        log.info("This is save method");
         Test test = testRepository.findById(request.getTestId()).orElseThrow(() ->
                 new NotFoundException(String.format("Test with id : %s doesn't exist !", request.getTestId())));
 
@@ -64,6 +67,7 @@ public class SelectTheMainIdeaQuestionServiceImpl implements SelectTheMainIdeaQu
     @Transactional
     @Override
     public SimpleResponse updateSelectTheMainQuestionById(Long id, SelectTheMainIdeaQuestionUpdateRequest request) {
+        log.info("This is update " + request.getTitle() + "method");
         Question question = questionRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException(String.format("Question with id %s was not found", id)));
 
