@@ -173,7 +173,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @PostConstruct
     public void init() {
-        log.info("This is init method ");
         try {
             GoogleCredentials googleCredentials = GoogleCredentials.fromStream(new ClassPathResource("billingual.json").getInputStream());
             FirebaseOptions firebaseOptions = FirebaseOptions.builder()

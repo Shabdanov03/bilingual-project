@@ -25,7 +25,7 @@ public class RespondNWordsQuestionServiceImpl implements RespondNWordsQuestionSe
     private final TestRepository testRepository;
     @Override
     public SimpleResponse saveRespondNWordsQuestion(RespondNWordsQuestionRequest request) {
-        log.info("This is save " +request.getTitle() + " method");
+        log.info("This is save  method");
         Test test = testRepository.findById(request.getTestId()).orElseThrow(() ->
                 new NotFoundException(String.format("Test with id : %s doesn't exist !", request.getTestId())));
         Question question = Question.builder()
@@ -46,7 +46,7 @@ public class RespondNWordsQuestionServiceImpl implements RespondNWordsQuestionSe
 
     @Override
     public SimpleResponse updateRespondNWordsQuestionById(Long id, RespondNWordsQuestionUpdateRequest updateRequest) {
-        log.info("This is update "+ updateRequest.getTitle() + "method");
+        log.info("This is update method");
         Question question = questionRepository.findById(id).orElseThrow(() -> new NotFoundException(
                 String.format("Question with id : %s doesn't exist ! ", id)));
 
