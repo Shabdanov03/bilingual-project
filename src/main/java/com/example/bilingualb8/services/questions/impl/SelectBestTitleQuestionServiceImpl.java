@@ -17,8 +17,6 @@ import com.example.bilingualb8.services.questions.SelectBestTitleQuestionService
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 import java.util.*;
@@ -30,11 +28,9 @@ public class SelectBestTitleQuestionServiceImpl implements SelectBestTitleQuesti
     private final QuestionRepository questionRepository;
     private final TestRepository testRepository;
     private final OptionRepository optionRepository;
-    private static final Logger logger = LogManager.getLogger(Question.class);
-
     @Override
     public SimpleResponse save(SelectBestTitleQuestionRequest request) {
-        logger.info("This is save "+ request.getTitle() + "method");
+        log.info("This is save "+ request.getTitle() + "method");
         Test test = testRepository.findById(request.getTestId()).orElseThrow(() ->
                 new com.example.bilingualb8.exceptions.NotFoundException(String.format("Test with id : %s doesn't exist !", request.getTestId())));
         Question question = new Question();
@@ -66,7 +62,7 @@ public class SelectBestTitleQuestionServiceImpl implements SelectBestTitleQuesti
     @Transactional
     @Override
     public SimpleResponse update(Long id, SelectBestTitleQuestionUpdateRequest request) {
-        logger.info("This is update "+ request.getTitle() + "method");
+        log.info("This is update "+ request.getTitle() + "method");
         Question question = questionRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException(String.format("Question with id %s was not found", id)));
 

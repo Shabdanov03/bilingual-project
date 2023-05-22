@@ -12,21 +12,21 @@ import com.example.bilingualb8.repositories.TestRepository;
 import com.example.bilingualb8.services.questions.RecordSayingStatementQuestionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-@Log4j2
+@Slf4j
 public class RecordSayingStatementQuestionServiceImpl implements RecordSayingStatementQuestionService {
     private final QuestionRepository questionRepository;
     private final TestRepository testRepository;
-    private static final Logger logger = LogManager.getLogger(Question.class);
 
     @Override
     public SimpleResponse saveRecordSayingStatement(RecordSayingStatementQuestionRequest request) {
-        logger.info("This is save " + request.getTitle() + " method");
+        log.info("This is save Record saying statement method");
         Test test = testRepository.findById(request.getTestId()).orElseThrow(() ->
                 new NotFoundException(String.format("Test with id : %s doesn't exist !", request.getTestId())));
 
@@ -48,7 +48,7 @@ public class RecordSayingStatementQuestionServiceImpl implements RecordSayingSta
 
     @Override
     public SimpleResponse updateRecordSayingStatementQuestion(Long id, RecordSayingStatementQuestionUpdateRequest updateRequest) {
-        logger.info("This is update" + updateRequest.getTitle() + " method");
+        log.info("This is update" + updateRequest.getTitle() + " method");
         Question question = questionRepository.findById(id).orElseThrow(() ->
                 new NotFoundException(String.format("Question with id : %s doesn't exist! ", id)));
 

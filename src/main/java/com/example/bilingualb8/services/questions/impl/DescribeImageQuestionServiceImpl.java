@@ -11,9 +11,7 @@ import com.example.bilingualb8.repositories.QuestionRepository;
 import com.example.bilingualb8.repositories.TestRepository;
 import com.example.bilingualb8.services.questions.DescribeImageQuestionService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -22,15 +20,14 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Log4j2
+@Slf4j
 public class DescribeImageQuestionServiceImpl implements DescribeImageQuestionService {
     private final QuestionRepository questionRepository;
     private final TestRepository testRepository;
-    private static final Logger logger = LogManager.getLogger(Question.class);
 
 
     public SimpleResponse saveDescribeQuestion(DescribeImageQuestionRequest request) {
-        logger.info("This is save Describe image question");
+        log.info("This is save describe image question method");
         Test test = testRepository.findById(request.getTestId()).orElseThrow(() ->
                 new NotFoundException(String.format("Test with id : %s doesn't exist !", request.getTestId())));
         Question question = Question.builder()
@@ -51,7 +48,7 @@ public class DescribeImageQuestionServiceImpl implements DescribeImageQuestionSe
 
     @Override
     public SimpleResponse updateDescribeImageQuestionById(Long id, DescribeImageQuestionUpdateRequest updateRequest) {
-        logger.info(String.format("This is update Describe image question", updateRequest.getTitle()));
+        log.info("This is update Describe image question method");
         Question question = questionRepository.findById(id).orElseThrow(() ->
                 new NotFoundException(String.format("Question with id : %s doesn't exist! ", id)));
 

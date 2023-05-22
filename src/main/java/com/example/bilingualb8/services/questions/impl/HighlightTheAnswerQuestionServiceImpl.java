@@ -12,13 +12,14 @@ import com.example.bilingualb8.repositories.TestRepository;
 import com.example.bilingualb8.services.questions.HighlightTheAnswerQuestionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-@Log4j2
+@Slf4j
 public class HighlightTheAnswerQuestionServiceImpl implements HighlightTheAnswerQuestionService {
     private final QuestionRepository questionRepository;
     private final TestRepository testRepository;
@@ -26,7 +27,7 @@ public class HighlightTheAnswerQuestionServiceImpl implements HighlightTheAnswer
 
     @Override
     public SimpleResponse saveHighlightTheAnswerQuestion(HighlightTheAnswerQuestionRequest request) {
-        logger.info("This is save  "+ request.getTitle()+ "method ");
+        log.info("This is save Highlight th answer question method");
         Test test = testRepository.findById(request.getTestId()).orElseThrow(() ->
                 new NotFoundException(String.format("Test with id : %s doesn't exist !", request.getTestId())));
         Question question = Question.builder()
@@ -48,7 +49,7 @@ public class HighlightTheAnswerQuestionServiceImpl implements HighlightTheAnswer
 
     @Override
     public SimpleResponse updateHighlightTheAnswerQuestionById(Long id, HighlightTheAnswerQuestionUpdateRequest updateRequest) {
-        logger.info("This is update "+ updateRequest.getTitle() + "method");
+        log.info("This is update the Highlight the answer question");
         Question question = questionRepository.findById(id).orElseThrow(() -> new NotFoundException(
                 String.format("Question with id : %s doesn't exist ! ", id)));
 

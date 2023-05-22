@@ -18,8 +18,6 @@ import com.example.bilingualb8.services.questions.SelectRealEnglishWordService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -34,11 +32,10 @@ public class SelectRealEnglishWordServiceImpl implements SelectRealEnglishWordSe
     private final QuestionRepository questionRepository;
     private final TestRepository testRepository;
     private final OptionRepository optionRepository;
-    private static final Logger logger = LogManager.getLogger(Question.class);
 
     @Override
     public SimpleResponse saveSelectRealEnglishWordQuestion(SelectRealEnglishWordRequest request) {
-        logger.info("this is save "+ request.getTitle() + "method");
+        log.info("this is save "+ request.getTitle() + "method");
         Test test = testRepository.findById(request.getTestId()).orElseThrow(() ->
                 new NotFoundException(String.format("Test with id : %s doesn't exist !", request.getTestId())));
         Question question = Question.builder()
@@ -68,7 +65,7 @@ public class SelectRealEnglishWordServiceImpl implements SelectRealEnglishWordSe
     @Transactional
     @Override
     public SimpleResponse updateSelectRealEnglishWordQuestion(Long id, SelectRealEnglishWordUpdateRequest request) {
-        logger.info("This is update "+ request.getTitle() + " method");
+        log.info("This is update "+ request.getTitle() + " method");
         Question question = questionRepository.findById(id).orElseThrow(() ->
                 new NotFoundException(String.format("Question with id : %s doesn't exist! ", id)));
 

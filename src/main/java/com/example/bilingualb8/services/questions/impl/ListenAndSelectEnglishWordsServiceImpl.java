@@ -18,8 +18,6 @@ import com.example.bilingualb8.services.questions.ListenAndSelectEnglishWordsSer
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -31,12 +29,11 @@ public class ListenAndSelectEnglishWordsServiceImpl implements ListenAndSelectEn
     private final TestRepository testRepository;
     private final QuestionRepository questionRepository;
     private final OptionRepository optionRepository;
-    private static final Logger logger = LogManager.getLogger(Question.class);
 
 
     @Override
     public SimpleResponse save(ListenAndSelectEnglishWordsRequest request) {
-        logger.info("This is save "+ request.getTitle() + "method");
+        log.info("This is save method");
         Test test = testRepository.findById(request.getTestId()).orElseThrow(() ->
                 new NoSuchElementException(String.format("Test with id: %s not found", request.getTestId())));
         Question question = Question.builder()
@@ -70,7 +67,7 @@ public class ListenAndSelectEnglishWordsServiceImpl implements ListenAndSelectEn
     @Transactional
     @Override
     public SimpleResponse update(ListenAndSelectEnglishWordsUpdateRequest request, Long id) {
-        logger.info("This is save "+ request.getTitle() + "method");
+        log.info("This is update Listen and select English words method");
         Question question = questionRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException(String.format("Question with id %s was not found", id)));
 
