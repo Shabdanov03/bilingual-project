@@ -16,6 +16,7 @@ import com.example.bilingualb8.repositories.custom.CustomTestRepository;
 import com.example.bilingualb8.services.TestService;
 import com.example.bilingualb8.services.questions.MainQuestionService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -93,10 +94,11 @@ public class TestServiceImpl implements TestService {
     }
 
     @Override
-    public SimpleResponse submitTest(PassTestRequest request) {
+    public SimpleResponse submitTest(PassTestRequest request, Authentication authentication) {
         List<Answer> answers = new ArrayList<>();
-        User user = userRepository.findById(request.getUserId())
-                .orElseThrow(() -> new NotFoundException(String.format("User with id %s was not found", request.getUserId())));
+        UserInfo userInfo = (UserInfo) authentication.getPrincipal();
+        User user = userRepository.findById(userInfo.getId())
+                .orElseThrow(() -> new NotFoundException(String.format("User with id %s was not found", userInfo.getId())));
 
         for (AnswerRequest answerRequest : request.getAnswers()) {
             Question question = questionRepository.findById(answerRequest.getQuestionId()).orElseThrow(

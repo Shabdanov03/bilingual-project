@@ -31,4 +31,5 @@ public class MyResultServiceImpl implements MyResultService {
                 .message(String.format("result with : %d id successfully deleted", id))
                 .build();
     }
+
 }

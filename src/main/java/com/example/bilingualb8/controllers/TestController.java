@@ -4,11 +4,14 @@ import com.example.bilingualb8.dto.requests.test.PassTestRequest;
 import com.example.bilingualb8.dto.requests.test.TestRequest;
 import com.example.bilingualb8.dto.responses.SimpleResponse;
 import com.example.bilingualb8.dto.responses.test.TestResponse;
+import com.example.bilingualb8.entity.UserInfo;
 import com.example.bilingualb8.services.TestService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.apache.catalina.User;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -60,7 +63,7 @@ public class TestController {
     @PreAuthorize("hasAuthority('ADMIN')")
     @Operation(summary = "This submit test method")
     @PostMapping("/submit")
-    public SimpleResponse submitTest(@RequestBody @Valid PassTestRequest request){
-        return testService.submitTest(request);
+    public SimpleResponse submitTest(@RequestBody @Valid PassTestRequest request, Authentication authentication){
+        return testService.submitTest(request,authentication);
     }
 }

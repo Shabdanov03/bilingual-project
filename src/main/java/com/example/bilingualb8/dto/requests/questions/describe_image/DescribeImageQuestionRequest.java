@@ -1,10 +1,14 @@
 package com.example.bilingualb8.dto.requests.questions.describe_image;
 
 import com.example.bilingualb8.dto.requests.file.FileRequest;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.Builder;
 import lombok.Data;
+import org.springframework.boot.jackson.JsonObjectSerializer;
 
 @Data
 @Builder
@@ -19,6 +23,7 @@ public class DescribeImageQuestionRequest {
     @NotNull(message = "The question order must not be empty.")
     @Positive(message = "Order can not be negative")
     private Integer questionOrder;
+    @Valid
     @NotNull(message = "The file must not be empty.")
     private FileRequest file;
     @NotNull(message = "The test id must not be empty.")
