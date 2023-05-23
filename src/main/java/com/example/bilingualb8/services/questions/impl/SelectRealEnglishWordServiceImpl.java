@@ -17,6 +17,7 @@ import com.example.bilingualb8.repositories.TestRepository;
 import com.example.bilingualb8.services.questions.SelectRealEnglishWordService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -26,6 +27,7 @@ import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class SelectRealEnglishWordServiceImpl implements SelectRealEnglishWordService {
     private final QuestionRepository questionRepository;
     private final TestRepository testRepository;
@@ -33,9 +35,10 @@ public class SelectRealEnglishWordServiceImpl implements SelectRealEnglishWordSe
 
     @Override
     public SimpleResponse saveSelectRealEnglishWordQuestion(SelectRealEnglishWordRequest request) {
+        log.info("Saving Select Real English Word question: {}", request.getTitle());
+        Test test = testRepository.findById(request.getTestId())
+                .orElseThrow(() -> new NotFoundException(String.format("Test with ID %s doesn't exist", request.getTestId())));
 
-        Test test = testRepository.findById(request.getTestId()).orElseThrow(() ->
-                new NotFoundException(String.format("Test with id : %s doesn't exist !", request.getTestId())));
         Question question = Question.builder()
                 .title(request.getTitle())
                 .duration(request.getDuration())
@@ -55,16 +58,19 @@ public class SelectRealEnglishWordServiceImpl implements SelectRealEnglishWordSe
         }
         question.setOptions(options);
         questionRepository.save(question);
+
+        log.info("Question with title '{}' successfully saved", request.getTitle());
         return SimpleResponse.builder()
-                .message(String.format("Question with title : %s successfully saved !", request.getTitle()))
+                .message(String.format("Question with title '%s' successfully saved!", request.getTitle()))
                 .build();
     }
 
     @Transactional
     @Override
     public SimpleResponse updateSelectRealEnglishWordQuestion(Long id, SelectRealEnglishWordUpdateRequest request) {
-        Question question = questionRepository.findById(id).orElseThrow(() ->
-                new NotFoundException(String.format("Question with id : %s doesn't exist! ", id)));
+        log.info("Updating Select Real English Word question: {}", request.getTitle());
+        Question question = questionRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException(String.format("Question with ID %s doesn't exist", id)));
 
         if (request.getTitle() != null) {
             question.setTitle(request.getTitle());
@@ -75,6 +81,7 @@ public class SelectRealEnglishWordServiceImpl implements SelectRealEnglishWordSe
         if (request.getQuestionOrder() != null) {
             question.setQuestionOrder(request.getQuestionOrder());
         }
+
         List<Option> options = question.getOptions(); // Existing options
         List<OptionUpdateRequest> requestOptions = request.getOptions(); // Request options
 
@@ -88,6 +95,7 @@ public class SelectRealEnglishWordServiceImpl implements SelectRealEnglishWordSe
             Option option = optionMap.get(optionId);
 
             if (option == null) {
+                // Create a new option
                 option = new Option();
                 option.setTitle(optionRequest.getTitle());
                 option.setOptionOrder(optionRequest.getOptionOrder());
@@ -95,6 +103,7 @@ public class SelectRealEnglishWordServiceImpl implements SelectRealEnglishWordSe
                 option.setQuestion(question);
                 options.add(option);
             } else {
+                // Update existing option
                 if (optionRequest.getTitle() != null) {
                     option.setTitle(optionRequest.getTitle());
                 }
@@ -107,13 +116,18 @@ public class SelectRealEnglishWordServiceImpl implements SelectRealEnglishWordSe
                 optionMap.remove(optionId);
             }
         }
+
+        // Delete options not in the request
         for (Option option : optionMap.values()) {
             optionRepository.delete(option);
             options.remove(option);
         }
+
         questionRepository.save(question);
+
+        log.info("Question with ID {} successfully updated", id);
         return SimpleResponse.builder()
-                .message(String.format("Question with id : %s successfully updated !", id))
+                .message(String.format("Question with ID %s successfully updated!", id))
                 .build();
     }
 }

@@ -11,18 +11,21 @@ import com.example.bilingualb8.repositories.QuestionRepository;
 import com.example.bilingualb8.repositories.TestRepository;
 import com.example.bilingualb8.services.questions.RecordSayingStatementQuestionService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class RecordSayingStatementQuestionServiceImpl implements RecordSayingStatementQuestionService {
     private final QuestionRepository questionRepository;
     private final TestRepository testRepository;
 
     @Override
     public SimpleResponse saveRecordSayingStatement(RecordSayingStatementQuestionRequest request) {
-        Test test = testRepository.findById(request.getTestId()).orElseThrow(() ->
-                new NotFoundException(String.format("Test with id : %s doesn't exist !", request.getTestId())));
+        log.info("Saving record saying statement question");
+        Test test = testRepository.findById(request.getTestId())
+                .orElseThrow(() -> new NotFoundException(String.format("Test with ID %s doesn't exist", request.getTestId())));
 
         Question question = Question.builder()
                 .questionType(QuestionType.RECORD_SAYING_STATEMENT)
@@ -35,15 +38,18 @@ public class RecordSayingStatementQuestionServiceImpl implements RecordSayingSta
                 .isActive(request.getIsActive())
                 .build();
         questionRepository.save(question);
+
+        log.info("Question with title '{}' successfully saved", request.getTitle());
         return SimpleResponse.builder()
-                .message(String.format("Question with title : %s successfully saved !", request.getTitle()))
+                .message(String.format("Question with title '%s' successfully saved", request.getTitle()))
                 .build();
     }
 
     @Override
     public SimpleResponse updateRecordSayingStatementQuestion(Long id, RecordSayingStatementQuestionUpdateRequest updateRequest) {
-        Question question = questionRepository.findById(id).orElseThrow(() ->
-                new NotFoundException(String.format("Question with id : %s doesn't exist! ", id)));
+        log.info("Updating record saying statement question with ID: {}", id);
+        Question question = questionRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException(String.format("Question with ID %s doesn't exist", id)));
 
         // TODO UPDATE LOGIC
         question.setTitle(updateRequest.getTitle() != null ? updateRequest.getTitle() : question.getTitle());
@@ -54,8 +60,10 @@ public class RecordSayingStatementQuestionServiceImpl implements RecordSayingSta
         question.setIsActive(updateRequest.getIsActive() != null ? updateRequest.getIsActive() : question.getIsActive());
 
         questionRepository.save(question);
+
+        log.info("Question with ID {} successfully updated", id);
         return SimpleResponse.builder()
-                .message(String.format("Question with id : %s successfully updated !", id))
+                .message(String.format("Question with ID %s successfully updated", id))
                 .build();
     }
 }

@@ -31,9 +31,12 @@ public class SelectBestTitleQuestionServiceImpl implements SelectBestTitleQuesti
 
     @Override
     public SimpleResponse save(SelectBestTitleQuestionRequest request) {
-        Test test = testRepository.findById(request.getTestId()).orElseThrow(() ->
-                new com.example.bilingualb8.exceptions.NotFoundException(String.format("Test with id : %s doesn't exist !", request.getTestId())));
+        log.info("Saving Select Best Title question: {}", request.getTitle());
+        Test test = testRepository.findById(request.getTestId())
+                .orElseThrow(() -> new com.example.bilingualb8.exceptions.NotFoundException(String.format("Test with ID %s doesn't exist", request.getTestId())));
+
         Question question = new Question();
+        // Set question fields
         question.setTitle(request.getTitle());
         question.setQuestionOrder(request.getQuestionOrder());
         question.setDuration(request.getDuration());
@@ -43,6 +46,7 @@ public class SelectBestTitleQuestionServiceImpl implements SelectBestTitleQuesti
         question.setQuestionType(QuestionType.SELECT_BEST_TITLE);
         question.setIsActive(request.getIsActive());
 
+        // Set question options
         List<Option> options = new ArrayList<>();
         for (OptionRequest option : request.getOptions()) {
             Option optionInstance = new Option();
@@ -53,17 +57,21 @@ public class SelectBestTitleQuestionServiceImpl implements SelectBestTitleQuesti
             options.add(optionInstance);
         }
         question.setOptions(options);
+
         questionRepository.save(question);
+
+        log.info("Question with title '{}' successfully saved", request.getTitle());
         return SimpleResponse.builder()
-                .message(String.format("Question with id %s successfully saved!", question.getId()))
+                .message(String.format("Question with ID %s successfully saved", question.getId()))
                 .build();
     }
 
     @Transactional
     @Override
     public SimpleResponse update(Long id, SelectBestTitleQuestionUpdateRequest request) {
+        log.info("Updating Select Best Title question: {}", request.getTitle());
         Question question = questionRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException(String.format("Question with id %s was not found", id)));
+                .orElseThrow(() -> new NotFoundException(String.format("Question with ID %s was not found", id)));
 
         // Update question fields
         if (request.getTitle() != null) {
@@ -78,7 +86,6 @@ public class SelectBestTitleQuestionServiceImpl implements SelectBestTitleQuesti
         if (request.getPassage() != null) {
             question.setPassage(request.getPassage());
         }
-
         if (request.getIsActive() != null) {
             question.setIsActive(request.getIsActive());
         }
@@ -119,7 +126,7 @@ public class SelectBestTitleQuestionServiceImpl implements SelectBestTitleQuesti
             }
         }
 
-        // Delete options not in request
+        // Delete options not in the request
         for (Option option : optionMap.values()) {
             optionRepository.delete(option);
             options.remove(option);
@@ -128,8 +135,9 @@ public class SelectBestTitleQuestionServiceImpl implements SelectBestTitleQuesti
         // Save the updated question
         questionRepository.save(question);
 
+        log.info("Question with ID {} successfully updated", id);
         return SimpleResponse.builder()
-                .message(String.format("Question with id %s updated successfully!", id))
+                .message(String.format("Question with ID %s updated successfully", id))
                 .build();
     }
 }

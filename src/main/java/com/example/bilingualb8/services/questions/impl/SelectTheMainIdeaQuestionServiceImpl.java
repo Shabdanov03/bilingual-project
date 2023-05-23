@@ -17,15 +17,16 @@ import com.example.bilingualb8.repositories.TestRepository;
 import com.example.bilingualb8.services.questions.SelectTheMainIdeaQuestionService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class SelectTheMainIdeaQuestionServiceImpl implements SelectTheMainIdeaQuestionService {
     private final TestRepository testRepository;
     private final QuestionRepository questionRepository;
@@ -33,8 +34,9 @@ public class SelectTheMainIdeaQuestionServiceImpl implements SelectTheMainIdeaQu
 
     @Override
     public SimpleResponse saveSelectTheMainIdeaQuestion(SelectTheMainIdeaQuestionRequest request) {
-        Test test = testRepository.findById(request.getTestId()).orElseThrow(() ->
-                new NotFoundException(String.format("Test with id : %s doesn't exist !", request.getTestId())));
+        log.info("Saving Select The Main Idea question");
+        Test test = testRepository.findById(request.getTestId())
+                .orElseThrow(() -> new NotFoundException(String.format("Test with ID %s doesn't exist", request.getTestId())));
 
         Question question = Question.builder()
                 .title(request.getTitle())
@@ -45,6 +47,7 @@ public class SelectTheMainIdeaQuestionServiceImpl implements SelectTheMainIdeaQu
                 .questionType(QuestionType.SELECT_THE_MAIN_IDEA)
                 .test(test)
                 .build();
+
         List<Option> optionList = new ArrayList<>();
         for (OptionRequest optionRequest : request.getOptions()) {
             Option option = new Option();
@@ -52,20 +55,22 @@ public class SelectTheMainIdeaQuestionServiceImpl implements SelectTheMainIdeaQu
             option.setIsCorrect(optionRequest.getIsCorrect() != null ? optionRequest.getIsCorrect() : false);
             option.setQuestion(question);
             optionList.add(option);
-
         }
         question.setOptions(optionList);
         questionRepository.save(question);
+
+        log.info("Question with title '{}' successfully saved", request.getTitle());
         return SimpleResponse.builder()
-                .message(String.format("Question with title : %s successfully saved !", request.getTitle()))
+                .message(String.format("Question with title '%s' successfully saved!", request.getTitle()))
                 .build();
     }
 
     @Transactional
     @Override
     public SimpleResponse updateSelectTheMainQuestionById(Long id, SelectTheMainIdeaQuestionUpdateRequest request) {
+        log.info("Updating Select The Main Idea question: {}", request.getTitle());
         Question question = questionRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException(String.format("Question with id %s was not found", id)));
+                .orElseThrow(() -> new NotFoundException(String.format("Question with ID %s was not found", id)));
 
         if (request.getTitle() != null) {
             question.setTitle(request.getTitle());
@@ -79,6 +84,7 @@ public class SelectTheMainIdeaQuestionServiceImpl implements SelectTheMainIdeaQu
         if (request.getPassage() != null) {
             question.setPassage(request.getPassage());
         }
+
         List<Option> options = question.getOptions();
         List<OptionUpdateRequest> requestOptions = request.getOptions();
 
@@ -92,14 +98,15 @@ public class SelectTheMainIdeaQuestionServiceImpl implements SelectTheMainIdeaQu
             Option option = optionMap.get(optionId);
 
             if (option == null) {
+                // Create a new option
                 option = new Option();
                 option.setTitle(optionRequest.getTitle());
                 option.setOptionOrder(optionRequest.getOptionOrder());
-                option.setIsCorrect(optionRequest.getIsCorrect() != null ?
-                        optionRequest.getIsCorrect() : false);
+                option.setIsCorrect(optionRequest.getIsCorrect() != null ? optionRequest.getIsCorrect() : false);
                 option.setQuestion(question);
                 options.add(option);
             } else {
+                // Update existing option
                 if (optionRequest.getTitle() != null) {
                     option.setTitle(optionRequest.getTitle());
                 }
@@ -109,17 +116,21 @@ public class SelectTheMainIdeaQuestionServiceImpl implements SelectTheMainIdeaQu
                 if (optionRequest.getIsCorrect() != null) {
                     option.setIsCorrect(optionRequest.getIsCorrect());
                 }
-
                 optionMap.remove(optionId);
             }
         }
+
+        // Delete options not in the request
         for (Option option : optionMap.values()) {
             optionRepository.delete(option);
             options.remove(option);
         }
+
         questionRepository.save(question);
+
+        log.info("Question with ID {} successfully updated", id);
         return SimpleResponse.builder()
-                .message(String.format("Question with id : %s successfully updated !", id))
+                .message(String.format("Question with ID %s successfully updated!", id))
                 .build();
     }
 }

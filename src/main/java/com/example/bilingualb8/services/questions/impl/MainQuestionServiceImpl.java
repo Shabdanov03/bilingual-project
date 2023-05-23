@@ -13,12 +13,13 @@ import com.example.bilingualb8.repositories.custom.CustomQuestionRepository;
 import com.example.bilingualb8.services.questions.MainQuestionService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class MainQuestionServiceImpl implements MainQuestionService {
     private final CustomQuestionRepository customQuestionRepository;
     private final QuestionRepository questionRepository;
@@ -27,29 +28,40 @@ public class MainQuestionServiceImpl implements MainQuestionService {
 
     @Override
     public List<QuestionResponse> getAllQuestions() {
+        log.info("Fetching all questions");
         return customQuestionRepository.getAllQuestions();
     }
 
     @Override
     public QuestionResponse getQuestionById(Long id) {
+        log.info("Fetching question by ID: {}", id);
         return customQuestionRepository.getQuestionById(id)
-                .orElseThrow(() -> new NotFoundException(String.format("Question with id : %s doesn't exist !", id)));
+                .orElseThrow(() -> new NotFoundException(String.format("Question with ID %s doesn't exist", id)));
     }
 
     @Transactional
     @Override
     public SimpleResponse deleteQuestionById(Long id) {
-        Question question = questionRepository.findById(id).orElseThrow(() ->
-                new NotFoundException(String.format("Question with id : %s doesn't exist !", id)));
+        log.info("Deleting question with ID: {}", id);
+        Question question = questionRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException(String.format("Question with ID %s doesn't exist", id)));
+
         Answer answer = answerRepository.findAnswerByQuestionId(question.getId());
+        if (answer != null) {
+            log.info("Deleting answer associated with question ID: {}", question.getId());
+            answerRepository.delete(answer);
+        }
+
         List<Result> results = resultRepository.findByTestId(question.getTest().getId());
         for (Result result : results) {
             result.getAnswers().remove(answer);
         }
-        if(answer != null) answerRepository.delete(answer);
+
         questionRepository.delete(question);
+
+        log.info("Question with ID {} deleted successfully", id);
         return SimpleResponse.builder()
-                .message(String.format("Question with id : %s successfully deleted !", id))
+                .message(String.format("Question with ID %s successfully deleted", id))
                 .build();
     }
 }
