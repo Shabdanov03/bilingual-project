@@ -17,12 +17,14 @@ import com.example.bilingualb8.repositories.TestRepository;
 import com.example.bilingualb8.services.questions.ListenAndSelectEnglishWordsService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 
 @Service
 @RequiredArgsConstructor
+@Log4j2
 public class ListenAndSelectEnglishWordsServiceImpl implements ListenAndSelectEnglishWordsService {
     private final TestRepository testRepository;
     private final QuestionRepository questionRepository;
@@ -30,8 +32,10 @@ public class ListenAndSelectEnglishWordsServiceImpl implements ListenAndSelectEn
 
     @Override
     public SimpleResponse save(ListenAndSelectEnglishWordsRequest request) {
+        log.info("Saving Listen and Select English Words question");
         Test test = testRepository.findById(request.getTestId()).orElseThrow(() ->
-                new NoSuchElementException(String.format("Test with id: %s not found", request.getTestId())));
+                new NoSuchElementException(String.format("Test with ID %s not found", request.getTestId())));
+
         Question question = Question.builder()
                 .title(request.getTitle())
                 .duration(request.getDuration())
@@ -55,20 +59,22 @@ public class ListenAndSelectEnglishWordsServiceImpl implements ListenAndSelectEn
         }
         question.setOptions(options);
         questionRepository.save(question);
+
+        log.info("Listen and Select English Words question saved successfully");
         return SimpleResponse.builder()
-                .message(String.format("Listen and select english words Question with title : %s successfully saved !", request.getTitle()))
+                .message(String.format("Listen and Select English Words question with title \"%s\" successfully saved!", request.getTitle()))
                 .build();
     }
 
     @Transactional
     @Override
     public SimpleResponse update(ListenAndSelectEnglishWordsUpdateRequest request, Long id) {
+        log.info("Updating Listen and Select English Words question with ID: {}", id);
         Question question = questionRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException(String.format("Question with id %s was not found", id)));
+                .orElseThrow(() -> new NotFoundException(String.format("Question with ID %s was not found", id)));
 
-        if (request.getTitle() != null) {
-            question.setTitle(request.getTitle());
-        }
+        // Update question fields if provided in the update request
+        question.setTitle(request.getTitle());
         if (request.getDuration() != null) {
             question.setDuration(request.getDuration());
         }
@@ -81,7 +87,6 @@ public class ListenAndSelectEnglishWordsServiceImpl implements ListenAndSelectEn
         if (request.getNumberOfReplays() != null) {
             question.setNumberOfReplays(request.getNumberOfReplays());
         }
-
         if (request.getIsActive() != null) {
             question.setIsActive(request.getIsActive());
         }
@@ -102,19 +107,13 @@ public class ListenAndSelectEnglishWordsServiceImpl implements ListenAndSelectEn
                 option = new Option();
                 option.setTitle(optionRequest.getTitle());
                 option.setOptionOrder(optionRequest.getOptionOrder());
-                option.setIsCorrect(optionRequest.getIsCorrect() != null ? optionRequest.getIsCorrect() : false);
+                option.setIsCorrect(optionRequest.getIsCorrect());
                 option.setQuestion(question);
                 options.add(option);
             } else {
-                if (optionRequest.getTitle() != null) {
-                    option.setTitle(optionRequest.getTitle());
-                }
-                if (optionRequest.getOptionOrder() != null) {
-                    option.setOptionOrder(optionRequest.getOptionOrder());
-                }
-                if (optionRequest.getIsCorrect() != null) {
-                    option.setIsCorrect(optionRequest.getIsCorrect());
-                }
+                option.setTitle(optionRequest.getTitle());
+                option.setOptionOrder(optionRequest.getOptionOrder());
+                option.setIsCorrect(optionRequest.getIsCorrect());
                 optionMap.remove(optionId);
             }
         }
@@ -124,8 +123,10 @@ public class ListenAndSelectEnglishWordsServiceImpl implements ListenAndSelectEn
             options.remove(option);
         }
         questionRepository.save(question);
+
+        log.info("Listen and Select English Words question with ID {} updated successfully", id);
         return SimpleResponse.builder()
-                .message(String.format("Question with id %s updated successfully!", id))
+                .message(String.format("Question with ID %s updated successfully!", id))
                 .build();
     }
 }

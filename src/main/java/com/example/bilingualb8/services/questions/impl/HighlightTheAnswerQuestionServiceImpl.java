@@ -11,18 +11,22 @@ import com.example.bilingualb8.repositories.QuestionRepository;
 import com.example.bilingualb8.repositories.TestRepository;
 import com.example.bilingualb8.services.questions.HighlightTheAnswerQuestionService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class HighlightTheAnswerQuestionServiceImpl implements HighlightTheAnswerQuestionService {
     private final QuestionRepository questionRepository;
     private final TestRepository testRepository;
 
     @Override
     public SimpleResponse saveHighlightTheAnswerQuestion(HighlightTheAnswerQuestionRequest request) {
+        log.info("Saving highlight the answer question");
         Test test = testRepository.findById(request.getTestId()).orElseThrow(() ->
-                new NotFoundException(String.format("Test with id : %s doesn't exist !", request.getTestId())));
+                new NotFoundException(String.format("Test with ID %s does not exist!", request.getTestId())));
+
         Question question = Question.builder()
                 .title(request.getTitle())
                 .questionType(QuestionType.HIGHLIGHT_THE_ANSWER)
@@ -34,28 +38,49 @@ public class HighlightTheAnswerQuestionServiceImpl implements HighlightTheAnswer
                 .test(test)
                 .isActive(request.getIsActive())
                 .build();
+
         questionRepository.save(question);
+
+        log.info("Highlight the answer question saved successfully");
         return SimpleResponse.builder()
-                .message(String.format("Question with title : %s successfully saved !", request.getTitle()))
+                .message(String.format("Question with title \"%s\" saved successfully!", request.getTitle()))
                 .build();
     }
 
     @Override
     public SimpleResponse updateHighlightTheAnswerQuestionById(Long id, HighlightTheAnswerQuestionUpdateRequest updateRequest) {
-        Question question = questionRepository.findById(id).orElseThrow(() -> new NotFoundException(
-                String.format("Question with id : %s doesn't exist ! ", id)));
+        log.info("Updating highlight the answer question with ID: {}", id);
+        Question question = questionRepository.findById(id).orElseThrow(() ->
+                new NotFoundException(String.format("Question with ID %s does not exist!", id)));
 
-        question.setTitle(updateRequest.getTitle() != null ? updateRequest.getTitle() : question.getTitle());
-        question.setStatement(updateRequest.getStatement() != null ? updateRequest.getStatement() : question.getStatement());
-        question.setPassage(updateRequest.getPassage() != null ? updateRequest.getPassage() : question.getPassage());
-        question.setCorrectAnswer(updateRequest.getCorrectAnswer() != null ? updateRequest.getCorrectAnswer() : question.getCorrectAnswer());
-        question.setDuration(updateRequest.getDuration() != null ? updateRequest.getDuration() : question.getDuration());
-        question.setQuestionOrder(updateRequest.getQuestionOrder() != null ? updateRequest.getQuestionOrder() : question.getQuestionOrder());
-        question.setIsActive(updateRequest.getIsActive() != null ? updateRequest.getIsActive() : question.getIsActive());
+        // Update question fields if provided in the update request
+        if (updateRequest.getTitle() != null) {
+            question.setTitle(updateRequest.getTitle());
+        }
+        if (updateRequest.getStatement() != null) {
+            question.setStatement(updateRequest.getStatement());
+        }
+        if (updateRequest.getPassage() != null) {
+            question.setPassage(updateRequest.getPassage());
+        }
+        if (updateRequest.getCorrectAnswer() != null) {
+            question.setCorrectAnswer(updateRequest.getCorrectAnswer());
+        }
+        if (updateRequest.getDuration() != null) {
+            question.setDuration(updateRequest.getDuration());
+        }
+        if (updateRequest.getQuestionOrder() != null) {
+            question.setQuestionOrder(updateRequest.getQuestionOrder());
+        }
+        if (updateRequest.getIsActive() != null) {
+            question.setIsActive(updateRequest.getIsActive());
+        }
 
         questionRepository.save(question);
+
+        log.info("Highlight the answer question with ID {} updated successfully", id);
         return SimpleResponse.builder()
-                .message(String.format("Question with id : %s successfully updated !", id))
+                .message(String.format("Question with ID %s updated successfully!", id))
                 .build();
     }
 }

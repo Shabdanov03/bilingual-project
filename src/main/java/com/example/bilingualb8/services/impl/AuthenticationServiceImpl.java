@@ -50,6 +50,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public AuthenticationResponse signUp(SignUpRequest signUpRequest) {
+        log.info("Signing up");
         if (userRepository.existsByUserInfoEmail(signUpRequest.email())) {
             throw new AlreadyExistException("Sorry, this email is already registered. Please try a different email or login to your existing account");
         }
@@ -68,6 +69,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         userRepository.save(newUser);
 
         var jwtToken = jwtService.generateToken(newUserInfo);
+
+        log.info("Sign up successful");
+
         return AuthenticationResponse
                 .builder()
                 .token(jwtToken)
@@ -78,6 +82,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public AuthenticationResponse signIn(AuthenticationRequest authenticationRequest) {
+        log.info("Signing in");
         var user = userRepository.findUserInfoByEmail(authenticationRequest.email())
                 .orElseThrow(() -> new NotFoundException("User was not found."));
 
@@ -89,6 +94,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         );
 
         var jwtToken = jwtService.generateToken(user);
+
+        log.info("Sign in successful");
+
         return AuthenticationResponse
                 .builder()
                 .token(jwtToken)
@@ -99,6 +107,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public SimpleResponse forgotPassword(ForgotPassword forgotPassword) {
+        log.info("Initiating password reset");
         UserInfo userInfo = userRepository.findUserInfoByEmail(forgotPassword.email())
                 .orElseThrow(() -> new NotFoundException("User was not found"));
         try {
@@ -118,6 +127,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             String htmlContent = templateEngine.process("reset-password-template.html", context);
 
             emailService.sendEmail(forgotPassword.email(), subject, htmlContent);
+            log.info("Password reset email sent");
+
             return SimpleResponse.builder()
                     .message("The password reset was sent to your email. Please check your email.")
                     .build();
@@ -129,17 +140,20 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public SimpleResponse resetPassword(String token, String newPassword) {
+        log.info("Resetting password");
         UserInfo userInfo = userInfoRepository.findByResetPasswordToken(token)
                 .orElseThrow(() -> new NotFoundException("User was not found"));
         userInfo.setPassword(passwordEncoder.encode(newPassword));
         userInfo.setResetPasswordToken(null);
         userInfoRepository.save(userInfo);
+        log.info("Password reset successful");
         return SimpleResponse.builder().message("User password changed successfully!").build();
     }
 
 
     @Override
     public AuthenticationResponse authWithGoogle(String tokenId) throws FirebaseAuthException {
+        log.info("Authenticating with Google");
         FirebaseToken firebaseToken = FirebaseAuth.getInstance().verifyIdToken(tokenId);
         if (userRepository.findUserInfoByEmail(firebaseToken.getEmail()).isEmpty()) {
             User newUser = new User();
@@ -158,7 +172,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         });
 
         String token = jwtService.generateToken(userInfo);
-        log.info("successfully works the authorization with google method");
+        log.info("Authentication with Google successful");
         return AuthenticationResponse.builder()
                 .email(firebaseToken.getEmail())
                 .token(token)
@@ -169,14 +183,15 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @PostConstruct
     public void init() {
         try {
+            log.info("Initializing Firebase");
             GoogleCredentials googleCredentials = GoogleCredentials.fromStream(new ClassPathResource("billingual.json").getInputStream());
             FirebaseOptions firebaseOptions = FirebaseOptions.builder()
                     .setCredentials(googleCredentials)
                     .build();
-            log.info("successfully works the init method");
             FirebaseApp firebaseApp = FirebaseApp.initializeApp(firebaseOptions);
+            log.info("Firebase initialized successfully");
         } catch (IOException e) {
-            log.error("IOException");
+            log.error("IOException occurred during initialization");
         }
     }
 }
