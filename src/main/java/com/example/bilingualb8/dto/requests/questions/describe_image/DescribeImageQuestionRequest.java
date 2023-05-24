@@ -1,17 +1,10 @@
 package com.example.bilingualb8.dto.requests.questions.describe_image;
 
-<<<<<<< HEAD
-import com.example.bilingualb8.dto.requests.file.FileRequest;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import jakarta.validation.Valid;
-=======
->>>>>>> origin
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.Builder;
 import lombok.Data;
-import org.springframework.boot.jackson.JsonObjectSerializer;
 
 @Data
 @Builder
