@@ -22,4 +22,5 @@ public class SelectTheMainIdeaQuestionUpdateRequest {
     private String passage;
     @Valid
     private List<OptionUpdateRequest> options;
+    private Boolean isActive;
 }

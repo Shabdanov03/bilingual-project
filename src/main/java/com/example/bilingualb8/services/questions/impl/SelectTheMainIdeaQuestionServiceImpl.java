@@ -45,6 +45,7 @@ public class SelectTheMainIdeaQuestionServiceImpl implements SelectTheMainIdeaQu
                 .duration(request.getDuration())
                 .questionOrder(request.getQuestionOrder())
                 .questionType(QuestionType.SELECT_THE_MAIN_IDEA)
+                .isActive(request.getIsActive())
                 .test(test)
                 .build();
 
@@ -83,6 +84,9 @@ public class SelectTheMainIdeaQuestionServiceImpl implements SelectTheMainIdeaQu
         }
         if (request.getPassage() != null) {
             question.setPassage(request.getPassage());
+        }
+        if (request.getIsActive() != null){
+            question.setIsActive(request.getIsActive());
         }
 
         List<Option> options = question.getOptions();

@@ -1,11 +1,14 @@
 package com.example.bilingualb8.repositories.custom.impl;
 
+import com.example.bilingualb8.dto.responses.answer.UserAnswerResponse;
 import com.example.bilingualb8.dto.responses.file.FileResponse;
 import com.example.bilingualb8.dto.responses.option.OptionResponse;
+import com.example.bilingualb8.dto.responses.questions.EvaluateQuestionResponse;
 import com.example.bilingualb8.dto.responses.questions.QuestionResponse;
 import com.example.bilingualb8.enums.FileType;
 import com.example.bilingualb8.enums.QuestionType;
 import com.example.bilingualb8.exceptions.NotFoundException;
+import com.example.bilingualb8.repositories.custom.CustomAnswerRepository;
 import com.example.bilingualb8.repositories.custom.CustomQuestionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -19,6 +22,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class CustomQuestionRepositoryImpl implements CustomQuestionRepository {
     private final JdbcTemplate jdbcTemplate;
+    private final CustomAnswerRepository customAnswerRepository;
 
     @Override
     public List<QuestionResponse> getAllQuestions() {
@@ -190,5 +194,37 @@ public class CustomQuestionRepositoryImpl implements CustomQuestionRepository {
         response.setFiles(fileResponses);
         response.setOptions(options);
         return Optional.of(response);
+    }
+
+    @Override
+    public EvaluateQuestionResponse getEvaluateQuestionByIdes(Long answerId, Long questionId) {
+
+        String sql = """
+                SELECT concat(u.first_name, ' ', u.last_name) as full_name,
+                t.title as title,
+                a.evaluated_score as score
+                FROM answers a
+                JOIN users u on a.user_id = u.id
+                JOIN questions q on a.question_id = q.id
+                JOIN tests t on q.test_id = t.id
+                WHERE a.id = ?
+                """;
+
+        Optional<QuestionResponse> questionById = getQuestionById(questionId);
+        List<UserAnswerResponse> answerResponses = customAnswerRepository.getAnswerResponsesByQuestionId(questionId);
+
+        EvaluateQuestionResponse evaluateQuestionResponses = jdbcTemplate.query(sql, (resultSet, i) ->
+                        new EvaluateQuestionResponse(
+                                resultSet.getString("full_name"),
+                                resultSet.getString("title"),
+                                resultSet.getFloat("score")
+                        ),
+                answerId
+        ).stream().findFirst().orElseThrow(()-> new NotFoundException("first index is empty"));
+
+        evaluateQuestionResponses.setQuestionResponse(questionById.orElseThrow(()-> new NotFoundException(String.format("question with id : %s not found", questionId))));
+        evaluateQuestionResponses.setUserAnswerResponse(answerResponses);
+
+        return evaluateQuestionResponses;
     }
 }

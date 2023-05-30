@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/questions/select-best-title")
 @RequiredArgsConstructor
+@CrossOrigin
 public class SelectBestTitleQuestionController {
     private final SelectBestTitleQuestionService questionService;
 

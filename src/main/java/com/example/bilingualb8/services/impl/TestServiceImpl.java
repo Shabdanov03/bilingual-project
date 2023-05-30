@@ -1,26 +1,26 @@
 package com.example.bilingualb8.services.impl;
 
-import com.example.bilingualb8.dto.requests.answer.AnswerRequest;
 import com.example.bilingualb8.dto.requests.test.PassTestRequest;
 import com.example.bilingualb8.dto.requests.test.TestRequest;
 import com.example.bilingualb8.dto.responses.SimpleResponse;
 import com.example.bilingualb8.dto.responses.test.TestResponse;
 import com.example.bilingualb8.entity.*;
 import com.example.bilingualb8.enums.AnswerStatus;
-import com.example.bilingualb8.enums.FileType;
 import com.example.bilingualb8.enums.QuestionType;
 import com.example.bilingualb8.exceptions.AlreadyExistException;
 import com.example.bilingualb8.exceptions.NotFoundException;
 import com.example.bilingualb8.repositories.*;
 import com.example.bilingualb8.repositories.custom.CustomTestRepository;
+import com.example.bilingualb8.services.AnswerService;
+import com.example.bilingualb8.services.ResultService;
 import com.example.bilingualb8.services.TestService;
 import com.example.bilingualb8.services.questions.MainQuestionService;
+import com.example.bilingualb8.utils.QuestionScoreGenerator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -33,8 +33,10 @@ public class TestServiceImpl implements TestService {
     private final MainQuestionService mainQuestionService;
     private final ResultRepository resultRepository;
     private final UserRepository userRepository;
-    private final OptionRepository optionRepository;
     private final AnswerRepository answerRepository;
+    private final AnswerService answerService;
+    private final ResultService resultService;
+    private final QuestionScoreGenerator questionScoreGenerator;
 
 
     @Override
@@ -131,60 +133,32 @@ public class TestServiceImpl implements TestService {
 
     @Override
     public SimpleResponse submitTest(PassTestRequest request, Authentication authentication) {
-        log.info("Submitting test");
 
-        List<Answer> answers = new ArrayList<>();
+        Test test = testRepository.findById(request.getTestId())
+                .orElseThrow(() -> new NotFoundException(String.format("Test with id %s was not found", request.getTestId())));
 
         UserInfo userInfo = (UserInfo) authentication.getPrincipal();
+
         User user = userRepository.findById(userInfo.getId())
                 .orElseThrow(() -> new NotFoundException(String.format("User with id %s was not found", userInfo.getId())));
 
-        for (AnswerRequest answerRequest : request.getAnswers()) {
-            Question question = questionRepository.findById(answerRequest.getQuestionId())
-                    .orElseThrow(() -> new NotFoundException(String.format("Question with id %s was not found", answerRequest.getQuestionId())));
+        List<Answer> answers = answerService.createAnswers(request.getAnswers(), user);
 
-            Answer answer = new Answer();
-            answer.setUser(user);
-            answer.setQuestion(question);
-            answer.setAnswerStatus(AnswerStatus.NOT_EVALUATED);
-
-            // Setting up answer options
-            if (answerRequest.getOptionsIds() != null) {
-                List<Option> options = optionRepository.findAllById(answerRequest.getOptionsIds());
-                answer.setOptions(options);
-            }
-
-            // Setting up answer number of replays
-            if (answerRequest.getNumberOfPlays() != null) {
-                answer.setNumberOfPlays(answerRequest.getNumberOfPlays());
-            }
-
-            // Setting up answer file
-            if (answerRequest.getFileUrl() != null && question.getQuestionType().equals(QuestionType.RECORD_SAYING_STATEMENT)) {
-                File file = new File();
-                file.setFileType(FileType.AUDIO);
-                file.setFileUrl(answerRequest.getFileUrl());
-                file.setQuestion(question);
-                answer.setFiles(new ArrayList<>(List.of(file)));
-            }
-
-            // Setting up answer data
-            if (answerRequest.getData() != null) {
-                if (question.getQuestionType() == QuestionType.DESCRIBE_IMAGE
-                        || question.getQuestionType() == QuestionType.HIGHLIGHT_THE_ANSWER
-                        || question.getQuestionType() == QuestionType.RESPOND_N_WORDS
-                        || question.getQuestionType() == QuestionType.TYPE_WHAT_YOU_HEAR) {
-                    answer.setData(answerRequest.getData());
-
-                    // Setting up number of words
-                    answer.setNumberOfWords(answerRequest.getData().split(" ").length);
-                }
-            }
-            answers.add(answer);
-        }
         answerRepository.saveAll(answers);
 
-        log.info("Test submitted successfully");
+        Result result = resultService.createResult(test, user, answers);
+
+        for (Answer answer : answers) {
+            if (answer.getQuestion().getQuestionType() == QuestionType.LISTEN_AND_SELECT_ENGLISH_WORD
+                    || answer.getQuestion().getQuestionType() == QuestionType.SELECT_ENGLISH_WORD) {
+                float v = questionScoreGenerator.scoreGenerator(answer);
+                answer.setAnswerStatus(AnswerStatus.EVALUATED);
+                answer.setEvaluatedScore(v);
+                result.setScore(result.getScore() + v);
+            }
+        }
+
+        resultRepository.save(result);
 
         return SimpleResponse.builder()
                 .message("Test submitted successfully!")
