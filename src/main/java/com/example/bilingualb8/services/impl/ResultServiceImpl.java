@@ -4,10 +4,7 @@ import com.example.bilingualb8.dto.responses.SimpleResponse;
 import com.example.bilingualb8.dto.responses.result.EvaluatingSubmittedResultResponse;
 import com.example.bilingualb8.dto.responses.result.SubmittedResultsResponse;
 import com.example.bilingualb8.dto.responses.userResult.MyResultResponse;
-import com.example.bilingualb8.entity.Answer;
-import com.example.bilingualb8.entity.Result;
-import com.example.bilingualb8.entity.Test;
-import com.example.bilingualb8.entity.User;
+import com.example.bilingualb8.entity.*;
 import com.example.bilingualb8.enums.ResultStatus;
 import com.example.bilingualb8.exceptions.NotFoundException;
 import com.example.bilingualb8.repositories.ResultRepository;
@@ -15,6 +12,7 @@ import com.example.bilingualb8.repositories.custom.CustomResultRepository;
 import com.example.bilingualb8.services.ResultService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -28,10 +26,11 @@ public class ResultServiceImpl implements ResultService {
     private final ResultRepository resultRepository;
 
     @Override
-    public List<MyResultResponse> getAll(Long userId) {
-        log.info("Fetching all results for user with ID: {}", userId);
-        List<MyResultResponse> results = customResultRepository.getAll(userId);
-        log.info("Retrieved {} results for user with ID: {}", results.size(), userId);
+    public List<MyResultResponse> getAll(Authentication authentication) {
+        UserInfo userInfo = (UserInfo) authentication.getPrincipal();
+        log.info("Fetching all results for user with ID: {}", userInfo.getId());
+        List<MyResultResponse> results = customResultRepository.getAll(userInfo.getId());
+        log.info("Retrieved {} results for user with ID: {}", results.size(), userInfo.getId());
         return results;
     }
 

@@ -27,6 +27,7 @@ public class QuestionResponse {
     private Integer numberOfReplays;
     private String correctAnswer;
     private String passage;
+    private Integer questionOrder;
     private String audioText;
     private Long testId;
     private List<FileResponse> files;

@@ -56,6 +56,7 @@ public class CustomTestRepositoryImpl implements CustomTestRepository {
                 q.number_of_replays as number_of_replays,
                 q.correct_answer as correct_answer,
                 q.passage as passage,
+                q.question_order as question_order,
                 q.audio_text as audio_text,
                 q.is_active as is_active,
                 t.id as test_id
@@ -73,6 +74,7 @@ public class CustomTestRepositoryImpl implements CustomTestRepository {
                         resultSet.getInt("number_of_replays"),
                         resultSet.getString("correct_answer"),
                         resultSet.getString("passage"),
+                        resultSet.getInt("question_order"),
                         resultSet.getString("audio_text"),
                         resultSet.getLong("test_id"),
                         null,
@@ -176,6 +178,7 @@ public class CustomTestRepositoryImpl implements CustomTestRepository {
                 q.number_of_replays as number_of_replays,
                 q.correct_answer as correct_answer,
                 q.passage as passage,
+                q.question_order as question_order,
                 q.audio_text as audio_text,
                 q.is_active as is_active,
                 t.id as test_id
@@ -194,6 +197,7 @@ public class CustomTestRepositoryImpl implements CustomTestRepository {
                         resultSet.getInt("number_of_replays"),
                         resultSet.getString("correct_answer"),
                         resultSet.getString("passage"),
+                        resultSet.getInt("question_order"),
                         resultSet.getString("audio_text"),
                         resultSet.getLong("test_id"),
                         null,

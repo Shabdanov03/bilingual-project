@@ -58,7 +58,7 @@ public class TestController {
 
 
     // TODO PASS TEST
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
     @Operation(summary = "This submit test method")
     @PostMapping("/submit")
     public SimpleResponse submitTest(@RequestBody @Valid PassTestRequest request, Authentication authentication){
