@@ -1,21 +1,29 @@
 package com.example.bilingualb8.services.impl;
 
 import com.example.bilingualb8.dto.responses.SimpleResponse;
+import com.example.bilingualb8.dto.responses.result.EvaluatingSubmittedResultResponse;
+import com.example.bilingualb8.dto.responses.result.SubmittedResultsResponse;
 import com.example.bilingualb8.dto.responses.userResult.MyResultResponse;
+import com.example.bilingualb8.entity.Answer;
+import com.example.bilingualb8.entity.Result;
+import com.example.bilingualb8.entity.Test;
+import com.example.bilingualb8.entity.User;
+import com.example.bilingualb8.enums.ResultStatus;
 import com.example.bilingualb8.exceptions.NotFoundException;
 import com.example.bilingualb8.repositories.ResultRepository;
 import com.example.bilingualb8.repositories.custom.CustomResultRepository;
-import com.example.bilingualb8.services.MyResultService;
+import com.example.bilingualb8.services.ResultService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class MyResultServiceImpl implements MyResultService {
+public class ResultServiceImpl implements ResultService {
     private final CustomResultRepository customResultRepository;
     private final ResultRepository resultRepository;
 
@@ -37,5 +45,27 @@ public class MyResultServiceImpl implements MyResultService {
         return SimpleResponse.builder()
                 .message(String.format("Result with ID %d successfully deleted", id))
                 .build();
+    }
+
+    @Override
+    public Result createResult(Test test, User user, List<Answer> answers) {
+        Result result = new Result();
+        result.setTest(test);
+        result.setUser(user);
+        result.setDateOfSubmission(LocalDateTime.now());
+        result.setStatus(ResultStatus.NOT_EVALUATED);
+        result.setScore(0); // todo answers score ...
+        result.setAnswers(answers);
+        return result;
+    }
+
+    @Override
+    public List<SubmittedResultsResponse> getAll() {
+        return customResultRepository.getAllSubmittedResults();
+    }
+
+    @Override
+    public EvaluatingSubmittedResultResponse getByIdEvaluatedSubmittedResult(Long resultId) {
+        return customResultRepository.getByIdEvaluatingSubmittedResult(resultId);
     }
 }

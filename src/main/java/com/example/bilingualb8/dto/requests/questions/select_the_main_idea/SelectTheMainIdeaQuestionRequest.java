@@ -17,6 +17,6 @@ public class SelectTheMainIdeaQuestionRequest {
     @Valid
     private List<OptionRequest> options;
     private Long testId;
-
+    private Boolean isActive;
 
 }

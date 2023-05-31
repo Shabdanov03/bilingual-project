@@ -1,6 +1,7 @@
 package com.example.bilingualb8.services.questions.impl;
 
 import com.example.bilingualb8.dto.responses.SimpleResponse;
+import com.example.bilingualb8.dto.responses.questions.EvaluateQuestionResponse;
 import com.example.bilingualb8.dto.responses.questions.QuestionResponse;
 import com.example.bilingualb8.entity.Answer;
 import com.example.bilingualb8.entity.Question;
@@ -63,5 +64,10 @@ public class MainQuestionServiceImpl implements MainQuestionService {
         return SimpleResponse.builder()
                 .message(String.format("Question with ID %s successfully deleted", id))
                 .build();
+    }
+
+    @Override
+    public EvaluateQuestionResponse getEvaluateQuestionByIdes(Long answerId, Long questionId) {
+        return customQuestionRepository.getEvaluateQuestionByIdes(answerId, questionId);
     }
 }

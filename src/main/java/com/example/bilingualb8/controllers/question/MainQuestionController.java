@@ -1,6 +1,7 @@
 package com.example.bilingualb8.controllers.question;
 
 import com.example.bilingualb8.dto.responses.SimpleResponse;
+import com.example.bilingualb8.dto.responses.questions.EvaluateQuestionResponse;
 import com.example.bilingualb8.dto.responses.questions.QuestionResponse;
 import com.example.bilingualb8.services.questions.MainQuestionService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -36,5 +37,12 @@ public class MainQuestionController {
     @GetMapping("/{id}")
     public QuestionResponse getMainQuestionById(@PathVariable Long id) {
         return mainQuestionService.getQuestionById(id);
+    }
+
+    @Operation(summary = "This is get evaluate question by id Main Question method")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping("/{answerId}/{questionId}")
+    public EvaluateQuestionResponse getEvaluateQuestionByIdes(@PathVariable Long answerId, @PathVariable Long questionId){
+        return mainQuestionService.getEvaluateQuestionByIdes(answerId, questionId);
     }
 }

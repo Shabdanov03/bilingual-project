@@ -12,6 +12,10 @@ import java.util.List;
 @Data
 @Builder
 public class PassTestRequest {
+
+    @NotNull(message = "Test ID can not be null")
+    @Positive(message = "Test id can not be negative")
+    private Long testId;
     @NotNull(message = "Answers can not be null")
     @Valid
     private List<AnswerRequest> answers;
