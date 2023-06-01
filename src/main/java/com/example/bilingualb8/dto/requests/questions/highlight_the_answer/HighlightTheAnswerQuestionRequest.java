@@ -27,5 +27,4 @@ public class HighlightTheAnswerQuestionRequest {
     private Long testId;
     @NotNull(message = "The isActive id must not be empty.")
     private Boolean isActive;
-
 }
