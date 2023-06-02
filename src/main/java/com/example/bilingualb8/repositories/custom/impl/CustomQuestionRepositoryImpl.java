@@ -87,6 +87,7 @@ public class CustomQuestionRepositoryImpl implements CustomQuestionRepository {
                  o.question_id as questionId,
                  o.file_url as fileUrl,
                  o.title as title,
+                 o.option_order as option_order,
                  o.is_correct as isCorrect
                  FROM options o
                  """;
@@ -99,7 +100,8 @@ public class CustomQuestionRepositoryImpl implements CustomQuestionRepository {
                         resultSet.getString("title"),
                         resultSet.getBoolean("isCorrect"),
                         resultSet.getLong("questionId"),
-                        resultSet.getString("fileUrl")
+                        resultSet.getString("fileUrl"),
+                        resultSet.getInt("option_order")
                 ));
 
         // TODO Inserting files & options to related questions
@@ -144,6 +146,7 @@ public class CustomQuestionRepositoryImpl implements CustomQuestionRepository {
                 o.question_id as questionId,
                 o.file_url as fileUrl,
                 o.title as title,
+                o.option_order as option_order,
                 o.is_correct as isCorrect
                 FROM options o WHERE o.question_id = ?
                 """;
@@ -154,7 +157,8 @@ public class CustomQuestionRepositoryImpl implements CustomQuestionRepository {
                         resultSet.getString("title"),
                         resultSet.getBoolean("isCorrect"),
                         resultSet.getLong("questionId"),
-                        resultSet.getString("fileUrl")
+                        resultSet.getString("fileUrl"),
+                        resultSet.getInt("option_order")
                 ), id);
 
         String sql = """
