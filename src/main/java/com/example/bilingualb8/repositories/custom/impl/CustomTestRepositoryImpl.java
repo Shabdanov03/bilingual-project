@@ -106,6 +106,7 @@ public class CustomTestRepositoryImpl implements CustomTestRepository {
                  o.question_id as questionId,
                  o.file_url as fileUrl,
                  o.title as title,
+                 o.option_order as option_order,
                  o.is_correct as isCorrect
                  FROM options o
                  """;
@@ -117,7 +118,8 @@ public class CustomTestRepositoryImpl implements CustomTestRepository {
                         resultSet.getString("title"),
                         resultSet.getBoolean("isCorrect"),
                         resultSet.getLong("questionId"),
-                        resultSet.getString("fileUrl")
+                        resultSet.getString("fileUrl"),
+                        resultSet.getInt("option_order")
                 ));
 
 
@@ -230,6 +232,7 @@ public class CustomTestRepositoryImpl implements CustomTestRepository {
                  o.question_id as questionId,
                  o.file_url as fileUrl,
                  o.title as title,
+                 o.option_order as option_order,
                  o.is_correct as isCorrect
                  FROM options o JOIN questions q on q.id = o.question_id
                  WHERE q.test_id = ?
@@ -242,7 +245,8 @@ public class CustomTestRepositoryImpl implements CustomTestRepository {
                         resultSet.getString("title"),
                         resultSet.getBoolean("isCorrect"),
                         resultSet.getLong("questionId"),
-                        resultSet.getString("fileUrl")
+                        resultSet.getString("fileUrl"),
+                        resultSet.getInt("option_order")
                 ), id);
 
 

@@ -128,7 +128,8 @@ public class CustomResultRepositoryImpl implements CustomResultRepository {
         String questionQuery = """
             SELECT q.id as id,
             q.question_type as question_type,
-            a.evaluated_score as score
+            a.evaluated_score as score,
+            q.question_order as question_order
             FROM tests t
             JOIN questions q on t.id = q.test_id
             JOIN results r on t.id = r.test_id
@@ -140,7 +141,8 @@ public class CustomResultRepositoryImpl implements CustomResultRepository {
                         new ResultQuestionResponse(
                                 resultSet.getLong("id"),
                                 QuestionType.valueOf(resultSet.getString("question_type")),
-                                resultSet.getFloat("score") // when I added score was some warn todo
+                                resultSet.getFloat("score"),
+                                resultSet.getInt("question_order")
                         ),
                 resultId
         );

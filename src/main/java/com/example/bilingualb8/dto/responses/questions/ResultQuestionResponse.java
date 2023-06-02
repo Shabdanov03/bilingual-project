@@ -20,10 +20,12 @@ public class ResultQuestionResponse {
     private float score;
     private AnswerStatus answerStatus;
     private List<UserAnswerResponse> userAnswerResponse;
+    private Integer questionOrder;
 
-    public ResultQuestionResponse(Long id, QuestionType questionType, float score) {
-        this.questionId = id;
+    public ResultQuestionResponse(Long questionId, QuestionType questionType, float score, Integer questionOrder) {
+        this.questionId = questionId;
         this.questionType = questionType;
         this.score = score;
+        this.questionOrder = questionOrder;
     }
 }

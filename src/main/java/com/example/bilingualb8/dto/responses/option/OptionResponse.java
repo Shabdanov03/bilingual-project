@@ -13,4 +13,5 @@ public class OptionResponse {
     private Boolean isCorrect;
     private Long questionId;
     private String fileUrl;
+    private Integer optionOrder;
 }
