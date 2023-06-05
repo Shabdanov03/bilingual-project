@@ -8,6 +8,6 @@ class BilingualB8ApplicationTests {
 
     @Test
     void contextLoads() {
-    }
 
+    }
 }
