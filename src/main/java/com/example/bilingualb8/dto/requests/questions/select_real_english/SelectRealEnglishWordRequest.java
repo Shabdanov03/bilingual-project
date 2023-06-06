@@ -4,6 +4,7 @@ import com.example.bilingualb8.dto.requests.option.OptionRequest;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
@@ -11,6 +12,7 @@ import java.util.List;
 
 @Data
 @Builder
+@AllArgsConstructor
 public class SelectRealEnglishWordRequest {
     @NotNull(message = "The title must not be empty.")
     private String title;
@@ -26,4 +28,8 @@ public class SelectRealEnglishWordRequest {
     @NotNull(message = "The option must not be empty.")
     @Valid
     private List<OptionRequest> options;
+
+    public SelectRealEnglishWordRequest() {
+    }
+
 }
