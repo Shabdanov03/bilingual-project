@@ -26,4 +26,20 @@ public class TypeWhatYouHearQuestionRequest {
     private Long testId;
     @NotNull(message = "The isActive id must not be empty.")
     private Boolean isActive;
+
+    public TypeWhatYouHearQuestionRequest(String title, Integer duration, Integer questionOrder,
+                                          Integer numberOfReplays, String fileRequest, String correctAnswer,
+                                          Long testId, Boolean isActive) {
+        this.title = title;
+        this.duration = duration;
+        this.questionOrder = questionOrder;
+        this.numberOfReplays = numberOfReplays;
+        this.fileRequest = fileRequest;
+        this.correctAnswer = correctAnswer;
+        this.testId = testId;
+        this.isActive = isActive;
+    }
+
+    public TypeWhatYouHearQuestionRequest() {
+    }
 }

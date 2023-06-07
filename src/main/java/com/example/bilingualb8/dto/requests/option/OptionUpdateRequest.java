@@ -2,11 +2,13 @@ package com.example.bilingualb8.dto.requests.option;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
 @Data
 @Builder
+@AllArgsConstructor
 public class OptionUpdateRequest {
     @NotNull(message = "The Option id must not be empty.")
     private Long id;
@@ -18,4 +20,5 @@ public class OptionUpdateRequest {
     @NotNull(message = "The option order must not be empty.")
     @Positive(message = "Option order can not be negative")
     private Integer optionOrder;
+    public OptionUpdateRequest(){}
 }

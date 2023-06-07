@@ -21,6 +21,6 @@ public class OptionRequest {
     @Positive(message = "Option order can not be negative")
     private Integer optionOrder;
 
-    public OptionRequest() {
+  public OptionRequest() {
     }
 }

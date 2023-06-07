@@ -12,4 +12,18 @@ public class TypeWhatYouHearQuestionUpdateRequest {
     private String correctAnswer;
     private String file;
     private Boolean isActive;
+
+    public TypeWhatYouHearQuestionUpdateRequest(
+            String title, Integer duration, Integer numberOfReplays,
+            String correctAnswer, String file, Boolean isActive) {
+        this.title = title;
+        this.duration = duration;
+        this.numberOfReplays = numberOfReplays;
+        this.correctAnswer = correctAnswer;
+        this.file = file;
+        this.isActive = isActive;
+    }
+
+    public TypeWhatYouHearQuestionUpdateRequest() {
+    }
 }
