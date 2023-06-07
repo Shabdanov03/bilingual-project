@@ -25,5 +25,17 @@ public class RecordSayingStatementQuestionRequest {
     private Long testId;
     @NotNull(message = "The isActive id must not be empty.")
     private Boolean isActive;
+
+    public RecordSayingStatementQuestionRequest() {
+    }
+    public RecordSayingStatementQuestionRequest(String title, String statement, String correctAnswer, Integer duration, Integer questionOrder, Long testId, Boolean isActive) {
+        this.title = title;
+        this.statement = statement;
+        this.correctAnswer = correctAnswer;
+        this.duration = duration;
+        this.questionOrder = questionOrder;
+        this.testId = testId;
+        this.isActive = isActive;
+    }
 }
 
