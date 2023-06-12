@@ -40,8 +40,6 @@ public class ListenAndSelectEnglishWordsServiceImpl implements ListenAndSelectEn
                 .title(request.getTitle())
                 .duration(request.getDuration())
                 .questionOrder(request.getQuestionOrder())
-                .numberOfReplays(request.getNumberOfReplays())
-                .correctAnswer(request.getCorrectAnswer())
                 .questionType(QuestionType.LISTEN_AND_SELECT_ENGLISH_WORD)
                 .optionType(OptionType.MULTIPLE)
                 .test(test)
