@@ -4,13 +4,16 @@ import com.example.bilingualb8.dto.requests.option.OptionRequest;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Builder
 @Data
+@AllArgsConstructor
 public class SelectBestTitleQuestionRequest {
     @NotNull(message = "The title order must not be empty.")
     private String title;
@@ -30,4 +33,8 @@ public class SelectBestTitleQuestionRequest {
     private List<OptionRequest> options;
     @NotNull(message = "The isActive id must not be empty.")
     private Boolean isActive;
+
+    public SelectBestTitleQuestionRequest() {
+
+    }
 }
