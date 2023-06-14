@@ -2,6 +2,7 @@ package com.example.bilingualb8.dto.requests.questions.select_the_main_idea;
 
 import com.example.bilingualb8.dto.requests.option.OptionRequest;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
 
@@ -17,6 +18,6 @@ public class SelectTheMainIdeaQuestionRequest {
     @Valid
     private List<OptionRequest> options;
     private Long testId;
+    @NotNull(message = "The is active must not be empty.")
     private Boolean isActive;
-
 }

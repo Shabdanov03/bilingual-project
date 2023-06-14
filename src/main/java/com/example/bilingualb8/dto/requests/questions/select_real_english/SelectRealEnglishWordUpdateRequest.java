@@ -18,6 +18,7 @@ public class SelectRealEnglishWordUpdateRequest {
     @Positive(message = "Duration can not be negative")
     private Integer duration;
     private Integer questionOrder;
+    private Boolean isActive;
     @NotNull(message = "The Option must not be empty.")
     @Valid
     private List<OptionUpdateRequest> options;

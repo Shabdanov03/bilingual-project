@@ -22,6 +22,8 @@ public class SelectRealEnglishWordRequest {
     @NotNull(message = "The question order must not be empty.")
     @Positive(message = "Test question order can not be negative")
     private Integer questionOrder;
+    @NotNull(message = "The is active must not be empty.")
+    private Boolean isActive;
     @NotNull(message = "The test id must not be empty.")
     @Positive(message = "Test id can not be negative")
     private Long testId;

@@ -46,6 +46,7 @@ public class SelectRealEnglishWordServiceImpl implements SelectRealEnglishWordSe
                 .test(test)
                 .questionType(QuestionType.SELECT_ENGLISH_WORD)
                 .optionType(OptionType.MULTIPLE)
+                .isActive(request.getIsActive())
                 .build();
 
         List<Option> options = new ArrayList<>();
@@ -81,6 +82,9 @@ public class SelectRealEnglishWordServiceImpl implements SelectRealEnglishWordSe
         }
         if (request.getQuestionOrder() != null) {
             question.setQuestionOrder(request.getQuestionOrder());
+        }
+        if (request.getIsActive() != null){
+            question.setIsActive(request.getIsActive());
         }
 
         List<Option> options = question.getOptions(); // Existing options
