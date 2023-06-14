@@ -53,6 +53,7 @@ public class ListenAndSelectEnglishWordsServiceImpl implements ListenAndSelectEn
             Option option = new Option();
             option.setTitle(optionRequest.getTitle());
             option.setIsCorrect(optionRequest.getIsCorrect());
+            option.setOptionOrder(optionRequest.getOptionOrder());
             option.setFileUrl(optionRequest.getFileUrl());
             option.setQuestion(question);
             options.add(option);

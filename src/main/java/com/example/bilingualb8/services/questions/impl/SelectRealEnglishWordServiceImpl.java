@@ -53,6 +53,7 @@ public class SelectRealEnglishWordServiceImpl implements SelectRealEnglishWordSe
             Option option = new Option();
             option.setTitle(optionRequest.getTitle());
             option.setIsCorrect(optionRequest.getIsCorrect() != null ? optionRequest.getIsCorrect() : false);
+            option.setOptionOrder(optionRequest.getOptionOrder());
             option.setQuestion(question);
             options.add(option);
         }
