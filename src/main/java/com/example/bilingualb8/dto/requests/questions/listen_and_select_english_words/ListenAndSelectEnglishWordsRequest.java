@@ -21,14 +21,9 @@ public class ListenAndSelectEnglishWordsRequest {
     @NotNull(message = "The question order must not be empty.")
     @Positive(message = "Order can not be negative")
     private Integer questionOrder;
-    @NotNull(message = "Number of replays  must not be empty.")
-    @Positive(message = "Number of Replays can not be negative")
-    private Integer numberOfReplays;
     @NotNull(message = "The test id must not be empty.")
     @Positive(message = "Test id can not be negative")
     private Long testId;
-    @NotNull(message = "Correct answer must not be empty")
-    private String correctAnswer;
     @NotNull(message = "Option must not be empty")
     @Valid
     private List<OptionRequest> optionsRequest;
