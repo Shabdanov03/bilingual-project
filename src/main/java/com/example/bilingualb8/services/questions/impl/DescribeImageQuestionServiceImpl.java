@@ -76,7 +76,9 @@ public class DescribeImageQuestionServiceImpl implements DescribeImageQuestionSe
         if (updateRequest.getFile() != null) {
             File file = question.getFiles().get(0);
             file.setFileUrl(updateRequest.getFile());
-            question.setFiles(List.of(file));
+            List<File>files = new ArrayList<>();
+            files.add(file);
+            question.setFiles(files);
         }
 
         questionRepository.save(question);

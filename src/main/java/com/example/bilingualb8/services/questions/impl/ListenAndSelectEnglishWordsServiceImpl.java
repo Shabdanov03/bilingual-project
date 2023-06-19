@@ -47,7 +47,7 @@ public class ListenAndSelectEnglishWordsServiceImpl implements ListenAndSelectEn
                 .build();
 
         List<Option> options = new ArrayList<>();
-        for (OptionRequest optionRequest : request.getOptionsRequest()) {
+        for (OptionRequest optionRequest : request.getOptions()) {
             Option option = new Option();
             option.setTitle(optionRequest.getTitle());
             option.setIsCorrect(optionRequest.getIsCorrect());
