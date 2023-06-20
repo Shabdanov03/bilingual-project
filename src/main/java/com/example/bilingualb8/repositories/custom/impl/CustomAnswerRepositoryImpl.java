@@ -20,6 +20,7 @@ public class CustomAnswerRepositoryImpl implements CustomAnswerRepository {
     public List<UserAnswerResponse> getAnswerResponsesByResultId(Long resultId) {// add option order
         String answerQuery = """
                 SELECT
+                a.id as answer_id,
                 a.question_id as question_id,
                 a.answer_status as answer_status,
                 o.title as option_title
@@ -34,6 +35,7 @@ public class CustomAnswerRepositoryImpl implements CustomAnswerRepository {
 
         return jdbcTemplate.query(answerQuery, (resultSet, i) ->
                         new UserAnswerResponse(
+                                resultSet.getLong("answer_id"),
                                 resultSet.getLong("question_id"),
                                 AnswerStatus.valueOf(resultSet.getString("answer_status")),
                                 resultSet.getString("option_title")
@@ -46,6 +48,7 @@ public class CustomAnswerRepositoryImpl implements CustomAnswerRepository {
     public List<UserAnswerResponse> getAnswerResponsesByQuestionId(Long questionId) {
         String answerQuery = """
                 SELECT
+                a.id as answer_id,
                 a.question_id as question_id,
                 a.answer_status as answer_status,
                 o.title as option_title
@@ -60,6 +63,7 @@ public class CustomAnswerRepositoryImpl implements CustomAnswerRepository {
 
         return jdbcTemplate.query(answerQuery, (resultSet, i) ->
                         new UserAnswerResponse(
+                                resultSet.getLong("answer_id"),
                                 resultSet.getLong("question_id"),
                                 AnswerStatus.valueOf(resultSet.getString("answer_status")),
                                 resultSet.getString("option_title")
