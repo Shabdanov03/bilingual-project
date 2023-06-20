@@ -131,9 +131,10 @@ public class CustomResultRepositoryImpl implements CustomResultRepository {
             a.evaluated_score as score,
             q.question_order as question_order
             FROM tests t
-            JOIN questions q on t.id = q.test_id
             JOIN results r on t.id = r.test_id
-            JOIN answers a on q.id = a.question_id
+            JOIN results_answers ra on r.id = ra.result_id
+            JOIN questions q on t.id = q.test_id
+            JOIN answers a on ra.answers_id = a.id and q.id = a.question_id
             WHERE r.id = ?
             """;
 
