@@ -210,7 +210,8 @@ public class CustomQuestionRepositoryImpl implements CustomQuestionRepository {
         String sql = """
                 SELECT concat(u.first_name, ' ', u.last_name) as full_name,
                 t.title as title,
-                a.evaluated_score as score
+                a.evaluated_score as score,
+                a.id as answer_id
                 FROM answers a
                 JOIN users u on a.user_id = u.id
                 JOIN questions q on a.question_id = q.id
@@ -225,7 +226,8 @@ public class CustomQuestionRepositoryImpl implements CustomQuestionRepository {
                         new EvaluateQuestionResponse(
                                 resultSet.getString("full_name"),
                                 resultSet.getString("title"),
-                                resultSet.getFloat("score")
+                                resultSet.getFloat("score"),
+                                resultSet.getLong("answer_id")
                         ),
                 answerId
         ).stream().findFirst().orElseThrow(()-> new NotFoundException("first index is empty"));

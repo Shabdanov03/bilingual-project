@@ -16,12 +16,14 @@ public class EvaluateQuestionResponse {
     private String userFullName;
     private String testName;
     private float evaluationScore;
+    private Long answerId;
     private QuestionResponse questionResponse;
     private List<UserAnswerResponse> userAnswerResponse;
 
-    public EvaluateQuestionResponse(String userName, String testName, float evaluationScore) {
+    public EvaluateQuestionResponse(String userName, String testName, float evaluationScore,Long answerId) {
         this.userFullName = userName;
         this.testName = testName;
         this.evaluationScore = evaluationScore;
+        this.answerId = answerId;
     }
 }

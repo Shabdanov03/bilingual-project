@@ -9,7 +9,6 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class UserAnswerResponse {
-    private Long answerId;
     private Long questionId; // todo no need
     private AnswerStatus answerStatus;
     private String optionTitle;
