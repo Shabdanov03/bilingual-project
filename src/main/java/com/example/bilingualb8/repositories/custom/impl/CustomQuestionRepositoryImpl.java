@@ -234,7 +234,6 @@ public class CustomQuestionRepositoryImpl implements CustomQuestionRepository {
 
         evaluateQuestionResponses.setQuestionResponse(questionById.orElseThrow(()-> new NotFoundException(String.format("question with id : %s not found", questionId))));
         evaluateQuestionResponses.setUserAnswerResponse(answerResponses);
-
         return evaluateQuestionResponses;
     }
 }

@@ -238,7 +238,6 @@ public class CustomTestRepositoryImpl implements CustomTestRepository {
                  WHERE q.test_id = ?
                  """;
 
-
         List<OptionResponse> options = jdbcTemplate.query(optionQuery, (resultSet, i) ->
                 new OptionResponse(
                         resultSet.getLong("id"),
@@ -248,7 +247,6 @@ public class CustomTestRepositoryImpl implements CustomTestRepository {
                         resultSet.getString("fileUrl"),
                         resultSet.getInt("option_order")
                 ), id);
-
 
         // TODO Inserting files & options to related questions
         questions.forEach(question -> {
