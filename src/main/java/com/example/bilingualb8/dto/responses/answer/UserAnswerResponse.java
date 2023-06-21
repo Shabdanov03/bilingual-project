@@ -13,4 +13,7 @@ public class UserAnswerResponse {
     private Long questionId; // todo no need
     private AnswerStatus answerStatus;
     private String optionTitle;
+    private String data;
+    private String fileUrl;
+    private Integer numberOfReplace;
 }
