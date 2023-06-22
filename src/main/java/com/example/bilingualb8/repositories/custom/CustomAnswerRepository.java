@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface CustomAnswerRepository {
     List<UserAnswerResponse> getAnswerResponsesByResultId(Long resultId);
-    List<UserAnswerResponse> getAnswerResponsesByQuestionId(Long questionId);
+    List<UserAnswerResponse> getAnswerResponsesByQuestionId(Long questionId, Long userId);
 }

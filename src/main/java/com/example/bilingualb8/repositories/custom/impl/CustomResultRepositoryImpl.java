@@ -86,6 +86,10 @@ public class CustomResultRepositoryImpl implements CustomResultRepository {
         List<ResultQuestionResponse> resultQuestionResponses = getResultQuestionResponses(resultId);
         List<UserAnswerResponse> evaluatingAnswerRespons = customAnswerRepository.getAnswerResponsesByResultId(resultId);
 
+        for (UserAnswerResponse answerRespon : evaluatingAnswerRespons) {
+            answerRespon.setFileUrl(getByAnswerId(answerRespon.getAnswerId()));
+        }
+
         for (ResultQuestionResponse resultQuestionResponse : resultQuestionResponses) {
             List<UserAnswerResponse> answers = evaluatingAnswerRespons.stream()
                     .filter(answer -> Objects.equals(answer.getQuestionId(), resultQuestionResponse.getQuestionId()))
@@ -104,7 +108,6 @@ public class CustomResultRepositoryImpl implements CustomResultRepository {
         }
 
         evaluatingSubmittedResultResponse.setResultQuestionResponses(resultQuestionResponses);
-
         return evaluatingSubmittedResultResponse;
     }
 
@@ -122,7 +125,6 @@ public class CustomResultRepositoryImpl implements CustomResultRepository {
         return jdbcTemplate.queryForObject(sql, new Object[]{answerId}, (resultSet, i) ->
                 resultSet.getLong("id"));
     }
-
 
     private List<ResultQuestionResponse> getResultQuestionResponses(Long resultId) {
         String questionQuery = """
@@ -174,5 +176,27 @@ public class CustomResultRepositoryImpl implements CustomResultRepository {
                         ),
                 resultId
         ).stream().findFirst().orElseThrow(()-> new NotFoundException("first index was empty"));
+    }
+
+    private String getByAnswerId(Long answerId) {
+        String sql = """
+            SELECT
+            f.file_url as file_url
+            FROM answers a
+            JOIN answers_files af on a.id = af.answer_id
+            JOIN files f on af.files_id = f.id
+            JOIN answers_options ao on a.id = ao.answer_id
+            JOIN options o on ao.options_id = o.id
+            WHERE a.id = ? AND o.id = ?
+            """;
+
+        String file_url = jdbcTemplate.query(sql, (resultSet) -> {
+            if (resultSet.next()) {
+                return resultSet.getString("file_url");
+            }
+            return null; // Return null if no result is found
+        }, answerId);
+        System.err.println(file_url + " " + answerId);
+        return file_url;
     }
 }

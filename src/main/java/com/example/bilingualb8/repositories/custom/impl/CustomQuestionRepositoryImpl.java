@@ -5,9 +5,11 @@ import com.example.bilingualb8.dto.responses.file.FileResponse;
 import com.example.bilingualb8.dto.responses.option.OptionResponse;
 import com.example.bilingualb8.dto.responses.questions.EvaluateQuestionResponse;
 import com.example.bilingualb8.dto.responses.questions.QuestionResponse;
+import com.example.bilingualb8.entity.Answer;
 import com.example.bilingualb8.enums.FileType;
 import com.example.bilingualb8.enums.QuestionType;
 import com.example.bilingualb8.exceptions.NotFoundException;
+import com.example.bilingualb8.repositories.AnswerRepository;
 import com.example.bilingualb8.repositories.custom.CustomAnswerRepository;
 import com.example.bilingualb8.repositories.custom.CustomQuestionRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +25,7 @@ import java.util.stream.Collectors;
 public class CustomQuestionRepositoryImpl implements CustomQuestionRepository {
     private final JdbcTemplate jdbcTemplate;
     private final CustomAnswerRepository customAnswerRepository;
+    private final AnswerRepository answerRepository;
 
     @Override
     public List<QuestionResponse> getAllQuestions() {
@@ -220,7 +223,17 @@ public class CustomQuestionRepositoryImpl implements CustomQuestionRepository {
                 """;
 
         Optional<QuestionResponse> questionById = getQuestionById(questionId);
-        List<UserAnswerResponse> answerResponses = customAnswerRepository.getAnswerResponsesByQuestionId(questionId);
+
+        Answer answer = answerRepository.findById(answerId).orElseThrow(() -> new NotFoundException(String.format("Answer with id %s was not found", answerId)));
+
+        List<UserAnswerResponse> answerResponses = customAnswerRepository.getAnswerResponsesByQuestionId(questionId, answer.getUser().getId());
+
+        for (UserAnswerResponse answerRespons : answerResponses) {
+            answerRespons.setFileUrl(getByAnswerId(answerRespons.getAnswerId()));
+
+            System.err.println(answerRespons.getAnswerId());
+
+        }
 
         EvaluateQuestionResponse evaluateQuestionResponses = jdbcTemplate.query(sql, (resultSet, i) ->
                         new EvaluateQuestionResponse(
@@ -236,4 +249,25 @@ public class CustomQuestionRepositoryImpl implements CustomQuestionRepository {
         evaluateQuestionResponses.setUserAnswerResponse(answerResponses);
         return evaluateQuestionResponses;
     }
+
+    private String getByAnswerId(Long answerId) {
+        String sql = """
+            SELECT
+            f.file_url as file_url
+            FROM answers a
+            JOIN answers_files af on a.id = af.answer_id
+            JOIN files f on af.files_id = f.id
+            WHERE a.id = ?
+            """;
+
+        String file_url = jdbcTemplate.query(sql, (resultSet) -> {
+            if (resultSet.next()) {
+                return resultSet.getString("file_url");
+            }
+            return null; // Return null if no result is found
+        }, answerId);
+        System.err.println(file_url + " " + answerId);
+        return file_url;
+    }
+
 }

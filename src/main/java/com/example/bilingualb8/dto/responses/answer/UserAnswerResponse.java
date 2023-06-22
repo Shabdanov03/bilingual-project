@@ -16,4 +16,13 @@ public class UserAnswerResponse {
     private String data;
     private String fileUrl;
     private Integer numberOfReplace;
+
+    public UserAnswerResponse(Long answerId, Long questionId, AnswerStatus answerStatus, String optionTitle, String data, Integer numberOfReplace) {
+        this.answerId = answerId;
+        this.questionId = questionId;
+        this.answerStatus = answerStatus;
+        this.optionTitle = optionTitle;
+        this.data = data;
+        this.numberOfReplace = numberOfReplace;
+    }
 }
