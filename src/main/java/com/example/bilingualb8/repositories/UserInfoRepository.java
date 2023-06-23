@@ -7,4 +7,5 @@ import java.util.Optional;
 
 public interface UserInfoRepository extends JpaRepository<UserInfo, Long> {
     Optional<UserInfo> findByResetPasswordToken(String token);
+    Optional<UserInfo> findByUserId(Long userId);
 }

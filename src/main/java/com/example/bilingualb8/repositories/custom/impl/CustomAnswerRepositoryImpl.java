@@ -18,22 +18,20 @@ public class CustomAnswerRepositoryImpl implements CustomAnswerRepository {
     @Override
     public List<UserAnswerResponse> getAnswerResponsesByResultId(Long resultId) {// add option order
         String answerQuery = """
-                SELECT
-                a.id as answer_id,
-                a.question_id as question_id,
-                a.answer_status as answer_status,
-                o.title as option_title,
-                a.data as data,
-                f.file_url as file_url,
-                a.number_of_plays as number_of_plays
+                 SELECT
+                    a.id as answer_id,
+                    a.question_id as question_id,
+                    a.answer_status as answer_status,
+                    o.title as option_title,
+                    a.data as data,
+                    a.number_of_plays as number_of_plays
                 FROM answers a
-                JOIN answers_options ao on a.id = ao.answer_id
-                JOIN options o on ao.options_id = o.id
-                JOIN questions q on a.question_id = q.id
-                JOIN results_answers ra on a.id = ra.answers_id
-                JOIN results r on ra.result_id = r.id
-                JOIN answers_files af on a.id = af.answer_id
-                JOIN files f on af.files_id = f.id
+                    JOIN answers_options ao on a.id = ao.answer_id
+                    JOIN options o on ao.options_id = o.id
+                    JOIN questions q on a.question_id = q.id
+                    JOIN results_answers ra on a.id = ra.answers_id
+                    JOIN results r on ra.result_id = r.id
+                    JOIN users u on u.id = r.user_id
                 WHERE r.id = ?
                                 """;
 
@@ -44,7 +42,6 @@ public class CustomAnswerRepositoryImpl implements CustomAnswerRepository {
                                 AnswerStatus.valueOf(resultSet.getString("answer_status")),
                                 resultSet.getString("option_title"),
                                 resultSet.getString("data"),
-                                resultSet.getString("file_url"),
                                 resultSet.getInt("number_of_plays")
                         ),
                 resultId
@@ -52,26 +49,24 @@ public class CustomAnswerRepositoryImpl implements CustomAnswerRepository {
     }
 
     @Override
-    public List<UserAnswerResponse> getAnswerResponsesByQuestionId(Long questionId) {
+    public List<UserAnswerResponse> getAnswerResponsesByQuestionId(Long questionId, Long userId) {
         String answerQuery = """
                 SELECT
-                a.id as answer_id,
-                a.question_id as question_id,
-                a.answer_status as answer_status,
-                o.title as option_title,
-                a.data as data,
-                f.file_url as file_url,
-                a.number_of_plays as number_of_plays
+                    a.id as answer_id,
+                    a.question_id as question_id,
+                    a.answer_status as answer_status,
+                    o.title as option_title,
+                    a.data as data,
+                    a.number_of_plays as number_of_plays
                 FROM answers a
-                JOIN answers_options ao on a.id = ao.answer_id
-                JOIN options o on ao.options_id = o.id
-                JOIN questions q on a.question_id = q.id
-                JOIN results_answers ra on a.id = ra.answers_id
-                JOIN results r on ra.result_id = r.id
-                JOIN answers_files af on a.id = af.answer_id
-                JOIN files f on af.files_id = f.id
-                WHERE q.id = ?
-                                """;
+                    JOIN answers_options ao on a.id = ao.answer_id
+                    JOIN options o on ao.options_id = o.id
+                    JOIN questions q on a.question_id = q.id
+                    JOIN results_answers ra on a.id = ra.answers_id
+                    JOIN results r on ra.result_id = r.id
+                    JOIN users u on u.id = r.user_id
+                WHERE q.id = ? AND a.user_id = ?
+                                                """;
 
         return jdbcTemplate.query(answerQuery, (resultSet, i) ->
                         new UserAnswerResponse(
@@ -80,10 +75,10 @@ public class CustomAnswerRepositoryImpl implements CustomAnswerRepository {
                                 AnswerStatus.valueOf(resultSet.getString("answer_status")),
                                 resultSet.getString("option_title"),
                                 resultSet.getString("data"),
-                                resultSet.getString("file_url"),
                                 resultSet.getInt("number_of_plays")
                         ),
-                questionId
+                questionId, userId
         );
     }
+
 }
