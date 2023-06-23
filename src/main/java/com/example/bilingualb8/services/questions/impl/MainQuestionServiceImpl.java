@@ -4,12 +4,12 @@ import com.example.bilingualb8.dto.responses.SimpleResponse;
 import com.example.bilingualb8.dto.responses.questions.EvaluateQuestionResponse;
 import com.example.bilingualb8.dto.responses.questions.QuestionResponse;
 import com.example.bilingualb8.entity.Answer;
+import com.example.bilingualb8.entity.Option;
 import com.example.bilingualb8.entity.Question;
-import com.example.bilingualb8.entity.Result;
 import com.example.bilingualb8.exceptions.NotFoundException;
 import com.example.bilingualb8.repositories.AnswerRepository;
+import com.example.bilingualb8.repositories.OptionRepository;
 import com.example.bilingualb8.repositories.QuestionRepository;
-import com.example.bilingualb8.repositories.ResultRepository;
 import com.example.bilingualb8.repositories.custom.CustomQuestionRepository;
 import com.example.bilingualb8.services.questions.MainQuestionService;
 import jakarta.transaction.Transactional;
@@ -22,10 +22,10 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 public class MainQuestionServiceImpl implements MainQuestionService {
+    private final OptionRepository optionRepository;
     private final CustomQuestionRepository customQuestionRepository;
     private final QuestionRepository questionRepository;
     private final AnswerRepository answerRepository;
-    private final ResultRepository resultRepository;
 
     @Override
     public List<QuestionResponse> getAllQuestions() {
@@ -44,20 +44,28 @@ public class MainQuestionServiceImpl implements MainQuestionService {
     @Override
     public SimpleResponse deleteQuestionById(Long id) {
         log.info("Deleting question with ID: {}", id);
+
+        // Retrieve the question entity from the repository
         Question question = questionRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException(String.format("Question with ID %s doesn't exist", id)));
 
+        // Clear the question reference from associated options
+        List<Option> options = optionRepository.findByQuestionId(id);
+        for (Option option : options) {
+            option.setQuestion(null);
+            optionRepository.save(option);
+        }
+
+        // Check if an answer is associated with the question and delete it
         Answer answer = answerRepository.findAnswerByQuestionId(question.getId());
         if (answer != null) {
             log.info("Deleting answer associated with question ID: {}", question.getId());
-            answerRepository.delete(answer);
+            answer.setQuestion(null);
+            answer.setOptions(null);
+            answerRepository.save(answer);
         }
 
-        List<Result> results = resultRepository.findByTestId(question.getTest().getId());
-        for (Result result : results) {
-            result.getAnswers().remove(answer);
-        }
-
+        // Delete the question from the repository
         questionRepository.delete(question);
 
         log.info("Question with ID {} deleted successfully", id);
@@ -65,6 +73,7 @@ public class MainQuestionServiceImpl implements MainQuestionService {
                 .message(String.format("Question with ID %s successfully deleted", id))
                 .build();
     }
+
 
     @Override
     public EvaluateQuestionResponse getEvaluateQuestionByIdes(Long answerId, Long questionId) {

@@ -28,7 +28,7 @@ public class ResultsController {
         return resultService.getAll(authentication);
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
     @Operation(summary = "This is delete by id my test method")
     @DeleteMapping("/{id}")
     public SimpleResponse deleteById(@PathVariable Long id) {

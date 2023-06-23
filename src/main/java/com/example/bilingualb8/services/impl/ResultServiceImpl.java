@@ -7,6 +7,7 @@ import com.example.bilingualb8.dto.responses.userResult.MyResultResponse;
 import com.example.bilingualb8.entity.*;
 import com.example.bilingualb8.enums.ResultStatus;
 import com.example.bilingualb8.exceptions.NotFoundException;
+import com.example.bilingualb8.repositories.AnswerRepository;
 import com.example.bilingualb8.repositories.ResultRepository;
 import com.example.bilingualb8.repositories.custom.CustomResultRepository;
 import com.example.bilingualb8.services.ResultService;

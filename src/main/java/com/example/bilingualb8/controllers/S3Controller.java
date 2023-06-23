@@ -18,14 +18,14 @@ import java.util.Map;
 public class S3Controller {
     private final S3Service s3Service;
 
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     @Operation(summary = "This is upload file method")
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     Map<String, String> uploadFile(@RequestParam MultipartFile multipartFile) throws IOException {
         return s3Service.upload(multipartFile);
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     @Operation(summary = "This is delete file method")
     @DeleteMapping
     Map<String, String> deleteFile(@RequestParam String link) {

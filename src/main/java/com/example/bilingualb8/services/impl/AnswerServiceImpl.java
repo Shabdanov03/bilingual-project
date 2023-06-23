@@ -5,6 +5,7 @@ import com.example.bilingualb8.dto.responses.SimpleResponse;
 import com.example.bilingualb8.entity.*;
 import com.example.bilingualb8.enums.AnswerStatus;
 import com.example.bilingualb8.enums.QuestionType;
+import com.example.bilingualb8.enums.ResultStatus;
 import com.example.bilingualb8.exceptions.NotFoundException;
 import com.example.bilingualb8.repositories.AnswerRepository;
 import com.example.bilingualb8.repositories.OptionRepository;
@@ -87,6 +88,12 @@ public class AnswerServiceImpl implements AnswerService {
         Result result = resultRepository.findById(resultIdByAnswerId).orElseThrow(()->
                 new NotFoundException(String.format("Answer with id : %s doesn't exist !", answerId)));
 
+        boolean allTrue = result.getAnswers().stream()
+                .allMatch(a -> a.getAnswerStatus() == AnswerStatus.EVALUATED);
+
+        if (allTrue){
+            result.setStatus(ResultStatus.EVALUATED);
+        }else result.setStatus(ResultStatus.NOT_EVALUATED);
         result.setScore(result.getScore() + score);
 
         resultRepository.save(result);

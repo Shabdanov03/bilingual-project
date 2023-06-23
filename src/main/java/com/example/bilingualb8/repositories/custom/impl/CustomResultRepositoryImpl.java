@@ -128,17 +128,18 @@ public class CustomResultRepositoryImpl implements CustomResultRepository {
 
     private List<ResultQuestionResponse> getResultQuestionResponses(Long resultId) {
         String questionQuery = """
-            SELECT q.id as id,
-            q.question_type as question_type,
-            a.evaluated_score as score,
-            q.question_order as question_order
-            FROM tests t
-            JOIN results r on t.id = r.test_id
-            JOIN results_answers ra on r.id = ra.result_id
-            JOIN questions q on t.id = q.test_id
-            JOIN answers a on ra.answers_id = a.id and q.id = a.question_id
-            WHERE r.id = ?
-            """;
+                SELECT q.id as id,
+                q.question_type as question_type,
+                a.evaluated_score as score,
+                q.question_order as question_order
+                FROM tests t
+                JOIN results r on t.id = r.test_id
+                JOIN users u on r.user_id = u.id
+                JOIN results_answers ra on r.id = ra.result_id
+                JOIN answers a on ra.answers_id = a.id
+                JOIN questions q on t.id = q.test_id
+                WHERE r.id = ?
+                            """;
 
         return jdbcTemplate.query(questionQuery, (resultSet, i) ->
                         new ResultQuestionResponse(
@@ -187,16 +188,14 @@ public class CustomResultRepositoryImpl implements CustomResultRepository {
             JOIN files f on af.files_id = f.id
             JOIN answers_options ao on a.id = ao.answer_id
             JOIN options o on ao.options_id = o.id
-            WHERE a.id = ? AND o.id = ?
+            WHERE a.id = ?
             """;
 
-        String file_url = jdbcTemplate.query(sql, (resultSet) -> {
+        return jdbcTemplate.query(sql, (resultSet) -> {
             if (resultSet.next()) {
                 return resultSet.getString("file_url");
             }
             return null; // Return null if no result is found
         }, answerId);
-        System.err.println(file_url + " " + answerId);
-        return file_url;
     }
 }

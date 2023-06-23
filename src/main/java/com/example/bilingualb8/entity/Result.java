@@ -29,6 +29,6 @@ public class Result {
     private ResultStatus status;
     private float score;
     private LocalDateTime dateOfSubmission;
-    @OneToMany(cascade = ALL)
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Answer> answers;
 }

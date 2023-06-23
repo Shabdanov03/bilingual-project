@@ -7,6 +7,7 @@ import com.example.bilingualb8.dto.responses.test.TestResponse;
 import com.example.bilingualb8.entity.*;
 import com.example.bilingualb8.enums.AnswerStatus;
 import com.example.bilingualb8.enums.QuestionType;
+import com.example.bilingualb8.enums.ResultStatus;
 import com.example.bilingualb8.exceptions.AlreadyExistException;
 import com.example.bilingualb8.exceptions.NotFoundException;
 import com.example.bilingualb8.repositories.*;
@@ -157,6 +158,13 @@ public class TestServiceImpl implements TestService {
                 result.setScore(result.getScore() + v);
             }
         }
+
+        boolean allTrue = result.getAnswers().stream()
+                .allMatch(a -> a.getAnswerStatus() == AnswerStatus.EVALUATED);
+
+        if (allTrue){
+            result.setStatus(ResultStatus.EVALUATED);
+        }else result.setStatus(ResultStatus.NOT_EVALUATED);
 
         resultRepository.save(result);
 

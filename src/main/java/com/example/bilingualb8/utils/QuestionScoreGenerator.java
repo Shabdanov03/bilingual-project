@@ -32,7 +32,7 @@ public class QuestionScoreGenerator {
             }
         }
 
-        if (options.size() == answer.getOptions().size() || answer.getOptions().size() == 0 || correctAnswers == 0){
+        if (answer.getOptions().size() == 0 || correctAnswers == 0){
             return 0; // if user chosen all options, answer will 0 or correct answer 0
         } else if (answer.getOptions().size() == options.size() - 1){ // if user chosen all-1 options
             if (correctAnswers == trueOptions){
@@ -40,6 +40,10 @@ public class QuestionScoreGenerator {
             } else {
                 return 0; // and true options not equal to correct answer
             }
+        } else if (options.size() == answer.getOptions().size()) {
+            if (correctAnswers == trueOptions){
+                return 10;
+            }else return 0;
         } else {
             return (float) correctAnswers * 10 / trueOptions;
         }
