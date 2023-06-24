@@ -33,4 +33,10 @@ public class UserAnswerResponse {
         this.data = data;
         this.numberOfReplace = numberOfReplace;
     }
+    public UserAnswerResponse(Long answerId, Long questionId, AnswerStatus answerStatus, Integer numberOfReplace) {
+        this.answerId = answerId;
+        this.questionId = questionId;
+        this.answerStatus = answerStatus;
+        this.numberOfReplace = numberOfReplace;
+    }
 }

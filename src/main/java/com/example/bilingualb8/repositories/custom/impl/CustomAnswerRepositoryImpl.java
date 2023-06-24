@@ -25,7 +25,6 @@ public class CustomAnswerRepositoryImpl implements CustomAnswerRepository {
                     a.question_id as question_id,
                     a.answer_status as answer_status,
                     o.title as option_title,
-                    a.data as data,
                     a.number_of_plays as number_of_plays
                 FROM answers a
                     JOIN answers_options ao on a.id = ao.answer_id
@@ -43,7 +42,6 @@ public class CustomAnswerRepositoryImpl implements CustomAnswerRepository {
                     a.question_id as question_id,
                     a.answer_status as answer_status,
                     f.file_url as url,
-                    a.data as data,
                     a.number_of_plays as number_of_plays
                 FROM answers a
                     JOIN answers_files af on a.id = af.answer_id
@@ -60,7 +58,6 @@ public class CustomAnswerRepositoryImpl implements CustomAnswerRepository {
                     a.id as answer_id,
                     a.question_id as question_id,
                     a.answer_status as answer_status,
-                    a.data as data,
                     a.number_of_plays as number_of_plays
                 FROM answers a
                     JOIN questions q on a.question_id = q.id
@@ -70,58 +67,61 @@ public class CustomAnswerRepositoryImpl implements CustomAnswerRepository {
                 WHERE r.id = ?
                                 """;
 
-        List<UserAnswerResponse> answerResponses = jdbcTemplate.query(answerQuery2, (resultSet, i) ->
+
+        List<UserAnswerResponse> answerResponse1 = jdbcTemplate.query(answerQuery2, (resultSet, i) ->
                         new UserAnswerResponse(
                                 resultSet.getLong("answer_id"),
                                 resultSet.getLong("question_id"),
                                 AnswerStatus.valueOf(resultSet.getString("answer_status")),
                                 resultSet.getString("url"),
-                                resultSet.getString("data"),
                                 resultSet.getInt("number_of_plays")
                         ),
                 resultId
         );
 
-        List<UserAnswerResponse> userAnswerResponses = jdbcTemplate.query(answerQuery, (resultSet, i) ->
+        List<UserAnswerResponse> answerResponses2 = jdbcTemplate.query(answerQuery, (resultSet, i) ->
                         new UserAnswerResponse(
                                 resultSet.getLong("answer_id"),
                                 resultSet.getLong("question_id"),
                                 AnswerStatus.valueOf(resultSet.getString("answer_status")),
                                 resultSet.getString("option_title"),
-                                resultSet.getString("data"),
                                 resultSet.getInt("number_of_plays")
                         ),
                 resultId
         );
 
-        List<UserAnswerResponse> userAnswerResponses3 = jdbcTemplate.query(answerQuery3, (resultSet, i) ->
+        List<UserAnswerResponse> answerResponses3 = jdbcTemplate.query(answerQuery3, (resultSet, i) ->
                         new UserAnswerResponse(
                                 resultSet.getLong("answer_id"),
                                 resultSet.getLong("question_id"),
                                 AnswerStatus.valueOf(resultSet.getString("answer_status")),
-                                resultSet.getString("data"),
                                 resultSet.getInt("number_of_plays")
                         ),
                 resultId
         );
 
-        for (UserAnswerResponse answerRespons : answerResponses) {
-            for (UserAnswerResponse userAnswerRespons : userAnswerResponses) {
-                if (!Objects.equals(answerRespons.getAnswerId(), userAnswerRespons.getAnswerId()) && !Objects.equals(answerRespons.getQuestionId(), userAnswerRespons.getQuestionId())){
-                    answerResponses.add(userAnswerRespons);
+        if (answerResponse1.isEmpty()) answerResponse1.addAll(answerResponses2);
+        else {
+            for (UserAnswerResponse answerRespons : answerResponse1) {
+                for (UserAnswerResponse userAnswerRespons : answerResponses2) {
+                    if (!Objects.equals(answerRespons.getAnswerId(), userAnswerRespons.getAnswerId()) || !Objects.equals(answerRespons.getQuestionId(), userAnswerRespons.getQuestionId())) {
+                        answerResponse1.add(userAnswerRespons);
+                    }
                 }
             }
         }
 
-        for (UserAnswerResponse answerRespons : answerResponses) {
-            for (UserAnswerResponse userAnswerResponse : userAnswerResponses3) {
-                if (!Objects.equals(answerRespons.getAnswerId(), userAnswerResponse.getAnswerId())  && !Objects.equals(answerRespons.getQuestionId(), userAnswerResponse.getQuestionId())){
-                    answerResponses.add(userAnswerResponse);
+        if (answerResponse1.isEmpty()) answerResponse1.addAll(answerResponses3);
+        else {
+            for (UserAnswerResponse answerRespons : answerResponse1) {
+                for (UserAnswerResponse userAnswerResponse : answerResponses3) {
+                    if (!Objects.equals(answerRespons.getAnswerId(), userAnswerResponse.getAnswerId()) || !Objects.equals(answerRespons.getQuestionId(), userAnswerResponse.getQuestionId())) {
+                        answerResponse1.add(userAnswerResponse);
+                    }
                 }
             }
         }
-
-        return answerResponses;
+        return answerResponse1;
     }
 
     @Override
@@ -212,23 +212,28 @@ public class CustomAnswerRepositoryImpl implements CustomAnswerRepository {
                 questionId, userId
         );
 
-        for (UserAnswerResponse answerRespons : answerResponses) {
-            for (UserAnswerResponse userAnswerRespons : answerResponses2) {
-                if (!Objects.equals(answerRespons.getAnswerId(), userAnswerRespons.getAnswerId()) && !Objects.equals(answerRespons.getQuestionId(), userAnswerRespons.getQuestionId())){
-                    answerResponses.add(userAnswerRespons);
+        if (answerResponses.isEmpty()) answerResponses.addAll(answerResponses2);
+        else {
+            for (UserAnswerResponse answerRespons : answerResponses) {
+                for (UserAnswerResponse userAnswerRespons : answerResponses2) {
+                    if (!Objects.equals(answerRespons.getAnswerId(), userAnswerRespons.getAnswerId()) || !Objects.equals(answerRespons.getQuestionId(), userAnswerRespons.getQuestionId())) {
+                        answerResponses.add(userAnswerRespons);
+                    }
                 }
             }
         }
 
-        for (UserAnswerResponse answerRespons : answerResponses) {
-            for (UserAnswerResponse userAnswerResponse : answerResponses3) {
-                if (!Objects.equals(answerRespons.getAnswerId(), userAnswerResponse.getAnswerId())  && !Objects.equals(answerRespons.getQuestionId(), userAnswerResponse.getQuestionId())){
-                    answerResponses.add(userAnswerResponse);
+        if (answerResponses.isEmpty()) answerResponses.addAll(answerResponses3);
+        else {
+            for (UserAnswerResponse answerRespons : answerResponses) {
+                for (UserAnswerResponse userAnswerResponse : answerResponses3) {
+                    if (!Objects.equals(answerRespons.getAnswerId(), userAnswerResponse.getAnswerId()) || !Objects.equals(answerRespons.getQuestionId(), userAnswerResponse.getQuestionId())) {
+                        answerResponses.add(userAnswerResponse);
+                    }
                 }
             }
         }
 
         return answerResponses;
     }
-
 }
