@@ -62,12 +62,9 @@ public class CustomAnswerRepositoryImpl implements CustomAnswerRepository {
                     a.id as answer_id,
                     a.question_id as question_id,
                     a.answer_status as answer_status,
-                    f.file_url as url,
                     a.data as data,
                     a.number_of_plays as number_of_plays
                 FROM answers a
-                    JOIN answers_files af on a.id = af.answer_id
-                    JOIN files f on f.id = af.files_id
                     JOIN questions q on a.question_id = q.id
                     JOIN results_answers ra on a.id = ra.answers_id
                     JOIN results r on ra.result_id = r.id
@@ -104,7 +101,6 @@ public class CustomAnswerRepositoryImpl implements CustomAnswerRepository {
                                 resultSet.getLong("answer_id"),
                                 resultSet.getLong("question_id"),
                                 AnswerStatus.valueOf(resultSet.getString("answer_status")),
-                                resultSet.getString("option_title"),
                                 resultSet.getString("data"),
                                 resultSet.getInt("number_of_plays")
                         ),
@@ -163,12 +159,9 @@ public class CustomAnswerRepositoryImpl implements CustomAnswerRepository {
                 a.id as answer_id,
                 a.question_id as question_id,
                 a.answer_status as answer_status,
-                f.file_url as url,
                 a.data as data,
                 a.number_of_plays as number_of_plays
                 FROM answers a
-                JOIN answers_files af on a.id = af.answer_id
-                JOIN files f on af.files_id = f.id
                 JOIN questions q on a.question_id = q.id
                 JOIN results_answers ra on a.id = ra.answers_id
                 JOIN results r on ra.result_id = r.id
@@ -204,7 +197,6 @@ public class CustomAnswerRepositoryImpl implements CustomAnswerRepository {
                                 resultSet.getLong("answer_id"),
                                 resultSet.getLong("question_id"),
                                 AnswerStatus.valueOf(resultSet.getString("answer_status")),
-                                resultSet.getString("option_title"),
                                 resultSet.getString("data"),
                                 resultSet.getInt("number_of_plays")
                         ),
