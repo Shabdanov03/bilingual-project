@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -17,6 +18,9 @@ public class CustomAnswerRepositoryImpl implements CustomAnswerRepository {
 
     @Override
     public List<UserAnswerResponse> getAnswerResponsesByResultId(Long resultId) {// add option order
+
+        List<UserAnswerResponse> answerResponses = new ArrayList<>();
+
         String answerQuery = """
                  SELECT
                     a.id as answer_id,
@@ -35,7 +39,37 @@ public class CustomAnswerRepositoryImpl implements CustomAnswerRepository {
                 WHERE r.id = ?
                                 """;
 
-        return jdbcTemplate.query(answerQuery, (resultSet, i) ->
+        String answerQuery2 = """
+                 SELECT
+                    a.id as answer_id,
+                    a.question_id as question_id,
+                    a.answer_status as answer_status,
+                    f.file_url as url,
+                    a.data as data,
+                    a.number_of_plays as number_of_plays
+                FROM answers a
+                    JOIN answers_files af on a.id = af.answer_id
+                    JOIN files f on f.id = af.files_id
+                    JOIN questions q on a.question_id = q.id
+                    JOIN results_answers ra on a.id = ra.answers_id
+                    JOIN results r on ra.result_id = r.id
+                    JOIN users u on u.id = r.user_id
+                WHERE r.id = ?
+                                """;
+
+        List<UserAnswerResponse> userAnswer = jdbcTemplate.query(answerQuery2, (resultSet, i) ->
+                        new UserAnswerResponse(
+                                resultSet.getLong("answer_id"),
+                                resultSet.getLong("question_id"),
+                                AnswerStatus.valueOf(resultSet.getString("answer_status")),
+                                resultSet.getString("url"),
+                                resultSet.getString("data"),
+                                resultSet.getInt("number_of_plays")
+                        ),
+                resultId
+        );
+
+        List<UserAnswerResponse> userAnswerResponses = jdbcTemplate.query(answerQuery, (resultSet, i) ->
                         new UserAnswerResponse(
                                 resultSet.getLong("answer_id"),
                                 resultSet.getLong("question_id"),
@@ -46,10 +80,17 @@ public class CustomAnswerRepositoryImpl implements CustomAnswerRepository {
                         ),
                 resultId
         );
+        answerResponses.addAll(userAnswer);
+        answerResponses.addAll(userAnswerResponses);
+
+        return answerResponses;
     }
 
     @Override
     public List<UserAnswerResponse> getAnswerResponsesByQuestionId(Long questionId, Long userId) {
+
+        List<UserAnswerResponse> answerResponses = new ArrayList<>();
+
         String answerQuery = """
                 SELECT
                     a.id as answer_id,
@@ -68,7 +109,36 @@ public class CustomAnswerRepositoryImpl implements CustomAnswerRepository {
                 WHERE q.id = ? AND a.user_id = ?
                                                 """;
 
-        return jdbcTemplate.query(answerQuery, (resultSet, i) ->
+        String answerQuery2 = """
+                SELECT
+                a.id as answer_id,
+                a.question_id as question_id,
+                a.answer_status as answer_status,
+                f.file_url as url,
+                a.data as data,
+                a.number_of_plays as number_of_plays
+                FROM answers a
+                JOIN answers_files af on a.id = af.answer_id
+                JOIN files f on af.files_id = f.id
+                JOIN questions q on a.question_id = q.id
+                JOIN results_answers ra on a.id = ra.answers_id
+                JOIN results r on ra.result_id = r.id
+                JOIN users u on u.id = r.user_id
+                WHERE q.id = ? AND a.user_id = ?""";
+
+        List<UserAnswerResponse> answerResponses1 = jdbcTemplate.query(answerQuery2, (resultSet, i) ->
+                        new UserAnswerResponse(
+                                resultSet.getLong("answer_id"),
+                                resultSet.getLong("question_id"),
+                                AnswerStatus.valueOf(resultSet.getString("answer_status")),
+                                resultSet.getString("url"),
+                                resultSet.getString("data"),
+                                resultSet.getInt("number_of_plays")
+                        ),
+                questionId, userId
+        );
+
+        List<UserAnswerResponse> answerResponses2 = jdbcTemplate.query(answerQuery, (resultSet, i) ->
                         new UserAnswerResponse(
                                 resultSet.getLong("answer_id"),
                                 resultSet.getLong("question_id"),
@@ -79,6 +149,11 @@ public class CustomAnswerRepositoryImpl implements CustomAnswerRepository {
                         ),
                 questionId, userId
         );
+
+        answerResponses.addAll(answerResponses1);
+        answerResponses.addAll(answerResponses2);
+
+        return answerResponses;
     }
 
 }

@@ -23,7 +23,7 @@ public class Answer {
     private Question question;
     @ManyToOne(cascade = {REFRESH, MERGE, PERSIST, DETACH})
     private User user;
-    @OneToMany(cascade = {REFRESH, MERGE, PERSIST, DETACH})
+    @ManyToMany(cascade = {REFRESH, MERGE, PERSIST, DETACH})
     private List<Option> options;
     private String data;
     private float evaluatedScore;

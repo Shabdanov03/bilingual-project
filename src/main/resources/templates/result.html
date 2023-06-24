@@ -23,9 +23,9 @@
           <p th:text="${title}">
             Ваш тест [Название теста] был успешно проверен администрацией.
           </p>
-            <a href="#">Нажмите сюда
-              <p th:text="${link}"></p>
-            </a> чтобы посмотреть результат
+             Click on the link to see the result
+            <a th:text="${link}">Нажмите сюда
+            </a>
           <p>we recommend that you visit the sites below in order to improve grammar, vocabulary, listening, speaking:</p>
           <ul>
             <li><a href="http://www.examenglish.com/">Exam English</a></li>
@@ -36,7 +36,7 @@
       </tr>
       <tr>
         <td bgcolor="#f8f8f8" align="center" style="padding: 20px 0 30px 0">
-          <p>С уважением,<br />Администрация Bilingual</p>
+          <p>Sincerely,<br />Bilingual Administration</p>
         </td>
       </tr>
     </table>
