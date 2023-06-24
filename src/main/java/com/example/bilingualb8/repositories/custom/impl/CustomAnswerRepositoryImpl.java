@@ -7,8 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Repository
 @RequiredArgsConstructor
@@ -18,8 +18,6 @@ public class CustomAnswerRepositoryImpl implements CustomAnswerRepository {
 
     @Override
     public List<UserAnswerResponse> getAnswerResponsesByResultId(Long resultId) {// add option order
-
-        List<UserAnswerResponse> answerResponses = new ArrayList<>();
 
         String answerQuery = """
                  SELECT
@@ -72,7 +70,7 @@ public class CustomAnswerRepositoryImpl implements CustomAnswerRepository {
                 WHERE r.id = ?
                                 """;
 
-        List<UserAnswerResponse> userAnswer = jdbcTemplate.query(answerQuery2, (resultSet, i) ->
+        List<UserAnswerResponse> answerResponses = jdbcTemplate.query(answerQuery2, (resultSet, i) ->
                         new UserAnswerResponse(
                                 resultSet.getLong("answer_id"),
                                 resultSet.getLong("question_id"),
@@ -106,17 +104,28 @@ public class CustomAnswerRepositoryImpl implements CustomAnswerRepository {
                         ),
                 resultId
         );
-        answerResponses.addAll(userAnswer);
-        answerResponses.addAll(userAnswerResponses);
-        answerResponses.addAll(userAnswerResponses3);
+
+        for (UserAnswerResponse answerRespons : answerResponses) {
+            for (UserAnswerResponse userAnswerRespons : userAnswerResponses) {
+                if (!Objects.equals(answerRespons.getAnswerId(), userAnswerRespons.getAnswerId())){
+                    answerResponses.add(userAnswerRespons);
+                }
+            }
+        }
+
+        for (UserAnswerResponse answerRespons : answerResponses) {
+            for (UserAnswerResponse userAnswerResponse : userAnswerResponses3) {
+                if (!Objects.equals(answerRespons.getAnswerId(), userAnswerResponse.getAnswerId())){
+                    answerResponses.add(userAnswerResponse);
+                }
+            }
+        }
 
         return answerResponses;
     }
 
     @Override
     public List<UserAnswerResponse> getAnswerResponsesByQuestionId(Long questionId, Long userId) {
-
-        List<UserAnswerResponse> answerResponses = new ArrayList<>();
 
         String answerQuery = """
                 SELECT
@@ -168,7 +177,7 @@ public class CustomAnswerRepositoryImpl implements CustomAnswerRepository {
                 JOIN users u on u.id = r.user_id
                 WHERE q.id = ? AND a.user_id = ?""";
 
-        List<UserAnswerResponse> answerResponses1 = jdbcTemplate.query(answerQuery2, (resultSet, i) ->
+        List<UserAnswerResponse> answerResponses = jdbcTemplate.query(answerQuery2, (resultSet, i) ->
                         new UserAnswerResponse(
                                 resultSet.getLong("answer_id"),
                                 resultSet.getLong("question_id"),
@@ -203,9 +212,21 @@ public class CustomAnswerRepositoryImpl implements CustomAnswerRepository {
                 questionId, userId
         );
 
-        answerResponses.addAll(answerResponses1);
-        answerResponses.addAll(answerResponses2);
-        answerResponses.addAll(answerResponses3);
+        for (UserAnswerResponse answerRespons : answerResponses) {
+            for (UserAnswerResponse userAnswerRespons : answerResponses2) {
+                if (!Objects.equals(answerRespons.getAnswerId(), userAnswerRespons.getAnswerId())){
+                    answerResponses.add(userAnswerRespons);
+                }
+            }
+        }
+
+        for (UserAnswerResponse answerRespons : answerResponses) {
+            for (UserAnswerResponse userAnswerResponse : answerResponses3) {
+                if (!Objects.equals(answerRespons.getAnswerId(), userAnswerResponse.getAnswerId())){
+                    answerResponses.add(userAnswerResponse);
+                }
+            }
+        }
 
         return answerResponses;
     }
