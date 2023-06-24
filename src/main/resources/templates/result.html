@@ -23,9 +23,15 @@
           <p th:text="${title}">
             Ваш тест [Название теста] был успешно проверен администрацией.
           </p>
-          <p>
-          <a href=${link}>Нажмите сюда</a> чтобы посмотреть результат
-          </p>
+            <a href="#">Нажмите сюда
+              <p th:text="${link}"></p>
+            </a> чтобы посмотреть результат
+          <p>We recommend that you visit possible sites for testing English:</p>
+          <ul>
+            <li><a href="http://www.examenglish.com/">Exam English</a></li>
+            <li><a href="https://www.englishclub.com/">English Club</a></li>
+            <li><a href="https://www.duolingo.com/">Duolingo</a></li>
+          </ul>
         </td>
       </tr>
       <tr>
