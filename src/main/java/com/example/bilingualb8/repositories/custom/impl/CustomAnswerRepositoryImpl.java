@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -19,8 +18,6 @@ public class CustomAnswerRepositoryImpl implements CustomAnswerRepository {
 
     @Override
     public List<UserAnswerResponse> getAnswerResponsesByResultId(Long resultId) {// add option order
-
-
 
         String answerQuery = """
                  SELECT
@@ -73,8 +70,7 @@ public class CustomAnswerRepositoryImpl implements CustomAnswerRepository {
                 WHERE r.id = ?
                                 """;
 
-
-        List<UserAnswerResponse> answerResponses1 = jdbcTemplate.query(answerQuery2, (resultSet, i) ->
+        List<UserAnswerResponse> answerResponses = jdbcTemplate.query(answerQuery2, (resultSet, i) ->
                         new UserAnswerResponse(
                                 resultSet.getLong("answer_id"),
                                 resultSet.getLong("question_id"),
@@ -85,8 +81,6 @@ public class CustomAnswerRepositoryImpl implements CustomAnswerRepository {
                         ),
                 resultId
         );
-
-        List<UserAnswerResponse> answerResponses = new ArrayList<>(answerResponses1);
 
         List<UserAnswerResponse> userAnswerResponses = jdbcTemplate.query(answerQuery, (resultSet, i) ->
                         new UserAnswerResponse(
@@ -111,11 +105,9 @@ public class CustomAnswerRepositoryImpl implements CustomAnswerRepository {
                 resultId
         );
 
-
-
         for (UserAnswerResponse answerRespons : answerResponses) {
             for (UserAnswerResponse userAnswerRespons : userAnswerResponses) {
-                if (!Objects.equals(answerRespons.getQuestionId(), userAnswerRespons.getQuestionId())){
+                if (!Objects.equals(answerRespons.getAnswerId(), userAnswerRespons.getAnswerId()) && !Objects.equals(answerRespons.getQuestionId(), userAnswerRespons.getQuestionId())){
                     answerResponses.add(userAnswerRespons);
                 }
             }
@@ -123,7 +115,7 @@ public class CustomAnswerRepositoryImpl implements CustomAnswerRepository {
 
         for (UserAnswerResponse answerRespons : answerResponses) {
             for (UserAnswerResponse userAnswerResponse : userAnswerResponses3) {
-                if (!Objects.equals(answerRespons.getQuestionId(), userAnswerResponse.getQuestionId())){
+                if (!Objects.equals(answerRespons.getAnswerId(), userAnswerResponse.getAnswerId())  && !Objects.equals(answerRespons.getQuestionId(), userAnswerResponse.getQuestionId())){
                     answerResponses.add(userAnswerResponse);
                 }
             }
@@ -185,7 +177,7 @@ public class CustomAnswerRepositoryImpl implements CustomAnswerRepository {
                 JOIN users u on u.id = r.user_id
                 WHERE q.id = ? AND a.user_id = ?""";
 
-        List<UserAnswerResponse> answerResponses1 = jdbcTemplate.query(answerQuery2, (resultSet, i) ->
+        List<UserAnswerResponse> answerResponses = jdbcTemplate.query(answerQuery2, (resultSet, i) ->
                         new UserAnswerResponse(
                                 resultSet.getLong("answer_id"),
                                 resultSet.getLong("question_id"),
@@ -209,8 +201,6 @@ public class CustomAnswerRepositoryImpl implements CustomAnswerRepository {
                 questionId, userId
         );
 
-        List<UserAnswerResponse> answerResponses = new ArrayList<>(answerResponses1);
-
         List<UserAnswerResponse> answerResponses3 = jdbcTemplate.query(answerQuery3, (resultSet, i) ->
                         new UserAnswerResponse(
                                 resultSet.getLong("answer_id"),
@@ -224,7 +214,7 @@ public class CustomAnswerRepositoryImpl implements CustomAnswerRepository {
 
         for (UserAnswerResponse answerRespons : answerResponses) {
             for (UserAnswerResponse userAnswerRespons : answerResponses2) {
-                if (!Objects.equals(answerRespons.getQuestionId(), userAnswerRespons.getQuestionId())){
+                if (!Objects.equals(answerRespons.getAnswerId(), userAnswerRespons.getAnswerId()) && !Objects.equals(answerRespons.getQuestionId(), userAnswerRespons.getQuestionId())){
                     answerResponses.add(userAnswerRespons);
                 }
             }
@@ -232,7 +222,7 @@ public class CustomAnswerRepositoryImpl implements CustomAnswerRepository {
 
         for (UserAnswerResponse answerRespons : answerResponses) {
             for (UserAnswerResponse userAnswerResponse : answerResponses3) {
-                if (!Objects.equals(answerRespons.getQuestionId(), userAnswerResponse.getQuestionId())){
+                if (!Objects.equals(answerRespons.getAnswerId(), userAnswerResponse.getAnswerId())  && !Objects.equals(answerRespons.getQuestionId(), userAnswerResponse.getQuestionId())){
                     answerResponses.add(userAnswerResponse);
                 }
             }
