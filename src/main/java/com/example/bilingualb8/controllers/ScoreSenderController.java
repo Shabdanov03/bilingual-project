@@ -15,8 +15,8 @@ public class ScoreSenderController {
     private final ScoreSender scoreSender;
 
     @PostMapping("/{resultId}")
-    public SimpleResponse sendEmail(@Valid @PathVariable Long resultId) {
-         return scoreSender.scoreSender(resultId);
+    public SimpleResponse sendEmail(@Valid @PathVariable Long resultId, String link) {
+         return scoreSender.scoreSender(resultId, link);
     }
 }
 

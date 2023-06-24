@@ -28,7 +28,7 @@ public class ScoreSenderImpl implements ScoreSender {
     private final UserInfoRepository userInfoRepository;
 
     @Override
-    public SimpleResponse scoreSender(Long resultId) {
+    public SimpleResponse scoreSender(Long resultId, String link) {
         log.info("Initiating password reset");
         try {
             Result result = resultRepository.findById(resultId)
@@ -40,19 +40,20 @@ public class ScoreSenderImpl implements ScoreSender {
             Test test = testRepository.findById(result.getTest().getId())
                     .orElseThrow(() -> new NotFoundException(String.format("Test with ID %d not found", result.getTest().getId())));
 
-            String subject = "Password Reset Request";
+            String subject = "Your result";
 
             Context context = new Context();
-            context.setVariable("name",String.format("Привет, %s!", userInfo.getUser().getFirstName()));
-            context.setVariable("title",String.format("Ваш тест %s был успешно проверен администрацией.", test.getTitle()) );
+            context.setVariable("name",String.format("Hi, %s!", userInfo.getUser().getFirstName()));
+            context.setVariable("title",String.format("Your test %s has been successfully verified by the administrator.", test.getTitle()) );
+            context.setVariable("link", String.format(link));
 
             String htmlContent = templateEngine.process("result.html", context);
 
             emailService.sendEmail(userInfo.getEmail(), subject, htmlContent);
-            log.info("Password reset email sent");
+            log.info("score sender");
 
             return SimpleResponse.builder()
-                    .message("The password reset was sent to your email. Please check your email.")
+                    .message("The score was sent to your email. Please check your email.")
                     .build();
 
         } catch (MessagingException e) {
