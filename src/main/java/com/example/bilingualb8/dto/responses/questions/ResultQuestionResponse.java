@@ -3,10 +3,7 @@ package com.example.bilingualb8.dto.responses.questions;
 import com.example.bilingualb8.dto.responses.answer.UserAnswerResponse;
 import com.example.bilingualb8.enums.AnswerStatus;
 import com.example.bilingualb8.enums.QuestionType;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
@@ -14,6 +11,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public class ResultQuestionResponse {
     private Long questionId;
     private QuestionType questionType;

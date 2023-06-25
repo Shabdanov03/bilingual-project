@@ -84,6 +84,7 @@ public class CustomResultRepositoryImpl implements CustomResultRepository {
     public EvaluatingSubmittedResultResponse getByIdEvaluatingSubmittedResult(Long resultId) {
         EvaluatingSubmittedResultResponse evaluatingSubmittedResultResponse = getEvaluatingSubmittedResultResponses(resultId);
         List<ResultQuestionResponse> resultQuestionResponses = getResultQuestionResponses(resultId);
+        System.err.println(resultQuestionResponses);
         List<UserAnswerResponse> evaluatingAnswerRespons = customAnswerRepository.getAnswerResponsesByResultId(resultId);
 
         for (UserAnswerResponse answerRespon : evaluatingAnswerRespons) {
@@ -132,12 +133,10 @@ public class CustomResultRepositoryImpl implements CustomResultRepository {
                 q.question_type as question_type,
                 a.evaluated_score as score,
                 q.question_order as question_order
-                FROM tests t
-                JOIN results r on t.id = r.test_id
-                JOIN users u on r.user_id = u.id
+                FROM results r
                 JOIN results_answers ra on r.id = ra.result_id
-                JOIN answers a on ra.answers_id = a.id
-                JOIN questions q on t.id = q.test_id
+                JOIN answers a on a.id = ra.answers_id
+                JOIN questions q on a.question_id = q.id
                 WHERE r.id = ?
                             """;
 

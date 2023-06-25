@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -17,7 +18,7 @@ public class CustomAnswerRepositoryImpl implements CustomAnswerRepository {
     private final JdbcTemplate jdbcTemplate;
 
     @Override
-    public List<UserAnswerResponse> getAnswerResponsesByResultId(Long resultId) {// add option order
+    public List<UserAnswerResponse> getAnswerResponsesByResultId(Long resultId) {
 
         String answerQuery = """
                  SELECT
@@ -57,6 +58,7 @@ public class CustomAnswerRepositoryImpl implements CustomAnswerRepository {
                  SELECT
                     a.id as answer_id,
                     a.question_id as question_id,
+                    a.data as data,
                     a.answer_status as answer_status,
                     a.number_of_plays as number_of_plays
                 FROM answers a
@@ -67,12 +69,13 @@ public class CustomAnswerRepositoryImpl implements CustomAnswerRepository {
                 WHERE r.id = ?
                                 """;
 
-
-        List<UserAnswerResponse> answerResponse1 = jdbcTemplate.query(answerQuery2, (resultSet, i) ->
+        List<UserAnswerResponse> answerResponses1 = jdbcTemplate.query(answerQuery2, (resultSet, i) ->
                         new UserAnswerResponse(
                                 resultSet.getLong("answer_id"),
                                 resultSet.getLong("question_id"),
                                 AnswerStatus.valueOf(resultSet.getString("answer_status")),
+                                null,
+                                null,
                                 resultSet.getString("url"),
                                 resultSet.getInt("number_of_plays")
                         ),
@@ -85,8 +88,10 @@ public class CustomAnswerRepositoryImpl implements CustomAnswerRepository {
                                 resultSet.getLong("question_id"),
                                 AnswerStatus.valueOf(resultSet.getString("answer_status")),
                                 resultSet.getString("option_title"),
+                                null,
+                                null,
                                 resultSet.getInt("number_of_plays")
-                        ),
+                                ),
                 resultId
         );
 
@@ -95,33 +100,58 @@ public class CustomAnswerRepositoryImpl implements CustomAnswerRepository {
                                 resultSet.getLong("answer_id"),
                                 resultSet.getLong("question_id"),
                                 AnswerStatus.valueOf(resultSet.getString("answer_status")),
+                                null,
+                                resultSet.getString("data"),
+                                null,
                                 resultSet.getInt("number_of_plays")
                         ),
                 resultId
         );
 
-        if (answerResponse1.isEmpty()) answerResponse1.addAll(answerResponses2);
-        else {
-            for (UserAnswerResponse answerRespons : answerResponse1) {
-                for (UserAnswerResponse userAnswerRespons : answerResponses2) {
-                    if (!Objects.equals(answerRespons.getAnswerId(), userAnswerRespons.getAnswerId()) || !Objects.equals(answerRespons.getQuestionId(), userAnswerRespons.getQuestionId())) {
-                        answerResponse1.add(userAnswerRespons);
+        List<UserAnswerResponse> answerResponses = new ArrayList<>(answerResponses1);
+        List<UserAnswerResponse> elementsToAdd = new ArrayList<>();
+
+        if (answerResponses.isEmpty()) {
+            answerResponses.addAll(answerResponses2);
+        } else {
+            for (UserAnswerResponse answerResponse : answerResponses) {
+                boolean shouldAdd = true;
+                for (UserAnswerResponse userAnswerResponse : answerResponses2) {
+                    if (Objects.equals(answerResponse.getAnswerId(), userAnswerResponse.getAnswerId())
+                            && Objects.equals(answerResponse.getQuestionId(), userAnswerResponse.getQuestionId())) {
+                        shouldAdd = false;
+                        break;
+                    }
+                    if (shouldAdd) {
+                        elementsToAdd.add(userAnswerResponse);
                     }
                 }
             }
         }
 
-        if (answerResponse1.isEmpty()) answerResponse1.addAll(answerResponses3);
-        else {
-            for (UserAnswerResponse answerRespons : answerResponse1) {
+        answerResponses.addAll(elementsToAdd);
+        elementsToAdd.clear();
+
+        if (answerResponses.isEmpty()) {
+            answerResponses.addAll(answerResponses3);
+        } else {
+            for (UserAnswerResponse answerResponse : answerResponses) {
+                boolean shouldAdd = true;
                 for (UserAnswerResponse userAnswerResponse : answerResponses3) {
-                    if (!Objects.equals(answerRespons.getAnswerId(), userAnswerResponse.getAnswerId()) || !Objects.equals(answerRespons.getQuestionId(), userAnswerResponse.getQuestionId())) {
-                        answerResponse1.add(userAnswerResponse);
+                    if (Objects.equals(answerResponse.getAnswerId(), userAnswerResponse.getAnswerId())
+                            && Objects.equals(answerResponse.getQuestionId(), userAnswerResponse.getQuestionId())) {
+                        shouldAdd = false;
+                        break;
+                    }
+                    if (shouldAdd) {
+                        elementsToAdd.add(userAnswerResponse);
                     }
                 }
             }
         }
-        return answerResponse1;
+
+        answerResponses.addAll(elementsToAdd);
+        return answerResponses;
     }
 
     @Override
@@ -133,7 +163,6 @@ public class CustomAnswerRepositoryImpl implements CustomAnswerRepository {
                     a.question_id as question_id,
                     a.answer_status as answer_status,
                     o.title as option_title,
-                    a.data as data,
                     a.number_of_plays as number_of_plays
                 FROM answers a
                     JOIN answers_options ao on a.id = ao.answer_id
@@ -151,7 +180,6 @@ public class CustomAnswerRepositoryImpl implements CustomAnswerRepository {
                 a.question_id as question_id,
                 a.answer_status as answer_status,
                 f.file_url as url,
-                a.data as data,
                 a.number_of_plays as number_of_plays
                 FROM answers a
                 JOIN answers_files af on a.id = af.answer_id
@@ -182,8 +210,9 @@ public class CustomAnswerRepositoryImpl implements CustomAnswerRepository {
                                 resultSet.getLong("answer_id"),
                                 resultSet.getLong("question_id"),
                                 AnswerStatus.valueOf(resultSet.getString("answer_status")),
+                                null,
+                                null,
                                 resultSet.getString("url"),
-                                resultSet.getString("data"),
                                 resultSet.getInt("number_of_plays")
                         ),
                 questionId, userId
@@ -195,7 +224,8 @@ public class CustomAnswerRepositoryImpl implements CustomAnswerRepository {
                                 resultSet.getLong("question_id"),
                                 AnswerStatus.valueOf(resultSet.getString("answer_status")),
                                 resultSet.getString("option_title"),
-                                resultSet.getString("data"),
+                                null,
+                                null,
                                 resultSet.getInt("number_of_plays")
                         ),
                 questionId, userId
@@ -206,7 +236,9 @@ public class CustomAnswerRepositoryImpl implements CustomAnswerRepository {
                                 resultSet.getLong("answer_id"),
                                 resultSet.getLong("question_id"),
                                 AnswerStatus.valueOf(resultSet.getString("answer_status")),
+                                null,
                                 resultSet.getString("data"),
+                                null,
                                 resultSet.getInt("number_of_plays")
                         ),
                 questionId, userId
@@ -233,7 +265,6 @@ public class CustomAnswerRepositoryImpl implements CustomAnswerRepository {
                 }
             }
         }
-
         return answerResponses;
     }
 }
