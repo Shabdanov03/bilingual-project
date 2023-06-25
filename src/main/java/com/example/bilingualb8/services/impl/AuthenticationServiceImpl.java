@@ -184,7 +184,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public void init() {
         try {
             log.info("Initializing Firebase");
-            GoogleCredentials googleCredentials = GoogleCredentials.fromStream(new ClassPathResource("billingual.json").getInputStream());
+            GoogleCredentials googleCredentials = GoogleCredentials.fromStream(new ClassPathResource("bilingual.json").getInputStream());
             FirebaseOptions firebaseOptions = FirebaseOptions.builder()
                     .setCredentials(googleCredentials)
                     .build();
