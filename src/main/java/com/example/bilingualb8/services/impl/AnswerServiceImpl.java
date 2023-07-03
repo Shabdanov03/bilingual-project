@@ -16,7 +16,6 @@ import com.example.bilingualb8.services.AnswerService;
 import com.example.bilingualb8.services.FileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -66,7 +65,7 @@ public class AnswerServiceImpl implements AnswerService {
         }
 
         if (answerRequest.getData() != null) {
-            if (isDataApplicableForAnswer(answerRequest.getData(), question)) {
+            if (isDataApplicableForAnswer(question)) {
                 answer.setData(answerRequest.getData());
                 answer.setNumberOfWords(answerRequest.getData().split(" ").length);
             }
@@ -102,7 +101,7 @@ public class AnswerServiceImpl implements AnswerService {
         return SimpleResponse.builder().message(String.format("Answer with : %d id successfully scored", answerId)).build();
     }
 
-    private boolean isDataApplicableForAnswer(String data, Question question) {
+    private boolean isDataApplicableForAnswer(Question question) {
         return question.getQuestionType() == QuestionType.DESCRIBE_IMAGE
                 || question.getQuestionType() == QuestionType.HIGHLIGHT_THE_ANSWER
                 || question.getQuestionType() == QuestionType.RESPOND_N_WORDS
